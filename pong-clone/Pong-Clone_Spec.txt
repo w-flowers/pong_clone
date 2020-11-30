@@ -1,0 +1,24 @@
+--New Project - Pong Clone
+
+- Classes - paddles, 1 ball, boundaries
+
+Paddle Class:
+- Size, Position
+- Method: Move, Angle
+
+Ball Class:
+- Size, Position, dx, dy
+- Methods: Bounce
+
+Boundary Class:
+- Objects: Goal (Constructor 2 x values, horizontal line between them - symmetrical between players)
+- Attribute: Game_length - integer length of field in pixels
+- Edge (Constructor: list of points - )
+
+Field Class:
+- Objects: Boundaries, Ball, Paddles
+
+GUI Class:
+- Class wrapper for SDL functions
+- 30fps to start (may change)
+
