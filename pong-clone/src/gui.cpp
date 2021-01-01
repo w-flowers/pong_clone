@@ -10,7 +10,7 @@ public:
    Window(int width, int height);
    
    Window(){};
-   
+
    ~Window();
    
    class FailedInit{};
@@ -27,6 +27,8 @@ private:
 
 Window::Window(int width, int height)
 {
+   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) throw FailedInit{};
+
    window = SDL_CreateWindow( "Pong Clone", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                      width, height, SDL_WINDOW_SHOWN );
                      
@@ -43,12 +45,14 @@ Window::Window(int width, int height)
 Window::~Window()
 {
    SDL_DestroyWindow( window );
+
+   SDL_Quit();
 }
 
 class Renderer
 {
 public:
-   Renderer(Window &newwindow);
+   Renderer(Window& newwindow);
    
    Renderer(){};
    
@@ -65,7 +69,7 @@ private:
    SDL_Renderer *renderer {nullptr};
 };
 
-Renderer::Renderer(Window &newwindow)
+Renderer::Renderer(Window& newwindow)
 {  
    if( newwindow.get_window() == nullptr ) throw FailedInit{};
    
@@ -103,16 +107,9 @@ private:
    Renderer renderer;
 };
 
-GUI::GUI(int width, int height)
-//window{width, height}, renderer{window}
+GUI::GUI(int width, int height):
+   window{width, height}, renderer{window}
 { 
-   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) throw FailedInit{};
-   
-   std::cout << "Called\n";
-   
-   window = Window {width, height};
-   
-   renderer = Renderer {window};
 }
 
 GUI::~GUI()
@@ -120,8 +117,6 @@ GUI::~GUI()
    renderer.~Renderer();
    
    window.~Window();
-   
-   SDL_Quit();
 }
 
 
