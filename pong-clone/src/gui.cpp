@@ -1,29 +1,4 @@
-#include <SDL2/SDL.h>
-
-#include <iostream>
-
-const int fps = 30;
-
-class Window
-{
-public:
-   Window(int width, int height);
-   
-   Window(){};
-
-   ~Window();
-   
-   class FailedInit{};
-   
-   SDL_Window *get_window()
-   {
-      return window;
-   };
-   
-private:
-   SDL_Window *window {nullptr};
-   
-};
+#include "../inc/gui.hpp"
 
 Window::Window(int width, int height)
 {
@@ -32,14 +7,11 @@ Window::Window(int width, int height)
    window = SDL_CreateWindow( "Pong Clone", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                      width, height, SDL_WINDOW_SHOWN );
                      
-   std::cout << window << "\n";
-   
    if( window == nullptr )
    {
       throw FailedInit{};
    }
    
-   std::cout << "Called window\n";
 }
 
 Window::~Window()
@@ -49,31 +21,14 @@ Window::~Window()
    SDL_Quit();
 }
 
-class Renderer
+SDL_Window *Window::get_window()
 {
-public:
-   Renderer(Window& newwindow);
-   
-   Renderer(){};
-   
-   ~Renderer();
-   
-   class FailedInit{};
-   
-   SDL_Renderer *get_renderer()
-   {
-      return renderer;
-   };
-   
-private:
-   SDL_Renderer *renderer {nullptr};
-};
+   return window;
+}
 
 Renderer::Renderer(Window& newwindow)
 {  
    if( newwindow.get_window() == nullptr ) throw FailedInit{};
-   
-   std::cout << "Called Rend..." << newwindow.get_window() << "\n" ;
    
    renderer = SDL_CreateRenderer( newwindow.get_window(), -1, 0 );
    
@@ -82,7 +37,6 @@ Renderer::Renderer(Window& newwindow)
       throw FailedInit{};
    }
    
-   std::cout << "Finished Rend...\n";
 }
 
 Renderer::~Renderer()
@@ -90,22 +44,10 @@ Renderer::~Renderer()
    SDL_DestroyRenderer( renderer );
 }
 
-class GUI 
+SDL_Renderer *Renderer::get_renderer()
 {
-public:
-   GUI(int width, int height);
-   
-   ~GUI();
-   
-   class FailedInit{};
-   
-   void render(){};
-   
-private:
-   Window window;
-   
-   Renderer renderer;
-};
+   return renderer;
+}
 
 GUI::GUI(int width, int height):
    window{width, height}, renderer{window}
@@ -119,4 +61,17 @@ GUI::~GUI()
    window.~Window();
 }
 
+void GUI::run()
+{
+   //insert body here
+
+   return;
+}
+
+void GUI::game_loop()
+{
+   //insert body here
+   
+   return;
+}
 
