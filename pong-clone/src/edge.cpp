@@ -3,7 +3,9 @@
  *
  * All units an integer number of pixels. Edge angle calculated according to 
  * a number plane where the positive direction is right and down, negative left
- * and up
+ * and up.
+ *
+ * Author: William Flowers
  *****************************************************************************/
 
 class Edge

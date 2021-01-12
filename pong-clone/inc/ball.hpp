@@ -1,6 +1,6 @@
 
 /********************************************************************************
-* Ball (ball.hpp) 
+* Pong Clone - Ball (ball.hpp) 
 *
 * Class describing the game ball. All units measured in an integer number of 
 * pixels.
