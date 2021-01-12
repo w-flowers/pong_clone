@@ -30,7 +30,7 @@ Renderer::Renderer(Window& newwindow)
 {  
    if( newwindow.get_window() == nullptr ) throw FailedInit{};
    
-   renderer = SDL_CreateRenderer( newwindow.get_window(), -1, 0 );
+   renderer = SDL_CreateRenderer( newwindow.get_window(), -1, SDL_RENDERER_PRESENTVSYNC );
    
    if( renderer == nullptr )
    {
@@ -65,12 +65,28 @@ void GUI::run()
 {
    //insert body here
 
+   game_loop();
+
    return;
 }
 
 void GUI::game_loop()
 {
    //insert body here
+   SDL_Event e;
+
+   bool quit = false;
+
+   while ( !quit )
+   {
+       while ( SDL_PollEvent( &e ) )
+       {
+           if ( e.type == SDL_QUIT )
+           {
+               quit = true;
+           }
+       }
+   }
    
    return;
 }

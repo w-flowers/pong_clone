@@ -1,4 +1,4 @@
-#include "../src/gui.cpp"
+#include "../inc/gui.hpp"
 #include <iostream>
 
 int main( int argc, char* argv[] )
