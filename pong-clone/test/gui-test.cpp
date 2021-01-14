@@ -51,20 +51,7 @@ int main( int argc, char* argv[] )
    
    //context.render();
    
-   quit = false;
-   while (!quit){
-       while (SDL_PollEvent(&e)){
-           if (e.type == SDL_QUIT){
-               quit = true;
-           }
-           if (e.type == SDL_KEYDOWN){
-               quit = true;
-           }
-           if (e.type == SDL_MOUSEBUTTONDOWN){
-               quit = true;
-           }
-       }
-   }
+   context.run();
    
    return 0;
 }
