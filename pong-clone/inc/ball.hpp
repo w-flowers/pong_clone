@@ -8,6 +8,9 @@
 * Author: William Flowers
 ********************************************************************************/
 
+#include "pong_clone_base.hpp"
+
+#include "game_object.hpp"
 
 //Default ball values
 
@@ -31,6 +34,8 @@ public:
    void bounce(float edge_angle);
 
    void move();
+
+   void render( SDL_Renderer * );
    
 private:
    

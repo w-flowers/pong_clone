@@ -13,8 +13,8 @@
 class Game_object
 {
 public:
-   virtual render(SDL_Renderer *) = 0;
+   virtual void render(SDL_Renderer *) = 0;
 
    virtual ~Game_object() {};
-}
+};
 

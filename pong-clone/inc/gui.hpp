@@ -26,11 +26,14 @@ public:
    class FailedInit{};
    
    SDL_Window *get_window();
-   
+
+   //Non-copyable
+   Window( const Window & ) =delete;
+
+   Window & operator=( const Window & ) =delete;
+  
 private:
    SDL_Window *window {nullptr};
-
-   //Need to make copy and assignment constructor private
 };
 
 class Renderer
@@ -46,10 +49,13 @@ public:
    
    SDL_Renderer *get_renderer();
    
+   //Non-copyable
+   Renderer( const Renderer & ) =delete;
+
+   Renderer & operator=( const Renderer & ) =delete;
+  
 private:
    SDL_Renderer *renderer {nullptr};
-   
-   //Need to make copy and assignment constructor private
 };
 
 class GUI 
@@ -67,12 +73,14 @@ public:
    //The method which runs the game loop - called from within run
    void game_loop();
 
+   //Non-copyable
+   GUI( const GUI & ) =delete;
+   GUI & operator=( const GUI & ) =delete;
+  
 private:
    Window window;
    
    Renderer renderer;
-
-   //Need to make copy and assignment constructor private
 };
 
 #endif
