@@ -8,7 +8,13 @@
  * Author: William Flowers
  * ***************************************************************************/
 
+#ifndef PONG_CLONE_BASE
+
+#define PONG_CLONE_BASE
+
 #include <SDL2/SDL.h>
+
+#include <vector>
 
 #include <cmath>
 
@@ -21,3 +27,5 @@ struct position
    int x;
    int y;
 };
+
+#endif

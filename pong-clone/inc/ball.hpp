@@ -5,8 +5,15 @@
 * Class describing the game ball. All units measured in an integer number of 
 * pixels.
 *
+* NOTE: Currently ties movement to framerate. May be modified to implement frame
+* independent movement.
+*
 * Author: William Flowers
 ********************************************************************************/
+
+#ifndef BALL_HPP
+
+#define BALL_HPP
 
 #include "pong_clone_base.hpp"
 
@@ -57,4 +64,6 @@ private:
    //calculate angle of balls movement from horizontal - range from +pi to -pi
    float vel_angle();
 };
+
+#endif
 

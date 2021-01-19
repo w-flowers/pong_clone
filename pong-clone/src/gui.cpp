@@ -61,33 +61,4 @@ GUI::~GUI()
    window.~Window();
 }
 
-void GUI::run()
-{
-   //insert body here
-
-   game_loop();
-
-   return;
-}
-
-void GUI::game_loop()
-{
-   //insert body here
-   SDL_Event e;
-
-   bool quit = false;
-
-   while ( !quit )
-   {
-       while ( SDL_PollEvent( &e ) )
-       {
-           if ( e.type == SDL_QUIT )
-           {
-               quit = true;
-           }
-       }
-   }
-   
-   return;
-}
 

@@ -4,8 +4,6 @@
  * Author: William Flowers
  *
  * A collection of abstractions based on SDL. Most classes here are non-copyable.
- *
- * Also location of the main "run" method to be invoked.
  * ***************************************************************************/
 
 #ifndef PONG_GUI_H
@@ -13,6 +11,8 @@
 #define PONG_GUI_H
 
 #include "pong_clone_base.hpp"
+
+#include "game_object.hpp"
 
 class Window
 {
@@ -67,11 +67,8 @@ public:
    
    class FailedInit{};
    
-   //A containing method for all the game code, to be run after setup
-   void run();
-
-   //The method which runs the game loop - called from within run
-   void game_loop();
+   //Method which renders all game objects
+   void render_all( std::vector<Game_object>& );
 
    //Non-copyable
    GUI( const GUI & ) =delete;
