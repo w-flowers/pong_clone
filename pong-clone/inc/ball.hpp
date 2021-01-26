@@ -17,8 +17,6 @@
 
 #include "pong_clone_base.hpp"
 
-#include "game_object.hpp"
-
 //Default ball values
 
 #define DEFX 0
@@ -42,8 +40,10 @@ public:
 
    void move();
 
-   void render( SDL_Renderer * );
-   
+   struct position get_position() const;
+
+   int get_radius() const;
+
 private:
    
    int radius;

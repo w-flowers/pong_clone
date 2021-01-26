@@ -11,7 +11,7 @@
 * Author: William Flowers
 ********************************************************************************/
 
-#include <../inc/ball.hpp>
+#include "../inc/ball.hpp"
 
 Ball::Ball( int r )
 {
@@ -49,13 +49,17 @@ void Ball::move()
    position.y += velocity.dy;
 }
 
-void Ball::render(SDL_Renderer *)
-{
-
-}
-
 float Ball::vel_angle()
 {
-   return atan2f( ( (float) dy), ( (float) dx) );
+   return atan2f( ( (float) velocity.dy), ( (float) velocity.dx) );
 }
 
+struct position Ball::get_position() const
+{
+   return position;
+}
+
+int Ball::get_radius() const
+{
+   return radius;
+}

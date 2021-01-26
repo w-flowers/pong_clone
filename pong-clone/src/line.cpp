@@ -20,8 +20,8 @@
 #include "../inc/line.hpp"
 
 
-Line::Line( int x1_, int y1_, int x2_, int y2_ ):
-   x1{x1_}, y1{y1_}, x2{x2_}, y2{y2_}
+Line::Line( struct position p1_ , struct position p2_ ):
+   p1{p1_}, p2{p2_}
 {}
 
 void Line::set_colour(SDL_Color colour)
@@ -35,11 +35,42 @@ void Line::set_colour(SDL_Color colour)
    line_colour.a = colour.a;
 }
 
-Collidable::Collidable( int x1_, int y1_, int x2_, int y2_, int br //ball radius )
+struct position Line::get_p1() const
 {
-   Line::Line(x1_, y1_, x2_, y2_);
+   return p1;
+}
 
-   line_angle = atan2f( ( (float) (y2 - y1) ), ( (float) (x2 - x1) ) );
+struct position Line::get_p2() const
+{
+   return p2;
+}
+
+Line::~Line()
+{}
+
+Collidable::Collidable( struct position p1_ , struct position p2_ , int br /*ball radius*/ )
+   : Line( p1_, p2_ )
+{
+   line_angle = atan2f( ( (float) ( get_p2().y - get_p1().y ) ), ( (float) ( get_p2().x - get_p1().x ) ) );
+
+   set_collision_boxes( br );
+}
+
+float Collidable::get_line_angle()
+{
+   return line_angle;
+}
+
+void Collidable::set_collision_boxes( int br )
+{
+   int x1 = get_p1().x;
+
+   int x2 = get_p2().x;
+
+   int y1 = get_p1().y;
+
+   int y2 = get_p2().y;
+   //set outer collision box
 
    ocb_tl.x = ( x1 > x2 ) ? ( x2 - br ) : ( x1 - br ) ;
 
@@ -51,9 +82,9 @@ Collidable::Collidable( int x1_, int y1_, int x2_, int y2_, int br //ball radius
 
    //find appropriate bounds for inner container box
    
-   icb_x_offset = 0;
+   float icb_x_offset = br * std::cos( std::abs( this_pi/2.0 - line_angle ) ); //radius * cos (|90 - alpha|)
 
-   icb_y_offset = 0;
+   float icb_y_offset = br * std::sin( std::abs( this_pi/2.0 - line_angle ) ); //radius * sin (|90 - alpha|)
 
    icb_tl.x = ( x1 > x2 ) ? ( x2 - icb_x_offset ) : ( x1 - icb_x_offset ) ;
 
@@ -62,10 +93,70 @@ Collidable::Collidable( int x1_, int y1_, int x2_, int y2_, int br //ball radius
    icb_br.x = ( x1 > x2 ) ? ( x1 + icb_x_offset ) : ( x2 + icb_x_offset ) ;
 
    icb_br.y = ( y1 > y2 ) ? ( y1 + icb_y_offset ) : ( y2 + icb_y_offset ) ;
+  
+   return;
 }
 
-float Collidable::get_line_angle()
+bool Collidable::in_outer_collision_box( const Ball& ball)
 {
-   return line_angle;
+  struct position curr_pos = ball.get_position();
+
+  return curr_pos.x >= ocb_tl.x && curr_pos.y >= ocb_tl.y && 
+     curr_pos.x <= ocb_br.x && curr_pos.y <= ocb_br.y;
 }
+
+bool Collidable::is_colliding( const Ball& ball )
+{
+  struct position curr_pos = ball.get_position();
+
+   int x1 = get_p1().x;
+
+   int x2 = get_p2().x;
+
+   int y1 = get_p1().y;
+
+   int y2 = get_p2().y;
+
+  if( curr_pos.x >= ocb_tl.x && curr_pos.y >= ocb_tl.y && 
+     curr_pos.x <= ocb_br.x && curr_pos.y <= ocb_br.y)
+  {
+     //calculate distance of ball centre from line
+     float ax_by_c = ( x2 - x1 ) * ( curr_pos.y - y1 ) -
+        ( y2 - y1 ) * ( curr_pos.x - x1 ) ;
+
+     float asqrd = ( x2 - x1 ) * ( x2 - x1 );
+
+     float bsqrd = ( y2 - y1 ) * ( y2 - y1 );
+
+     return ( ax_by_c * ax_by_c / ( asqrd + bsqrd ) <=
+           ball.get_radius() * ball.get_radius() );
+  }
+
+  else
+  {
+     return //boolean of whether distance from ends^2 is less than ball_radius^2
+        ( ( curr_pos.x - x1 ) * ( curr_pos.x - x1 ) +
+          ( curr_pos.y - y1 ) * ( curr_pos.y - y1 ) <=
+          ball.get_radius() * ball.get_radius() ) ||
+        ( ( curr_pos.x - x2 ) * ( curr_pos.x - x2 ) +
+          ( curr_pos.y - y2 ) * ( curr_pos.y - y2 ) <=
+          ball.get_radius() * ball.get_radius() ) ;
+  }
+
+}
+
+Collidable::~Collidable()
+{}
+
+Edge::Edge( struct position p1_, struct position p2_, int br )
+   : Collidable( p1_, p2_, br )
+{}
+
+void Edge::collide( Ball& ball )
+{
+   ball.bounce( get_line_angle() );
+}
+
+Edge::~Edge()
+{}
 

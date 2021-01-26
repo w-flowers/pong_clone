@@ -9,11 +9,6 @@
  * The lines defined in this class may be part of the subclass "Collidable".
  * This class manages collisions between Balls and Lines.
  *
- * TO DO: 
- * Define the methods for collidable (outer rect - max of pts + radius, inner
- *  rect, use trig)
- * Move line angle from LINE to COLLIDABLE
- *
  * Author: William Flowers
  * ***************************************************************************/
 
@@ -23,55 +18,80 @@
 
 #include "ball.hpp"
 
-class Line : public Game_object
+class Line
 {
 public:
 
-   Line( int x1_, int y1_, int x2_, int y2_ );
-
-   void render(SDL_Renderer *renderer){};
+   Line( struct position p1_ , struct position p2_ );
 
    void set_colour(SDL_Color colour);
 
+   struct position get_p1() const;
+
+   struct position get_p2() const;
+
+   ~Line();
 private:
-
-   int x1;
-
-   int y1;
-
-   int x2;
-
-   int y2;
-
    SDL_Color line_colour {0, 0, 0, 0};
+
+   struct position p1;
+
+   struct position p2;
 };
 
 // Class for handling collision between balls and lines
 class Collidable : public Line
 {
 public:
-   Collidable();
+   Collidable( struct position p1_ , struct position p2_ , int br /*ball radius*/ );
 
    virtual void collide( Ball& ) = 0 ;
 
-   bool in_collision_box( Ball& );
+   //used to eliminate squares far from ball
+   bool in_outer_collision_box( const Ball& );
 
-   bool is_colliding( Ball& );
+   //checks whether ball has collided with line in this frame
+   bool is_colliding( const Ball& );
 
+   //needed for ball bouncing methods and collision methods
    float get_line_angle();
 
+   //resize collision boxes if ball radius changes, called in constructor
+   void set_collision_boxes( int br );
+
+   ~Collidable();
 private:
 
-   //Private variables to give location of the outer collision box
+   // Private variables to give location of the outer collision box
+   // Outer collision box is used to determine whether to run the collision
+   // function.
    position ocb_tl; //top left
 
    position ocb_br; //bottom right
 
-   //Private variables to give location of the inner collision box
-   position icb_tl; //top left
+   // Private variables to give location of the inner collision box - floats
+   // Inner collision box is used to determine which type of collision check to
+   // use. If it is in the icb, use distance between pt and line. If not, check
+   // points distance from endpoint.
+   positionf icb_tl; //top left
 
-   position icb_br; //bottom right
+   positionf icb_br; //bottom right
 
    float line_angle;
 };
 
+class Edge : public Collidable
+{
+public:
+   Edge( struct position p1_, struct position p2_, int br );
+
+   void collide( Ball& );
+   
+   ~Edge();
+};
+/*
+class Goal : public Collidable
+{
+public:
+   //insert methods related to players and scoring here
+};*/

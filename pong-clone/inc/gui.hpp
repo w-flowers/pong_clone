@@ -12,8 +12,6 @@
 
 #include "pong_clone_base.hpp"
 
-#include "game_object.hpp"
-
 class Window
 {
 public:
@@ -68,7 +66,7 @@ public:
    class FailedInit{};
    
    //Method which renders all game objects
-   void render_all( std::vector<Game_object>& );
+   //void render_all();
 
    //Non-copyable
    GUI( const GUI & ) =delete;

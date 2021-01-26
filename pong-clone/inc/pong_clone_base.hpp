@@ -28,4 +28,10 @@ struct position
    int y;
 };
 
+struct positionf 
+{
+   float x;
+   float y;
+};
+
 #endif
