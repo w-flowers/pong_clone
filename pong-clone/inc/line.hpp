@@ -14,8 +14,6 @@
 
 #include "pong_clone_base.hpp"
 
-#include "game_object.hpp"
-
 #include "ball.hpp"
 
 class Line

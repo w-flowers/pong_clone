@@ -12,8 +12,6 @@
  * Author: William Flowers
  * ***************************************************************************/
 
-#define CATCH_CONFIG_MAIN
-
 #include "../inc/line.hpp"
 
 #include "catch.hpp"
