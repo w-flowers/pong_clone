@@ -1,6 +1,6 @@
 
 /********************************************************************************
-* Pong Clone - Ball (ball.hpp) 
+* Pong Clone - Ball (ball.cpp) 
 *
 * Class describing the game ball. All units measured in an integer number of 
 * pixels.
@@ -13,20 +13,11 @@
 
 #include "../inc/ball.hpp"
 
-Ball::Ball( int r )
+Ball::Ball( int r, int init_x, int init_y, float speed )
+   : radius{r}, velocity{0, static_cast<int>( lroundf( speed ) ), speed},
+   position{init_x, init_y} 
 {
    if( r <= 0 ) throw InvalidBall{};
-   radius = r;
-
-   velocity.dx = DEFDX;
-
-   velocity.dy = DEFDY;
-
-   velocity.speed = DEFSPD;
-
-   position.x = DEFX;
-
-   position.y = DEFY;
 
    return;
 }
@@ -35,9 +26,9 @@ void Ball::bounce( float edge_angle )
 {
       float newangle = 2 * edge_angle - vel_angle();
       
-      velocity.dy = (int) lroundf( velocity.speed * sinf( newangle ) );
+      velocity.dy = static_cast<int>( lroundf( velocity.speed * sinf( newangle ) ) );
       
-      velocity.dx = (int) lroundf( velocity.speed * cosf( newangle ) );
+      velocity.dx = static_cast<int>( lroundf( velocity.speed * cosf( newangle ) ) );
       
       return;
 }
@@ -51,7 +42,7 @@ void Ball::move()
 
 float Ball::vel_angle()
 {
-   return atan2f( ( (float) velocity.dy), ( (float) velocity.dx) );
+   return atan2f( ( static_cast<float>( velocity.dy ) ), ( static_cast<float>( velocity.dx ) ) );
 }
 
 struct position Ball::get_position() const

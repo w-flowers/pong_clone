@@ -17,31 +17,24 @@
 
 #include "pong_clone_base.hpp"
 
-//Default ball values
-
-#define DEFX 0
-
-#define DEFY 0
-
-#define DEFSPD 0
-
-#define DEFDX 0
-
-#define DEFDY 0
-
-
 class Ball
 {
 public:
+   //Constructor - initialises ball with radius r, position given by inits,
+   // and the speed going in the vertical positive direction
+   Ball( int r, int init_x, int init_y, float speed );
    
-   Ball(int radius);
-   
-   void bounce(float edge_angle);
+   // Changes the internal dx and dy components of velocity according to its
+   // angle and the angle of the line/object it bounces off
+   void bounce( float edge_angle );
 
+   // Moves the ball one step, according to what the internal dx and dy are
    void move();
 
+   // Returns current position of the ball
    struct position get_position() const;
 
+   // Returns the radius of the ball
    int get_radius() const;
 
 private:
