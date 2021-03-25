@@ -28,7 +28,7 @@ test/obj/ball-test.o: test/ball-test.cpp inc/ball.hpp
 	$(CC) $(CFLAGS) -o test/obj/ball-test.o -c test/ball-test.cpp
 test/obj/game-test.o: test/game-test.cpp inc/game.hpp
 	$(CC) $(CFLAGS) -o test/obj/game-test.o -c test/game-test.cpp
-objects: obj/line.o obj/ball.o obj/game.o obj/gui.o obj/pong_clone_base.o
+objects: obj/line.o obj/ball.o obj/game.o obj/gui.o obj/pong_clone_base.o obj/boundary.o
 obj/game.o: src/game.cpp inc/game.hpp inc/gui.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/game.cpp -o obj/game.o 
 obj/gui.o: src/gui.cpp inc/gui.hpp inc/pong_clone_base.hpp

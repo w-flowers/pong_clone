@@ -40,7 +40,9 @@ public:
 private:
    std::vector<Line> game_bounds;
 
-   create_segment( pos_1, pos_2, seg_type, ball_radius );
+   //helper method to insert line segments into game bounds vector
+   void create_segment( struct position pos_1, struct position pos_2,
+         Linetype seg_type, int ball_radius );
 };
 
 #endif
