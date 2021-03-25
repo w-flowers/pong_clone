@@ -8,12 +8,15 @@
 
 #include "../inc/game.hpp"
 
-int main()
+#include "catch.hpp"
+
+TEST_CASE( "Game Class initilises correctly", "[game]" )
 {
    Game main_game;
 
-   main_game.run();
-
-   return 0;
+   SECTION( "Game method runs" )
+   {
+      main_game.run();
+   }
 }
 

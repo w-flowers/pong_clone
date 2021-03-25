@@ -2,8 +2,8 @@
 /******************************************************************************
  * pong_clone_base.hpp
  *
- * A header which defines constants and expressions that will be used accross
- * the entire codebase and which will not be expected to change.
+ * A header which defines constants, functions and expressions that will be used
+ * across the entire codebase and which will not be expected to change.
  *
  * Author: William Flowers
  * ***************************************************************************/
@@ -13,6 +13,7 @@
 #define PONG_CLONE_BASE
 
 #include <SDL2/SDL.h>
+
 
 #include <vector>
 
@@ -33,5 +34,11 @@ struct positionf
    float x;
    float y;
 };
+
+// Convenience function, don't want overhead of using exp
+float square_float( float a );
+
+// Function for testing purposes. Should not be used for actual equality tests
+bool approx_equal_anglesf( float a, float b );
 
 #endif

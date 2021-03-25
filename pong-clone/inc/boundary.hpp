@@ -2,7 +2,9 @@
 /********************************************************************************
 * Pong Clone - boundary (boundary.hpp) 
 *
-* DESCRIPTION
+* A class to manage the boundary of the game. Stores a vector of the game and
+* provides initialisation based on a list of points. Will always return a closed
+* polygon.
 *
 * Author: William Flowers
 ********************************************************************************/
@@ -15,13 +17,30 @@
 
 #include "line.hpp"
 
+//Enum used to initialise boundary
+enum Linetype { edge, goal };
+
+//Struct used to initialise boundary
+struct Line_start
+{
+   struct position pos;
+
+   Linetype type;
+};
+
 class Boundary
 {
 public:
-   Boundary();
+   //Initialise boundary using a list of points and edge types.
+   //Boundary() will join the points into a polygon.
+   //It is the caller's responsibility to ensure that the points passed in
+   //are reasonable.
+   Boundary( std::vector<Line_start> init_list, int ball_radius );
 
 private:
    std::vector<Line> game_bounds;
+
+   create_segment( pos_1, pos_2, seg_type, ball_radius );
 };
 
 #endif

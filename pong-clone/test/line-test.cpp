@@ -33,3 +33,41 @@ TEST_CASE( "Line Class initialises correctly", "[line]" )
    REQUIRE( newline.get_p2().y == 1 );
 }
 
+
+TEST_CASE( "Collidable Class initialises correctly", "[collidable]" )
+{
+   struct position p1_ = { 0, 0 };
+
+   struct position p2_ = { 1, 1 };
+
+   struct position p3_ = { 0, 1 };
+
+   struct position p4_ = { 1, 0 };
+
+   Edge col1 { p1_, p2_, 10 };
+
+   Edge col2 { p1_, p3_, 10 };
+
+   Edge col3 { p1_, p4_, 10 };
+
+   Edge col4 { p2_, p3_, 10 };
+
+   Edge col5 { p2_, p4_, 10 };
+
+   Edge col6 { p3_, p4_, 10 };
+
+   SECTION( "Angles are computed correctly" )
+   {
+      REQUIRE( approx_equal_anglesf( col1.get_line_angle(), this_pi / 4.0f ) );
+
+      REQUIRE( approx_equal_anglesf( col2.get_line_angle(), this_pi / 2.0f ) );
+
+      REQUIRE( approx_equal_anglesf( col3.get_line_angle(), 0.0f ) );
+
+      REQUIRE( approx_equal_anglesf( col4.get_line_angle(), this_pi ) );
+
+      REQUIRE( approx_equal_anglesf( col5.get_line_angle(), - ( this_pi / 2.0f ) ) );
+
+      REQUIRE( approx_equal_anglesf( col6.get_line_angle(), - ( this_pi / 4.0f ) ) );
+   }
+}

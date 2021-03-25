@@ -24,17 +24,6 @@ Line::Line( struct position p1_ , struct position p2_ ):
    p1{p1_}, p2{p2_}
 {}
 
-void Line::set_colour(SDL_Color colour)
-{
-   line_colour.r = colour.r;
-
-   line_colour.g = colour.g;
-
-   line_colour.b = colour.b;
-
-   line_colour.a = colour.a;
-}
-
 struct position Line::get_p1() const
 {
    return p1;
@@ -82,9 +71,9 @@ void Collidable::set_collision_boxes( int br )
 
    //find appropriate bounds for inner container box
    
-   float icb_x_offset = br * std::cos( std::abs( this_pi/2.0 - line_angle ) ); //radius * cos (|90 - alpha|)
+   float icb_x_offset = br * std::cos( std::abs( this_pi/2.0f - line_angle ) ); //radius * cos (|90 - alpha|)
 
-   float icb_y_offset = br * std::sin( std::abs( this_pi/2.0 - line_angle ) ); //radius * sin (|90 - alpha|)
+   float icb_y_offset = br * std::sin( std::abs( this_pi/2.0f - line_angle ) ); //radius * sin (|90 - alpha|)
 
    icb_tl.x = ( x1 > x2 ) ? ( x2 - icb_x_offset ) : ( x1 - icb_x_offset ) ;
 
@@ -97,7 +86,7 @@ void Collidable::set_collision_boxes( int br )
    return;
 }
 
-bool Collidable::in_outer_collision_box( const Ball& ball)
+bool Collidable::in_outer_collision_box( const Ball& ball )
 {
   struct position curr_pos = ball.get_position();
 
@@ -107,7 +96,7 @@ bool Collidable::in_outer_collision_box( const Ball& ball)
 
 bool Collidable::is_colliding( const Ball& ball )
 {
-  struct position curr_pos = ball.get_position();
+   struct position curr_pos = ball.get_position();
 
    int x1 = get_p1().x;
 
@@ -117,31 +106,31 @@ bool Collidable::is_colliding( const Ball& ball )
 
    int y2 = get_p2().y;
 
-  if( curr_pos.x >= ocb_tl.x && curr_pos.y >= ocb_tl.y && 
-     curr_pos.x <= ocb_br.x && curr_pos.y <= ocb_br.y)
-  {
-     //calculate distance of ball centre from line
-     float ax_by_c = ( x2 - x1 ) * ( curr_pos.y - y1 ) -
-        ( y2 - y1 ) * ( curr_pos.x - x1 ) ;
+   if( curr_pos.x >= icb_tl.x && curr_pos.y >= icb_tl.y && 
+         curr_pos.x <= icb_br.x && curr_pos.y <= icb_br.y)
+   {
+      //calculate distance of ball centre from line
+      float ax_by_c = ( x2 - x1 ) * ( curr_pos.y - y1 ) -
+         ( y2 - y1 ) * ( curr_pos.x - x1 ) ;
 
-     float asqrd = ( x2 - x1 ) * ( x2 - x1 );
+      float asqrd = ( x2 - x1 ) * ( x2 - x1 );
 
-     float bsqrd = ( y2 - y1 ) * ( y2 - y1 );
+      float bsqrd = ( y2 - y1 ) * ( y2 - y1 );
 
-     return ( ax_by_c * ax_by_c / ( asqrd + bsqrd ) <=
-           ball.get_radius() * ball.get_radius() );
-  }
+      return ( ax_by_c * ax_by_c / ( asqrd + bsqrd ) <=
+            ball.get_radius() * ball.get_radius() );
+   }
 
-  else
-  {
-     return //boolean of whether distance from ends^2 is less than ball_radius^2
-        ( ( curr_pos.x - x1 ) * ( curr_pos.x - x1 ) +
-          ( curr_pos.y - y1 ) * ( curr_pos.y - y1 ) <=
-          ball.get_radius() * ball.get_radius() ) ||
-        ( ( curr_pos.x - x2 ) * ( curr_pos.x - x2 ) +
-          ( curr_pos.y - y2 ) * ( curr_pos.y - y2 ) <=
-          ball.get_radius() * ball.get_radius() ) ;
-  }
+   else
+   {
+      return //boolean of whether distance from ends^2 is less than ball_radius^2
+         ( ( curr_pos.x - x1 ) * ( curr_pos.x - x1 ) +
+           ( curr_pos.y - y1 ) * ( curr_pos.y - y1 ) <=
+           ball.get_radius() * ball.get_radius() ) ||
+         ( ( curr_pos.x - x2 ) * ( curr_pos.x - x2 ) +
+           ( curr_pos.y - y2 ) * ( curr_pos.y - y2 ) <=
+           ball.get_radius() * ball.get_radius() ) ;
+   }
 
 }
 

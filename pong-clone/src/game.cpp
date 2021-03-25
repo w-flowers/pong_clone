@@ -10,14 +10,10 @@
 
 #include "../inc/game.hpp"
 
-#define GUI_SIZE_X 500
-
-#define GUI_SIZE_Y 500
 
 void Game::run()
 {
    //insert body here
-   GUI gui { GUI_SIZE_X, GUI_SIZE_Y };
 
    game_loop();
 
@@ -27,6 +23,14 @@ void Game::run()
 void Game::game_loop()
 {
    //insert body here
+   
+   //Render Boundaries
+
+   //Render Ball
+   
+   //Draw scoreboards
+   
+   //
    SDL_Event e;
 
    bool quit = false;
@@ -40,6 +44,9 @@ void Game::game_loop()
                quit = true;
            }
        }
+       //Move game objects
+       
+       //Render
    }
    
    return;

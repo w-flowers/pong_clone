@@ -7,7 +7,8 @@
  * and up. All lines defined herein may be rendered by the program.
  *
  * The lines defined in this class may be part of the subclass "Collidable".
- * This class manages collisions between Balls and Lines.
+ * This class manages collisions between Balls and Lines. For simplicity, it
+ * assumes that there is only one ball radius.
  *
  * Author: William Flowers
  * ***************************************************************************/
@@ -22,16 +23,12 @@ public:
 
    Line( struct position p1_ , struct position p2_ );
 
-   void set_colour(SDL_Color colour);
-
    struct position get_p1() const;
 
    struct position get_p2() const;
 
    ~Line();
 private:
-   SDL_Color line_colour {0, 0, 0, 0};
-
    struct position p1;
 
    struct position p2;

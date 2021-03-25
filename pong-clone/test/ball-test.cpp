@@ -30,7 +30,7 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
       REQUIRE( ball.get_position().y == 50 );
    }
 
-   SECTION( "Ball bounces correctly off horizontal line." )
+   SECTION( "Ball bounces correctly off horizontal line while moving vertically." )
    {
       ball.move();
 
@@ -45,7 +45,59 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
       REQUIRE( ball.get_position().x == 40 );
 
       REQUIRE( ball.get_position().y == 40 );
+
+      ball.move();
+
+      ball.bounce(0);
+
+      ball.move();
+
+      REQUIRE( ball.get_position().x == 40 );
+
+      REQUIRE( ball.get_position().y == 40 );
    }
 
+   SECTION( "Ball moving vertically bounces correctly off pi/4 angled line" )
+   {
+      ball.bounce( this_pi / 4.0 );
+
+      ball.move();
+
+      REQUIRE( ball.get_position().x == 50 );
+
+      REQUIRE( ball.get_position().y == 40 );
+
+      SECTION( "Ball moving horizontally bounces correctly off pi/4 angled line" )
+      {
+         ball.bounce( this_pi / 4.0 );
+
+         ball.move();
+
+         REQUIRE( ball.get_position().x == 50 );
+
+         REQUIRE( ball.get_position().y == 50 );
+      }
+
+      SECTION( "Ball moving horizontally bounces correctly off vertical line" )
+      {
+         ball.bounce( this_pi / 2.0 );
+
+         ball.move();
+
+         REQUIRE( ball.get_position().x == 40 );
+
+         REQUIRE( ball.get_position().y == 40 );
+         
+         ball.move();
+
+         ball.bounce( this_pi / 2.0 );
+
+         ball.move();
+
+         REQUIRE( ball.get_position().x == 40 );
+
+         REQUIRE( ball.get_position().y == 40 );
+      }
+   }
 }
 

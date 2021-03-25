@@ -26,6 +26,8 @@ public:
    
    // Changes the internal dx and dy components of velocity according to its
    // angle and the angle of the line/object it bounces off
+   // NOTE: edge_angle and vel_angle() CANNOT be equal - clipping will occur
+   // Controlling function needs to ensure that edge_angle != vel_angle()
    void bounce( float edge_angle );
 
    // Moves the ball one step, according to what the internal dx and dy are
