@@ -37,8 +37,15 @@ public:
    //are reasonable.
    Boundary( std::vector<Line_start> init_list, int ball_radius );
 
+   //return edge at vector index
+   Edge get_edge( int index );
+
+   //return size of vector of edges
+   int get_edges_size();
 private:
-   std::vector<Line> game_bounds;
+   std::vector<Edge> game_bounds;
+
+   //To be created: Vector of Goals - once goal class is created
 
    //helper method to insert line segments into game bounds vector
    void create_segment( struct position pos_1, struct position pos_2,

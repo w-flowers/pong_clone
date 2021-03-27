@@ -2,7 +2,8 @@
 /********************************************************************************
 * Pong Clone - Field (field.hpp) 
 *
-* DESCRIPTION
+* Class that manages the field - specifically, the ball(s), boundaries and
+* paddles.
 *
 * Author: William Flowers
 ********************************************************************************/
@@ -26,7 +27,25 @@
 
 class Field
 {
+public:
+   Field( std::vector<Line_start> init_list, int ball_radius );
+
+   Boundary get_boundary();
+
+   Ball get_ball( int index );
+
+   int ball_vec_size();
+
+   //TO DO: Paddle Methods
    
+   //moves elements in field by one step
+   void advance_field();
+private:
+   Boundary boundary;
+
+   std::vector<Ball> ball_vec;
+
+   //TO DO: std::vector<Paddle> paddles;
 };
 
 #endif

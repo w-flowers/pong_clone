@@ -22,6 +22,16 @@ Boundary::Boundary( std::vector<Line_start> init_list, int ball_radius )
         init_list.back().type, ball_radius );
 }
 
+Edge Boundary::get_edge( int index )
+{
+   return game_bounds.at( index );
+}
+
+int Boundary::get_edges_size()
+{
+   return game_bounds.size();
+}
+
 void Boundary::create_segment( struct position pos_1, struct position pos_2,
       Linetype seg_type, int ball_radius )
 {

@@ -5,6 +5,10 @@
  * Class describing the paddles used by players of the game. All units measured
  * in an integer number of pixels.
  *
+ * TO DO: This class needs a rewrite to fit better with the other classes
+ * Specifically, should be rewritten to incorporate an edge and use enums
+ * defined in pong clone base.
+ *
  * Author: William Flowers
  * ***************************************************************************/
 

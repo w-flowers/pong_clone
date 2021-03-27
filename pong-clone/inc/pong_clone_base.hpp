@@ -14,6 +14,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <iostream>
 
 #include <vector>
 
@@ -34,6 +35,8 @@ struct positionf
    float x;
    float y;
 };
+
+enum Player {player_1, player_2};
 
 // Convenience function, don't want overhead of using exp
 float square_float( float a );
