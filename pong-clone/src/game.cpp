@@ -2,7 +2,7 @@
 /********************************************************************************
 * Pong Clone - Game (game.cpp) 
 *
-* A class that managers the running of the game as a whole. Contains the run
+* A class that manages the running of the game as a whole. Contains the run
 * method and the event loop.
 *
 * Author: William Flowers

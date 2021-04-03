@@ -39,6 +39,9 @@ public:
    // Returns the radius of the ball
    int get_radius() const;
 
+   // Returns angle of ball movement
+   float get_vel_angle() const;
+
 private:
    
    int radius;
