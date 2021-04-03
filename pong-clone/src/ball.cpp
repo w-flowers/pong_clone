@@ -40,17 +40,33 @@ void Ball::move()
    position.y += velocity.dy;
 }
 
-float Ball::vel_angle()
-{
-   return atan2f( ( static_cast<float>( velocity.dy ) ), ( static_cast<float>( velocity.dx ) ) );
-}
-
 struct position Ball::get_position() const
 {
    return position;
+}
+
+float Ball::get_speed()
+{
+   return velocity.speed;
+}
+
+void Ball::set_velocity( int dx, int dy )
+{
+   velocity.dx = dx;
+
+   velocity.dy = dy;
+
+   return;
 }
 
 int Ball::get_radius() const
 {
    return radius;
 }
+
+float Ball::vel_angle()
+{
+   return atan2f( ( static_cast<float>( velocity.dy ) ), 
+         ( static_cast<float>( velocity.dx ) ) );
+}
+

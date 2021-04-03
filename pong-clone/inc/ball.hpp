@@ -17,6 +17,15 @@
 
 #include "pong_clone_base.hpp"
 
+struct velocity
+{
+   int dx;
+
+   int dy;
+
+   float speed;
+};
+
 class Ball
 {
 public:
@@ -24,6 +33,7 @@ public:
    // and the speed going in the vertical positive direction
    Ball( int r, int init_x, int init_y, float speed );
    
+   // DEPRECATED - look at physics.hpp instead
    // Changes the internal dx and dy components of velocity according to its
    // angle and the angle of the line/object it bounces off
    // NOTE: edge_angle and vel_angle() CANNOT be equal - clipping will occur
@@ -36,31 +46,25 @@ public:
    // Returns current position of the ball
    struct position get_position() const;
 
+   float get_speed() const;
+
+   void set_velocity( int dx, int dy );
+
    // Returns the radius of the ball
    int get_radius() const;
 
-   // Returns angle of ball movement
-   float get_vel_angle() const;
-
+   //calculate angle of balls movement from horizontal - range from +pi to -pi
+   float vel_angle();
 private:
    
    int radius;
    
-   struct velocity
-   {
-      int dx;
-      
-      int dy;
-      
-      float speed;
-   } velocity;
+   struct velocity velocity;
    
    struct position position;
    
    class InvalidBall {};
    
-   //calculate angle of balls movement from horizontal - range from +pi to -pi
-   float vel_angle();
 };
 
 #endif

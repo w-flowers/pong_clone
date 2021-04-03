@@ -11,3 +11,17 @@
 
 #include "../inc/physics.hpp"
 
+void Engine::bounce( Ball& ball, float edge_angle )
+{
+      float newangle = 2 * edge_angle - ball.vel_angle();
+      
+      ball.set_velocity( 
+            //x value
+            static_cast<int>( lroundf( ball.get_speed() * cosf( newangle ) ) )
+
+            //y value
+            static_cast<int>( lroundf( ball.get_speed() * sinf( newangle ) ) ),
+            );
+      
+      return;
+}

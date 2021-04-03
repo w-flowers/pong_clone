@@ -84,9 +84,10 @@ public:
    
    ~Edge();
 };
-/*
+
 class Goal : public Collidable
 {
 public:
    //insert methods related to players and scoring here
-};*/
+};
+
