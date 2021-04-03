@@ -6,16 +6,13 @@
  * a number plane where the positive direction is right and down, negative left
  * and up. All lines defined herein may be rendered by the program.
  *
- * The lines defined in this class may be part of the subclass "Collidable".
- * This class manages collisions between Balls and Lines. For simplicity, it
- * assumes that there is only one ball radius.
- *
  * Author: William Flowers
  * ***************************************************************************/
 
 #include "pong_clone_base.hpp"
 
-#include "ball.hpp"
+//Enum used to initialise boundary
+enum Linetype { edge, goal, paddle};
 
 class Line
 {
@@ -27,18 +24,47 @@ public:
 
    struct position get_p2() const;
 
+   void set_p1( int x, int y );
+
+   void set_p2( int x, int y );
+
+   //needed for ball bouncing methods and collision methods
+   float get_line_angle();
+
    ~Line();
 private:
    struct position p1;
 
    struct position p2;
+
+   float line_angle;
 };
 
+class Line_Object
+{
+public:
+   Line_Object( struct position pos_1, struct position pos_2,
+      Linetype t, Player p );
+
+   Line line;
+
+   Linetype get_type() const;
+
+   Player get_player() const;
+
+   Class InvalidPlayerValue{};
+private:
+   Linetype type;
+
+   Player player;
+};
+
+/* DEPRECATED
 // Class for handling collision between balls and lines
 class Collidable : public Line
 {
 public:
-   Collidable( struct position p1_ , struct position p2_ , int br /*ball radius*/ );
+   Collidable( struct position p1_ , struct position p2_ , int br ball radius );
 
    virtual void collide( Ball& ) = 0 ;
 
@@ -75,6 +101,7 @@ private:
    float line_angle;
 };
 
+// DEPRECATED
 class Edge : public Collidable
 {
 public:
@@ -85,9 +112,10 @@ public:
    ~Edge();
 };
 
+// DEPRECATED
 class Goal : public Collidable
 {
 public:
    //insert methods related to players and scoring here
 };
-
+*/

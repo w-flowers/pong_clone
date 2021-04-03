@@ -36,7 +36,7 @@ struct positionf
    float y;
 };
 
-enum Player {player_1, player_2};
+enum Player {pl_1, pl_2, none};
 
 // Convenience function, don't want overhead of using exp
 float square_float( float a );

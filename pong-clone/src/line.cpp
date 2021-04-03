@@ -6,14 +6,6 @@
  * a number plane where the positive direction is right and down, negative left
  * and up. All lines defined herein may be rendered by the program.
  *
- * The lines defined in this class may be part of the subclass "Collidable".
- * This class manages collisions between Balls and Lines.
- *
- * TO DO: 
- * Define the methods for collidable (outer rect - max of pts + radius, inner
- *  rect, use trig)
- * Move line angle from LINE to COLLIDABLE
- *
  * Author: William Flowers
  *****************************************************************************/
 
@@ -22,7 +14,12 @@
 
 Line::Line( struct position p1_ , struct position p2_ ):
    p1{p1_}, p2{p2_}
-{}
+{
+   line_angle = atan2f( 
+         ( (float) ( get_p2().y - get_p1().y ) ), 
+         ( (float) ( get_p2().x - get_p1().x ) ) 
+         );
+}
 
 struct position Line::get_p1() const
 {
@@ -34,10 +31,60 @@ struct position Line::get_p2() const
    return p2;
 }
 
+void set_p1( int x, int y )
+{
+   p1.x = x;
+
+   p1.y = y;
+}
+
+void set_p2( int x, int y )
+{
+   p2.x = x;
+
+   p2.y = y;
+}
+
+float Line::get_line_angle()
+{
+   return line_angle;
+}
+
 Line::~Line()
 {}
 
-Collidable::Collidable( struct position p1_ , struct position p2_ , int br /*ball radius*/ )
+Line_Object::Line_Object( struct position pos_1, struct position pos_2,
+      Linetype t, Player p )
+   : Line{ pos_1, pos_2 }, type{ t }
+{
+   if( type == edge )
+   {
+      if( p != none)
+      {
+         throw InvalidPlayerValue{};
+      }
+      else
+      {
+         player = none;
+      }
+   }
+
+   else
+   {
+      if( p == none )
+      {
+         throw InvalidPlayerValue{};
+      }
+      else
+      {
+         player = p;
+      }
+   }
+}
+
+/* DEPRECATED - Functions moved to physics.cpp
+
+Collidable::Collidable( struct position p1_ , struct position p2_ , int br ball radius )
    : Line( p1_, p2_ )
 {
    line_angle = atan2f( ( (float) ( get_p2().y - get_p1().y ) ), ( (float) ( get_p2().x - get_p1().x ) ) );
@@ -148,4 +195,4 @@ void Edge::collide( Ball& ball )
 
 Edge::~Edge()
 {}
-
+*/

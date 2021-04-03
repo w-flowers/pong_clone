@@ -32,9 +32,6 @@ private:
    //Check collision between a ball and a line
    void is_colliding_bl( Ball& ball, Line& line );
 
-   void collide_ball_edge( Ball& ball, Edge& edge );
-
-   void collide_ball_goal( Ball& ball, Goal& goal );
 };
 
 #endif
