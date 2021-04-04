@@ -33,7 +33,6 @@ public:
    // and the speed going in the vertical positive direction
    Ball( int r, int init_x, int init_y, float speed );
    
-   // DEPRECATED - look at physics.hpp instead
    // Changes the internal dx and dy components of velocity according to its
    // angle and the angle of the line/object it bounces off
    // NOTE: edge_angle and vel_angle() CANNOT be equal - clipping will occur

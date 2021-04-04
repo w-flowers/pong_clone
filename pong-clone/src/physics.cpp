@@ -11,7 +11,7 @@
 
 #include "../inc/physics.hpp"
 
-void Engine::bounce( Ball& ball, float edge_angle )
+void Physics::bounce( Ball& ball, float edge_angle )
 {
       float newangle = 2 * edge_angle - ball.vel_angle();
       
@@ -24,4 +24,102 @@ void Engine::bounce( Ball& ball, float edge_angle )
             );
       
       return;
+}
+
+void Physics::collide_ball_point( Ball& ball, struct position pos )
+{
+   int dx = ball.get_position().x - pos.x;
+
+   int dy = ball.get_position().y - pos.y;
+
+   int br = ball.get_radius();
+
+   if( square_int( dy ) + square_int( dx ) <= br * br )
+   {
+      // Compute angle of perpendicular to line from centre of ball to point and
+      // pass to bounce method of ball
+
+      ball.bounce( 
+            ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
+            + this_pi / 2.0 ) 
+            );
+   }
+}
+
+void Physics::is_colliding_bl( Ball& ball, const Line& line )
+{
+   struct position curr_pos = ball.get_position();
+
+   int x1 = line.get_p1().x;
+
+   int x2 = line.get_p2().x;
+
+   int y1 = line.get_p1().y;
+
+   int y2 = line.get_p2().y;
+
+   Line_Eq l_e { (y2 - y1), ( -(x2 - x1) ), {x1, y1} };
+
+   //check if within radius of line
+   if( sqrd_dist_pt_ln( curr_pos, l_e ) <=
+         square_float( (float) ball.get_radius() ) )
+   {
+      float xm = ( x1 + x2 ) / 2.0;
+
+      float ym = ( y1 + y2 ) / 2.0;
+
+      //normal equation at midpoint of line
+      Line_Eq n_e { ( x2 - x1 ), ( y2 - y1 ), {xm, ym} };
+
+      return ( sqrd_dist_pt_ln( curr_pos, n_e ) <=
+            square_float( ym - y1 ) + square_float( xm - x1 ) );
+   }
+}
+
+void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o )
+{
+   if( is_colliding_bl( ball, line_o.line ) )
+   {
+      switch( line_o.type )
+      {
+         case edge:
+
+            ball.bounce( line_e.line.get_line_angle() );
+            
+            break;
+
+         case goal:
+
+            //Insert goal code here
+            break;
+
+         case paddle:
+
+            //Insert paddle code here
+            break;
+      }
+   }
+   else 
+   {
+      collide_ball_point( ball, line_o.line.get_p1() );
+
+      collide_ball_point( ball, line_o.line.get_p2() );
+   }
+}
+
+void Physics::collide_balls( Ball& ball1, Ball& ball2 )
+{
+   if( square_int( ball1.position().x - ball2.position().x ) +
+         square_int( ball1.position().y - ball2.position().y ) <=
+         square_int( ball1.get_radius() + ball2.get_radius() ) )
+   {
+      //bounce off perpendicular to line joining centres of b1 and b2
+   }
+}
+
+float Physics::sqrd_dist_pt_ln( struct position pos, Line_eq line )
+{
+   float ax_by_c = a * ( pos.x - p.x ) + b * ( pos.y - p.y );
+
+   return square_float( ax_by_c ) / ( a*a + b*b );
 }

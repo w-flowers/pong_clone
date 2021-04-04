@@ -41,6 +41,8 @@ enum Player {pl_1, pl_2, none};
 // Convenience function, don't want overhead of using exp
 float square_float( float a );
 
+int square_int( int a );
+
 // Function for testing purposes. Should not be used for actual equality tests
 bool approx_equal_anglesf( float a, float b );
 
