@@ -25,26 +25,48 @@
 
 #include "boundary.hpp"
 
+struct BallArgs
+{
+   int radius;
+
+   int init_x;
+
+   int init_y;
+
+   float speed;
+};
+
 class Field
 {
 public:
-   Field( std::vector<Line_start> init_list, int ball_radius );
+   Field( std::vector<Line_start> boun_init_list, 
+         std::vector<BallArgs> ball_init_list, int x_d, int y_d );
 
-   Boundary get_boundary();
+   //public - encapsulation in boundary class
+   Boundary boundary;
 
    Ball get_ball( int index );
 
    int ball_vec_size();
 
+   // Get dimensions of field
+   int get_x_dim() const;
+
+   int get_y_dim() const;
+
    //TO DO: Paddle Methods
    
    //moves elements in field by one step
    void advance_field();
-private:
-   Boundary boundary;
 
+   class InvalidDimensions{};
+private:
    std::vector<Ball> ball_vec;
 
+   //Dimensions of the field in total
+   int x_dim;
+
+   int y_dim;
    //TO DO: std::vector<Paddle> paddles;
 };
 

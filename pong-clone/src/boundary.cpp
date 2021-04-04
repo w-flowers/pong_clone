@@ -10,7 +10,7 @@
 
 #include "../inc/boundary.hpp"
 
-Boundary::Boundary( std::vector<Line_start> init_list, int ball_radius )
+Boundary::Boundary( std::vector<Line_start> init_list )
 {
    for( auto i = 0; i < init_list.size() - 1; i++ )
    {

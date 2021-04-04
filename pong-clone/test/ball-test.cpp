@@ -19,6 +19,8 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
    REQUIRE( ball.get_position().y == 40 );
 
+   REQUIRE( ball.get_speed() == 10.0 );
+
    SECTION( "Ball moves correctly" )
    {
       ball.move();
@@ -30,6 +32,8 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
       REQUIRE( ball.get_position().y == 50 );
    }
 
+   //Section needs to be moved to physics.hpp
+    
    SECTION( "Ball bounces correctly off horizontal line while moving vertically." )
    {
       ball.move();

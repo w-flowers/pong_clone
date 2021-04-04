@@ -1,13 +1,10 @@
 
 /******************************************************************************
- * Pong-clone - Line (line.hpp)
+ * Pong-clone - Line (line-test.cpp)
  *
  * All units an integer number of pixels. Line angle calculated according to 
  * a number plane where the positive direction is right and down, negative left
  * and up. All lines defined herein may be rendered by the program.
- *
- * The lines defined in this class may be part of the subclass "Collidable".
- * This class manages collisions between Balls and Lines.
  *
  * Author: William Flowers
  * ***************************************************************************/
@@ -31,10 +28,33 @@ TEST_CASE( "Line Class initialises correctly", "[line]" )
    REQUIRE( newline.get_p2().x == 1 );
 
    REQUIRE( newline.get_p2().y == 1 );
+
+   SECTION( "Set functions work correctly" )
+   {
+      newline.set_p1( 3, 4 );
+
+      REQUIRE( newline.get_p1().x == 3 );
+
+      REQUIRE( newline.get_p1().y == 4 );
+
+      REQUIRE( newline.get_p2().x == 1 );
+
+      REQUIRE( newline.get_p2().y == 1 );
+
+      newline.set_p2( 5, 6 );
+
+      REQUIRE( newline.get_p1().x == 3 );
+
+      REQUIRE( newline.get_p1().y == 4 );
+
+      REQUIRE( newline.get_p2().x == 5 );
+
+      REQUIRE( newline.get_p2().y == 6 );
+   }
 }
 
 
-TEST_CASE( "Collidable Class initialises correctly", "[collidable]" )
+TEST_CASE( "Line class computes angles correctly", "[LineAngle]" )
 {
    struct position p1_ = { 0, 0 };
 
@@ -44,17 +64,17 @@ TEST_CASE( "Collidable Class initialises correctly", "[collidable]" )
 
    struct position p4_ = { 1, 0 };
 
-   Edge col1 { p1_, p2_, 10 };
+   Line col1 { p1_, p2_ };
 
-   Edge col2 { p1_, p3_, 10 };
+   Line col2 { p1_, p3_ };
 
-   Edge col3 { p1_, p4_, 10 };
+   Line col3 { p1_, p4_ };
 
-   Edge col4 { p2_, p3_, 10 };
+   Line col4 { p2_, p3_ };
 
-   Edge col5 { p2_, p4_, 10 };
+   Line col5 { p2_, p4_ };
 
-   Edge col6 { p3_, p4_, 10 };
+   Line col6 { p3_, p4_ };
 
    SECTION( "Angles are computed correctly" )
    {
@@ -71,3 +91,4 @@ TEST_CASE( "Collidable Class initialises correctly", "[collidable]" )
       REQUIRE( approx_equal_anglesf( col6.get_line_angle(), - ( this_pi / 4.0f ) ) );
    }
 }
+

@@ -9,6 +9,10 @@
  * Author: William Flowers
  * ***************************************************************************/
 
+#ifndef LINE_HPP
+
+#define LINE_HPP
+
 #include "pong_clone_base.hpp"
 
 //Enum used to initialise boundary
@@ -52,12 +56,14 @@ public:
 
    Player get_player() const;
 
-   Class InvalidPlayerValue{};
+   class InvalidPlayerValue{};
 private:
    Linetype type;
 
    Player player;
 };
+
+#endif
 
 /* DEPRECATED
 // Class for handling collision between balls and lines

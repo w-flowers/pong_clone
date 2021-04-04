@@ -45,7 +45,7 @@ struct position Ball::get_position() const
    return position;
 }
 
-float Ball::get_speed()
+float Ball::get_speed() const
 {
    return velocity.speed;
 }

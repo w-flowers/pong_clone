@@ -31,14 +31,14 @@ struct position Line::get_p2() const
    return p2;
 }
 
-void set_p1( int x, int y )
+void Line::set_p1( int x, int y )
 {
    p1.x = x;
 
    p1.y = y;
 }
 
-void set_p2( int x, int y )
+void Line::set_p2( int x, int y )
 {
    p2.x = x;
 
@@ -55,7 +55,7 @@ Line::~Line()
 
 Line_Object::Line_Object( struct position pos_1, struct position pos_2,
       Linetype t, Player p )
-   : Line{ pos_1, pos_2 }, type{ t }
+   : line{ pos_1, pos_2 }, type{ t }
 {
    if( type == edge )
    {
