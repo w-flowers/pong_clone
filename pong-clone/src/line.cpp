@@ -45,7 +45,7 @@ void Line::set_p2( int x, int y )
    p2.y = y;
 }
 
-float Line::get_line_angle()
+float Line::get_line_angle() const
 {
    return line_angle;
 }
@@ -80,6 +80,16 @@ Line_Object::Line_Object( struct position pos_1, struct position pos_2,
          player = p;
       }
    }
+}
+
+Linetype Line_Object::get_type() const
+{
+   return type;
+}
+
+Player Line_Object::get_player() const
+{
+   return player;
 }
 
 /* DEPRECATED - Functions moved to physics.cpp

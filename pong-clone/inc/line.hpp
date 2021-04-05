@@ -33,7 +33,7 @@ public:
    void set_p2( int x, int y );
 
    //needed for ball bouncing methods and collision methods
-   float get_line_angle();
+   float get_line_angle() const;
 
    ~Line();
 private:

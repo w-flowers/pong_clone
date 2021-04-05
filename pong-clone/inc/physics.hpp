@@ -13,6 +13,16 @@
 
 #define PHYSICS
 
+#include "pong_clone_base.hpp"
+
+#include "ball.hpp"
+
+#include "line.hpp"
+
+#include "boundary.hpp"
+
+#include "field.hpp"
+
 // Grid to store a vector of balls, lines and paddles for each grid square
 // Collide function will then only be called on the objects in the same
 // squares.
@@ -40,7 +50,7 @@ namespace Physics
    void collide_ball_point( Ball& ball, struct position pos );
 
    //Check collision between a ball and a line, excluding endpoints
-   void is_colliding_bl( Ball& ball, const Line& line );
+   bool is_colliding_bl( Ball& ball, const Line& line );
 
    //Check then execute collision between a ball and a line
    void collide_ball_line( Ball& ball, const Line_Object& line_o );
@@ -56,10 +66,10 @@ namespace Physics
       float b;
 
       struct positionf p;
-   }
+   };
 
    // Compute square of distance between point and line
-   float sqrd_dist_pt_ln( struct position pos, Line_Eq line );
+   float sqrd_dist_pt_ln( struct positionf pos, Line_Eq line );
 };
 
 #endif

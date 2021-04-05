@@ -17,10 +17,10 @@ void Physics::bounce( Ball& ball, float edge_angle )
       
       ball.set_velocity( 
             //x value
-            static_cast<int>( lroundf( ball.get_speed() * cosf( newangle ) ) )
+            static_cast<int>( lroundf( ball.get_speed() * cosf( newangle ) ) ),
 
             //y value
-            static_cast<int>( lroundf( ball.get_speed() * sinf( newangle ) ) ),
+            static_cast<int>( lroundf( ball.get_speed() * sinf( newangle ) ) )
             );
       
       return;
@@ -46,9 +46,10 @@ void Physics::collide_ball_point( Ball& ball, struct position pos )
    }
 }
 
-void Physics::is_colliding_bl( Ball& ball, const Line& line )
+bool Physics::is_colliding_bl( Ball& ball, const Line& line )
 {
-   struct position curr_pos = ball.get_position();
+   struct positionf curr_pos { static_cast<float>( ball.get_position().x ), 
+      static_cast<float>( ball.get_position().y ) };
 
    int x1 = line.get_p1().x;
 
@@ -80,11 +81,11 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o )
 {
    if( is_colliding_bl( ball, line_o.line ) )
    {
-      switch( line_o.type )
+      switch( line_o.get_type() )
       {
          case edge:
 
-            ball.bounce( line_e.line.get_line_angle() );
+            ball.bounce( line_o.line.get_line_angle() );
             
             break;
 
@@ -109,17 +110,28 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o )
 
 void Physics::collide_balls( Ball& ball1, Ball& ball2 )
 {
-   if( square_int( ball1.position().x - ball2.position().x ) +
-         square_int( ball1.position().y - ball2.position().y ) <=
+   int dy = ball1.get_position().y - ball2.get_position().y;
+
+   int dx = ball1.get_position().x - ball2.get_position().x;
+
+   if( square_int( dx ) + square_int( dy ) <=
          square_int( ball1.get_radius() + ball2.get_radius() ) )
    {
       //bounce off perpendicular to line joining centres of b1 and b2
+      float normal_angle = 
+         ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
+           + this_pi / 2.0 ); 
+
+      ball1.bounce( normal_angle );
+
+      ball2.bounce( normal_angle );
    }
 }
 
-float Physics::sqrd_dist_pt_ln( struct position pos, Line_eq line )
+float Physics::sqrd_dist_pt_ln( struct positionf pos, Line_Eq line )
 {
-   float ax_by_c = a * ( pos.x - p.x ) + b * ( pos.y - p.y );
+   float ax_by_c = line.a * ( pos.x - line.p.x ) + 
+      line.b * ( pos.y - line.p.y );
 
-   return square_float( ax_by_c ) / ( a*a + b*b );
+   return square_float( ax_by_c ) / ( line.a*line.a + line.b*line.b );
 }
