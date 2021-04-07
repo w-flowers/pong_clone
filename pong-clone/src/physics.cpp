@@ -221,7 +221,142 @@ void Field_Grid::assign_ball_to_squares( const Ball& ball)
 
 void Field_Grid::assign_line_to_squares( const Line& line)
 {
+   struct positionf lp1 = {
+      static_cast<float>( line.get_p1().x ),
+      static_cast<float>( line.get_p1().y )
+   };
+   
+   struct positionf lp2 = {
+      static_cast<float>( line.get_p2().x ),
+      static_cast<float>( line.get_p2().y )
+   };
 
+   if( lp1.x > lp2.x || lp1.x == lp2.x && lp1.y > lp2.y )
+   {
+      struct positionf dummy = lp2;
+
+      lp2 = lp1;
+
+      lp1 = dummy;
+   }
+
+   std::vector<struct positionf> crossing_pts { lp1 }
+
+   Line_Eq l_e { ( lp1().y - lp2().y ), ( lp2().x - lp1().x ),
+      { ( lp1().x ), (lp1().y ) } };
+
+   for( int i = 0; i < num_cols; i++ )
+   {
+      if( lp1.x == lp2.x ) break;
+      
+      while( static_cast<float>( field_sqrs[i].pos.x + field_sqrs[i].w ) <= lp1.x )
+      {
+        i++;
+
+        if( i >= num_cols ) break;
+      } 
+
+      if( i >= num_cols ) break;
+
+      float v_intcpt = static_cast<float>( field_sqrs[i].pos.x + field_sqrs[i].w );
+
+      if( v_intcpt >= lp2.x || approx_equal_angles( v_intcpt, lp2.x )) break;
+
+      else
+      {
+         crossing_pts.push_back({v_intcpt, 
+               ( ( (-l_e.a) / (l_e.b) ) * (v_intcpt - l_e.p.x) + l_e.p.y ) }
+              );
+      }
+   }
+
+   crossing_pts.push_back( lp2 );
+
+   //At this point, crossing points is sorted by x, ascending
+
+   float y_min = ( lp1.y < lp2.y ) ? lp1.y: lp2.y;
+
+   float y_max = ( lp1.y > lp2.y ) ? lp1.y: lp2.y;
+
+   for( int i = 0; i < num_rows; i++ )
+   {
+      if( lp1.y == lp2.y ) break;
+      
+      while( static_cast<float>( field_sqrs[num_cols*i].pos.y 
+               + field_sqrs[num_cols*i].h ) 
+            <= y_min )
+      {
+        i++;
+
+        if( i >= num_rows ) break;
+      } 
+
+      if( i >= num_rows ) break;
+
+      float h_intcpt = static_cast<float>( field_sqrs[i].pos.y + field_sqrs[i].h );
+
+      if( h_intcpt >= y_max ) 
+      {
+         break;
+      }
+
+      else
+      {
+         float new_x = ( (- l_e.b) / (l_e.a) * (h_intcpt - l_e.p.y) + l_e.p.x );
+
+         for( int i = 1; i < crossing_pts.size(); i++ )
+         {
+            // Note: last element acts as a sentinal for this condition
+            if( crossing_pts[i].x > new_x )
+            {
+               auto new_It = crossing_pts.begin() + i;
+
+               crossing_pts.insert( new_It, {new_x, h_intcpt} );
+
+               break;
+            }
+            else if( approx_equal_angles( new_x, crossing_pts[i].x ) )
+            {
+               break;
+            }
+         }
+      }
+   }
+
+   for( int i = 1; i < crossing_pts.size(); i++ )
+   {
+      struct positionf midpoint = 
+      { ( crossing_pts[i-1].x + crossing_pts[i].x ) / 2.0, 
+         ( crossing_pts[i-1].y + crossing_pts[i].y ) / 2.0 };
+
+      int mp_row = 0;
+
+      int mp_col = 0;
+
+      for( int i = 0; i < num_rows; i++ )
+      {
+         if( midpoint.y 
+               <= ( field_sqrs[ num_cols * i ].pos.y 
+                  + field_sqrs[ num_cols * i ].h ) )
+         {
+            mp_row = i;
+
+            break;
+         }
+      }
+
+      for( int i = 0; i < num_cols; i++ )
+      {
+         if( midpoint.x <= ( field_sqrs[ i ].pos.x + field_sqrs[ i ].w ) )
+         {
+            mp_col = i;
+
+            break;
+         }
+      }
+
+      field_sqrs[ mp_col + num_cols * mp_row].edges.push_back( &line );
+   }
 }
 
 void Physics::bounce( Ball& ball, float edge_angle )
