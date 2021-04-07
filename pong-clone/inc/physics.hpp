@@ -4,7 +4,8 @@
 *
 * File containing the functions and classes making up the physics engine. To be
 * populated in order to better seperate concerns in base classes and enable
-* implementation of better algorithms.
+* implementation of better algorithms. Manages all collision code between 
+* objects.
 *
 * Author: William Flowers
 ********************************************************************************/
@@ -26,11 +27,52 @@
 // Grid to store a vector of balls, lines and paddles for each grid square
 // Collide function will then only be called on the objects in the same
 // squares.
+//
+// Class divides field up into a grid of rows and columns specified in the
+// constructor arguments.
 class Field_Grid
 {
+public:
    //Need to add paddles to this structure
-   Field_Grid();
+   Field_Grid( const Field& field, int rows, int columns );
+
+   // This function assumes the rows/cols in grid are larger than the balls'
+   // diameter
+   void assign_ball_to_squares( const Ball& ball );
+
+   void assign_line_to_squares( const Line& line );
+
+   void return_objects_to_collide( 
+         std::unordered_map< Ball*, std::set< Ball* > >& balls_to_collide,
+         std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide
+         );
+
+private:
+   int num_rows;
+
+   int num_cols;
+
+   std::vector<Field_Square> field_sqrs;
 };
+
+struct Field_Square
+{
+   std::vector<Ball *> balls {};
+
+   std::vector<Line_Object *> edges {};
+
+   std::vector<Line_Object *> paddles {};
+
+   //top left corner of square
+   struct position pos;
+
+   //width
+   int w;
+
+   //height
+   int h;
+};
+
 
 namespace Physics
 {

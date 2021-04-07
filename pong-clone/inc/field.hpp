@@ -3,7 +3,7 @@
 * Pong Clone - Field (field.hpp) 
 *
 * Class that manages the field - specifically, the ball(s), boundaries and
-* paddles.
+* paddles. It manages movement but NOT collisions.
 *
 * Author: William Flowers
 ********************************************************************************/
@@ -62,6 +62,10 @@ public:
    class InvalidDimensions{};
 private:
    std::vector<Ball> ball_vec;
+
+   std::unordered_map< Ball*, std::set< Ball* > > balls_to_collide;
+
+   std::unordered_map< Ball*, std::set< Line_Object* > > lines_to_collide;
 
    //Dimensions of the field in total
    int x_dim;
