@@ -15,13 +15,13 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
    SECTION( "Correct calculation of square of distance between pt and line" )
    {
-      Physics::Line_Eq hori_ln { 0.0, 1.0, {0.0, 3.0} };
+      Line_Eq hori_ln { 0.0, 1.0, {0.0, 3.0} };
 
-      Physics::Line_Eq vert_ln { 1.0, 0.0, {3.0, 0.0} };
+      Line_Eq vert_ln { 1.0, 0.0, {3.0, 0.0} };
 
-      Physics::Line_Eq y_eq_x { -1, 1, {0.0, 0.0} };
+      Line_Eq y_eq_x { -1, 1, {0.0, 0.0} };
 
-      Physics::Line_Eq y_eq_2x1 { -2, 1, {0.0, 1.0} };
+      Line_Eq y_eq_2x1 { -2, 1, {0.0, 1.0} };
 
       struct positionf pos1 = {0 , 0};
 
@@ -31,37 +31,37 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
       struct positionf pos4 = {2 , 2};
 
-      REQUIRE( sqrd_dist_pt_ln( pos1, hori_ln ) == 9.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos1, hori_ln ) == 9.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos2, hori_ln ) == 9.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos2, hori_ln ) == 9.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos3, hori_ln ) == 4.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos3, hori_ln ) == 4.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos4, hori_ln ) == 1.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos4, hori_ln ) == 1.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos1, vert_ln ) == 9.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos1, vert_ln ) == 9.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos2, vert_ln ) == 4.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos2, vert_ln ) == 4.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos3, vert_ln ) == 9.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos3, vert_ln ) == 9.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos4, vert_ln ) == 1.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos4, vert_ln ) == 1.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos1, y_eq_x ) == 0.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos1, y_eq_x ) == 0.0);
 
-      REQUIRE( sqrd_dist_pt_ln( pos2, y_eq_x ) == 0.5);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos2, y_eq_x ) == 0.5);
 
-      REQUIRE( sqrd_dist_pt_ln( pos3, y_eq_x ) == 0.5);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos3, y_eq_x ) == 0.5);
 
-      REQUIRE( sqrd_dist_pt_ln( pos4, y_eq_x ) == 0.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos4, y_eq_x ) == 0.0);
 
-      REQUIRE( approx_equal_anglesf( sqrd_dist_pt_ln( pos1, y_eq_2x1 ), 0.2) );
+      REQUIRE( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos1, y_eq_2x1 ), 0.2) );
 
-      REQUIRE( approx_equal_anglesf( sqrd_dist_pt_ln( pos2, y_eq_2x1 ), 1.8) );
+      REQUIRE( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos2, y_eq_2x1 ), 1.8) );
 
-      REQUIRE( sqrd_dist_pt_ln( pos3, y_eq_2x1 ) == 0.0);
+      REQUIRE( Physics::sqrd_dist_pt_ln( pos3, y_eq_2x1 ) == 0.0);
 
-      REQUIRE( approx_equal_anglesf( sqrd_dist_pt_ln( pos4, y_eq_2x1 ), 1.8) );
+      REQUIRE( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos4, y_eq_2x1 ), 1.8) );
    }
 
    Ball ball{ 10, 40, 40, 10.0 };
@@ -145,5 +145,5 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
          REQUIRE( ball.get_position().y == 40 );
       }
    }
-
 }
+

@@ -15,6 +15,17 @@
 
 #include "pong_clone_base.hpp"
 
+// Gives equation of line in form a(x - p.x) + b(y - p.y) = 0
+struct Line_Eq
+{
+   float a;
+
+   float b;
+
+   struct positionf p;
+};
+
+
 //Enum used to initialise boundary
 enum Linetype { edge, goal, paddle};
 

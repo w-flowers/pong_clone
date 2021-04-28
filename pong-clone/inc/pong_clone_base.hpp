@@ -20,6 +20,10 @@
 
 #include <cmath>
 
+#include <unordered_map>
+
+#include <set>
+
 const float this_pi = 3.141593; //local definition of pi, may change in future
 
 const int fps = 30;

@@ -5,9 +5,17 @@
 *
 * Author: William Flowers
 ********************************************************************************/
+#define PHYSICS_TEST
+
 #include "../inc/field.hpp"
 
 #include "catch.hpp"
+
+Field_Square *Field_Grid::get_field_square(int index)
+{
+   return &field_sqrs.at(index);
+}
+   
 
 TEST_CASE( "Field Class initialises correctly", "[Field]" )
 {
@@ -41,7 +49,7 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800};
+   Field test_field {list, ball_init, 1000, 800, 10, 10};
 
    REQUIRE( test_field.get_x_dim() == 1000 );
 
@@ -57,6 +65,10 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
       REQUIRE( test_field.get_ball(i).get_speed() == 2 );
    }
+   SECTION( "Balls and lines are in correct section of Field Grid")
+   {
+
+   }
 
    test_field.advance_field();
 
@@ -70,5 +82,7 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
       REQUIRE( test_field.get_ball(i).get_speed() == 2 );
    }
+
+
 }
 
