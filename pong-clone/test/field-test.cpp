@@ -26,14 +26,14 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
    for(int i = 1; i < 11; i++)
    {
-      Line_start temp {{90*i, 100*( i%2 )}, edge, none};
+      Line_start temp {{900*i, 1000*( i%2 )}, edge, none};
 
       list.push_back(temp);
    }
 
    for(int i = 10; i > 0; i--)
    {
-      Line_start temp {{90*i, 600 - 100 * ( i%2 ) }, edge, none};
+      Line_start temp {{900*i, 6000 - 1000 * ( i%2 ) }, edge, none};
 
       list.push_back(temp);
    }
@@ -44,45 +44,60 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
    for(int i = 0; i < 6; i++)
    {
-      BallArgs temp {20, 100*i, 300, 2};
+      BallArgs temp {200, 1200*( i + 1 ), 3000, 20};
 
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 10, 10};
+   Field test_field {list, ball_init, 10000, 8000, 10, 10};
 
-   REQUIRE( test_field.get_x_dim() == 1000 );
+   REQUIRE( test_field.get_x_dim() == 10000 );
 
-   REQUIRE( test_field.get_y_dim() == 800 );
+   REQUIRE( test_field.get_y_dim() == 8000 );
 
    for(int i = 0; i < test_field.ball_vec_size(); i++)
    {
-      REQUIRE( test_field.get_ball(i).get_position().x == 100*i );
+      REQUIRE( test_field.get_ball(i).get_position().x == 1200*( i + 1 ) );
 
-      REQUIRE( test_field.get_ball(i).get_position().y == 300 );
+      REQUIRE( test_field.get_ball(i).get_position().y == 3000 );
 
-      REQUIRE( test_field.get_ball(i).get_radius() == 20 );
+      REQUIRE( test_field.get_ball(i).get_radius() == 200 );
 
-      REQUIRE( test_field.get_ball(i).get_speed() == 2 );
-   }
-   SECTION( "Balls and lines are in correct section of Field Grid")
-   {
-
+      REQUIRE( test_field.get_ball(i).get_speed() == 20 );
    }
 
    test_field.advance_field();
 
    for(int i = 0; i < test_field.ball_vec_size(); i++)
    {
-      REQUIRE( test_field.get_ball(i).get_position().x == 100*i );
+      REQUIRE( test_field.get_ball(i).get_position().x == 1200*( i + 1 ) );
 
-      REQUIRE( test_field.get_ball(i).get_position().y == 302 );
+      REQUIRE( test_field.get_ball(i).get_position().y == 3020 );
 
-      REQUIRE( test_field.get_ball(i).get_radius() == 20 );
+      REQUIRE( test_field.get_ball(i).get_radius() == 200 );
 
-      REQUIRE( test_field.get_ball(i).get_speed() == 2 );
+      REQUIRE( test_field.get_ball(i).get_speed() == 20 );
    }
 
+   SECTION( "Balls do not leave boundaries of field over time" )
+   {
+      for( int i = 0; i < 5000; i++ )
+      {
+         test_field.advance_field();
+      }
 
+      for(int i = 0; i < test_field.ball_vec_size(); i++)
+      {
+         CAPTURE( i );
+
+         CHECK( test_field.get_ball(i).get_position().x <= 10000 );
+
+         CHECK( test_field.get_ball(i).get_position().y <= 8000 );
+
+         CHECK( test_field.get_ball(i).get_position().x >= 0 );
+
+         CHECK( test_field.get_ball(i).get_position().y >= 0 );
+      }
+   }
 }
 

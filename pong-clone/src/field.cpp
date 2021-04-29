@@ -58,7 +58,7 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
       current_x += new_w;
    }
 
-   for( auto ball : balls)
+   for( Ball& ball : balls)
    {
       assign_ball_to_squares( ball );
    }
@@ -70,7 +70,7 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
    //insert similar things for paddles once implemented
 }
 
-void Field_Grid::assign_ball_to_squares( const Ball& ball)
+void Field_Grid::assign_ball_to_squares( Ball& ball)
 {
    struct position ball_p = ball.get_position();
    
@@ -209,7 +209,7 @@ void Field_Grid::assign_ball_to_squares( const Ball& ball)
    }
 }
 
-void Field_Grid::assign_line_to_squares( const Line_Object& line)
+void Field_Grid::assign_line_to_squares( Line_Object& line)
 {
    struct positionf lp1 = {
       static_cast<float>( line.line.get_p1().x ),
@@ -354,13 +354,22 @@ void Field_Grid::assign_line_to_squares( const Line_Object& line)
    }
 }
 
+void Field_Grid::clear_balls()
+{
+   for( int i = 0; i < num_rows*num_cols; i++ )
+   {
+      field_sqrs.at(i).balls.clear();
+   }
+
+   return;
+}
+
 void Field_Grid::return_objects_to_collide( 
       std::unordered_map< Ball*, std::set< Ball* > >& balls_to_collide,
-      std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide
+      std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide,
+      std::vector< Ball >& ball_vec //Owner of Balls
       )
 {
-   std::set<Ball *> used_balls {};
-
    // Add objects in each square to ordered map if they don't already exist
    for( auto sqr : field_sqrs )
    {
@@ -368,13 +377,26 @@ void Field_Grid::return_objects_to_collide(
       {
          for( int j = i + 1; j < sqr.balls.size(); j++ )
          {
+            balls_to_collide.at( sqr.balls.at(i) ).insert( sqr.balls.at(j) );
+         }
 
+         for( int j = 0; j < sqr.edges.size(); j++ )
+         {
+            lines_to_collide.at( sqr.balls.at(i) ).insert( sqr.edges.at(j) );
          }
       }
    }
 
+   // Delete duplicate pairs from map
+   for( Ball& ref_ball : ball_vec )
+   {
+      for( auto ball_p : balls_to_collide.at( &ref_ball ) )
+      {
+         balls_to_collide.at( ball_p ).erase( &ref_ball );
+      }
+   }
 
-
+   return;
 }
 
 Field::Field( std::vector<Line_start> boun_init_list,
@@ -393,9 +415,20 @@ Field::Field( std::vector<Line_start> boun_init_list,
    }
 
    field_grid = { ball_vec, boundary, x_dim, y_dim, rows, columns };
+
+   balls_to_collide = {};
+
+   lines_to_collide = {};
+
+   for( Ball& b : ball_vec )
+   {
+      balls_to_collide.insert( { &b, {} } );
+
+      lines_to_collide.insert( { &b, {} } );
+   }
 }
 
-Ball Field::get_ball( int index )
+Ball& Field::get_ball( int index )
 {
    return ball_vec.at( index );
 }
@@ -415,11 +448,36 @@ int Field::get_y_dim() const
    return y_dim;
 }
 
+//Below needs to be modified to accept paddle methods
 void Field::advance_field()
 {
+   field_grid.return_objects_to_collide( balls_to_collide, lines_to_collide,
+         ball_vec);
+
+   for( Ball& b : ball_vec )
+   {
+      for( auto ball_p : balls_to_collide.at( &b ) )
+      {
+         Physics::collide_balls( b, *ball_p );
+      }
+
+      for( auto edge_p : lines_to_collide.at( &b ) )
+      {
+         Physics::collide_ball_line( b, *edge_p );
+      }
+   }
+
+   field_grid.clear_balls();
+
    for( Ball& b : ball_vec )
    {
       b.move();
+
+      field_grid.assign_ball_to_squares( b );
+
+      balls_to_collide.at( &b ).clear();
+
+      lines_to_collide.at( &b ).clear();
    }
 }
 

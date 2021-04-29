@@ -25,6 +25,8 @@
 
 #include "boundary.hpp"
 
+#include "physics.hpp"
+
 struct BallArgs
 {
    int radius;
@@ -39,11 +41,11 @@ struct BallArgs
 
 struct Field_Square
 {
-   std::vector<const Ball *> balls {};
+   std::vector< Ball * > balls {};
 
-   std::vector<const Line_Object *> edges {};
+   std::vector< Line_Object * > edges {};
 
-   std::vector<const Line_Object *> paddles {};
+   std::vector< Line_Object * > paddles {};
 
    //top left corner of square
    struct position pos;
@@ -75,16 +77,20 @@ public:
    // diameter
    //
    // Function gives all squares which a ball is in contact with.
-   void assign_ball_to_squares( const Ball& ball );
+   void assign_ball_to_squares( Ball& ball );
 
    // Puts line in all field squares in which the line is in contact with the
    // interior of said square, or the bottom/right boundary, or the field edge.
-   void assign_line_to_squares( const Line_Object& line );
+   void assign_line_to_squares( Line_Object& line );
+
+   // Deletes all elements of the Ball* vectors
+   void clear_balls();
 
    // Takes a reference to a maps of Balls to a sets of objects to collide with.
    void return_objects_to_collide( 
          std::unordered_map< Ball*, std::set< Ball* > >& balls_to_collide,
-         std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide
+         std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide,
+         std::vector< Ball >& ball_vec //Owner of Balls
          );
 
    //Function for testing purposes - defined in test/field-test.cpp
@@ -111,7 +117,7 @@ public:
    //public - encapsulation in boundary class
    Boundary boundary;
 
-   Ball get_ball( int index );
+   Ball& get_ball( int index );
 
    int ball_vec_size();
 
@@ -127,6 +133,8 @@ public:
 
    class InvalidDimensions{};
 private:
+   // Implementation note: resizing or pushing back to this vector will
+   // invalidate all the pointers to ball in all other structures - just don't!
    std::vector<Ball> ball_vec;
 
    std::unordered_map< Ball*, std::set< Ball* > > balls_to_collide;

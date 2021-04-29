@@ -22,13 +22,8 @@
 
 #include "boundary.hpp"
 
-#include "field.hpp"
-
 namespace Physics
 {
-   // Detect collisions and take appropriate action
-   void detect_collisions( Field field );
-
    // NOTICE - Also exists in Ball class - will likely go back there, as ball
    // is responsible for its own movement
    //

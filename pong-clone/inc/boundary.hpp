@@ -39,7 +39,7 @@ public:
    Boundary( std::vector<Line_start> init_list );
 
    //return edge at vector index
-   Line_Object get_line( int index );
+   Line_Object& get_line( int index );
 
    //return size of vector of edges
    int get_lines_size();

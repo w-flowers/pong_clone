@@ -32,7 +32,7 @@ Boundary::Boundary( std::vector<Line_start> init_list )
         init_list.back().type, init_list.back().player ) );
 }
 
-Line_Object Boundary::get_line( int index )
+Line_Object& Boundary::get_line( int index )
 {
    return game_bounds.at( index );
 }
