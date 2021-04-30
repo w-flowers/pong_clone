@@ -14,6 +14,8 @@
 
 #include "gui.hpp"
 
+#include "field.hpp"
+
 const int GUI_SIZE_X {500};
 
 const int GUI_SIZE_Y {500};
@@ -26,7 +28,7 @@ public:
 
 private:
    //The method which runs the game loop - called from within run
-   void game_loop();
+   void game_loop( Field& field );
 
    //Main gui for the game
    GUI gui { GUI_SIZE_X, GUI_SIZE_Y };

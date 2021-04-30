@@ -12,6 +12,14 @@
 
 #include "pong_clone_base.hpp"
 
+#include "ball.hpp"
+
+#include "field.hpp"
+
+#include "line.hpp"
+
+#include "boundary.hpp"
+
 class Window
 {
 public:
@@ -67,7 +75,7 @@ public:
    class FailedInit{};
    
    //Method which renders all game objects
-   //void render_all();
+   void render_all( Field& field );
 
    //Non-copyable
    GUI( const GUI & ) =delete;
@@ -77,6 +85,15 @@ private:
    Window window;
    
    Renderer renderer;
+
+   // Method which renders edges, goals and paddles
+   void render_line( Line_Object& line_o );
+
+   // Method which renders a ball
+   void render_ball( Ball& ball );
+
+   // Render Background
+   void render_background();
 };
 
 #endif

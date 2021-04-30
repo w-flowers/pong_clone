@@ -24,6 +24,8 @@
 
 #include <set>
 
+#include <unordered_set>
+
 const float this_pi = 3.141593; //local definition of pi, may change in future
 
 const int fps = 30;
@@ -32,6 +34,8 @@ struct position
 {
    int x;
    int y;
+
+   bool operator<(const struct position);
 };
 
 struct positionf 

@@ -15,12 +15,14 @@ void Game::run()
 {
    //insert body here
 
-   game_loop();
+   // Initialise field
+
+   //game_loop( field );
 
    return;
 }
 
-void Game::game_loop()
+void Game::game_loop( Field& field )
 {
    //insert body here
    
@@ -47,6 +49,7 @@ void Game::game_loop()
        //Move game objects
        
        //Render
+       gui.render_all( field );
    }
    
    return;

@@ -141,6 +141,9 @@ private:
 
    std::unordered_map< Ball*, std::set< Line_Object* > > lines_to_collide;
 
+   std::unordered_map< Ball*, std::set< struct position > > 
+      points_to_collide;
+
    //Dimensions of the field in total
    int x_dim;
 

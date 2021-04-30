@@ -33,14 +33,19 @@ namespace Physics
    // Controlling function needs to ensure that edge_angle != vel_angle()
    void bounce( Ball& ball, float edge_angle );
 
-   //Check collision and then collide a ball off a point
+   // Collide a ball off a point
    void collide_ball_point( Ball& ball, struct position pos );
+
+   // Check collision between ball and point
+   bool is_colliding_bp( Ball& ball, struct position pos );
 
    //Check collision between a ball and a line, excluding endpoints
    bool is_colliding_bl( Ball& ball, const Line& line );
 
    //Check then execute collision between a ball and a line
-   void collide_ball_line( Ball& ball, const Line_Object& line_o );
+   void collide_ball_line( Ball& ball, const Line_Object& line_o, 
+         std::unordered_map< Ball*, std::set< struct position > >& points_to_collide 
+         );
 
    //Check then execute collision between a ball and a ball
    void collide_balls( Ball& ball1, Ball& ball2 );

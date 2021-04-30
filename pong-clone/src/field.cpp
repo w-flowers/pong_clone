@@ -30,7 +30,7 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
 
    for( int i = 0; i < num_rows * num_cols ; i++ )
    {
-      if( i % num_cols )
+      if( !( i % num_cols ) )
       {
          current_x = 0;
 
@@ -286,7 +286,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
       if( i >= num_rows ) break;
 
-      float h_intcpt = static_cast<float>( field_sqrs[i].pos.y + field_sqrs[i].h );
+      float h_intcpt = static_cast<float>( field_sqrs[num_cols*i].pos.y + field_sqrs[num_cols*i].h );
 
       if( h_intcpt >= y_max ) 
       {
@@ -420,11 +420,15 @@ Field::Field( std::vector<Line_start> boun_init_list,
 
    lines_to_collide = {};
 
+   points_to_collide = {};
+
    for( Ball& b : ball_vec )
    {
       balls_to_collide.insert( { &b, {} } );
 
       lines_to_collide.insert( { &b, {} } );
+
+      points_to_collide.insert( { &b, {} } );
    }
 }
 
@@ -463,7 +467,12 @@ void Field::advance_field()
 
       for( auto edge_p : lines_to_collide.at( &b ) )
       {
-         Physics::collide_ball_line( b, *edge_p );
+         Physics::collide_ball_line( b, *edge_p, points_to_collide );
+      }
+
+      for( auto point : points_to_collide.at( &b ) )
+      {
+         Physics::collide_ball_point( b, point );
       }
    }
 
@@ -478,6 +487,8 @@ void Field::advance_field()
       balls_to_collide.at( &b ).clear();
 
       lines_to_collide.at( &b ).clear();
+
+      points_to_collide.at( &b ).clear();
    }
 }
 

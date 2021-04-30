@@ -32,18 +32,21 @@ void Physics::collide_ball_point( Ball& ball, struct position pos )
 
    int dy = ball.get_position().y - pos.y;
 
+   ball.bounce( 
+         ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
+           + this_pi / 2.0 ) 
+         );
+}
+
+bool Physics::is_colliding_bp( Ball& ball, struct position pos )
+{
+   int dx = ball.get_position().x - pos.x;
+
+   int dy = ball.get_position().y - pos.y;
+
    int br = ball.get_radius();
 
-   if( square_int( dy ) + square_int( dx ) <= br * br )
-   {
-      // Compute angle of perpendicular to line from centre of ball to point and
-      // pass to bounce method of ball
-
-      ball.bounce( 
-            ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
-            + this_pi / 2.0 ) 
-            );
-   }
+   return ( square_int( dy ) + square_int( dx ) <= br * br );
 }
 
 bool Physics::is_colliding_bl( Ball& ball, const Line& line )
@@ -79,7 +82,9 @@ bool Physics::is_colliding_bl( Ball& ball, const Line& line )
    else return false;
 }
 
-void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o )
+void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o,
+     std::unordered_map< Ball*, std::set< struct position > >& points_to_collide 
+     )
 {
    if( is_colliding_bl( ball, line_o.line ) )
    {
@@ -104,9 +109,19 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o )
    }
    else 
    {
-      collide_ball_point( ball, line_o.line.get_p1() );
+      struct position p1 = line_o.line.get_p1();
 
-      collide_ball_point( ball, line_o.line.get_p2() );
+      if( is_colliding_bp( ball, p1 ) ) 
+      {
+         points_to_collide.at( &ball ).insert( { p1 } );
+      }
+
+      struct position p2 = line_o.line.get_p2();
+
+      if( is_colliding_bp( ball, p2 ) )
+      {
+         points_to_collide.at( &ball ).insert( { p2 } );
+      }
    }
 }
 
