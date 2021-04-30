@@ -34,9 +34,9 @@ struct position
 {
    int x;
    int y;
-
-   bool operator<(const struct position);
 };
+
+bool operator<( const position&, const position& );
 
 struct positionf 
 {

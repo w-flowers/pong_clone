@@ -10,6 +10,18 @@
 
 #include "../inc/pong_clone_base.hpp"
 
+bool operator<( const position& p1, const position& p2 )
+{
+   if( p1.x < p2.x ) return true;
+
+   else if ( p1.x > p2.x ) return false;
+
+   else
+   {
+      return ( p1.y < p2.y );
+   }
+}
+
 float square_float( float a )
 {
    return a * a;
