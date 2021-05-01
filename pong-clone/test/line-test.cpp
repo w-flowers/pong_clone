@@ -78,17 +78,17 @@ TEST_CASE( "Line class computes angles correctly", "[LineAngle]" )
 
    SECTION( "Angles are computed correctly" )
    {
-      REQUIRE( approx_equal_anglesf( col1.get_line_angle(), this_pi / 4.0f ) );
+      REQUIRE( approx_equal_anglesd( col1.get_line_angle(), this_pi / 4.0 ) );
 
-      REQUIRE( approx_equal_anglesf( col2.get_line_angle(), this_pi / 2.0f ) );
+      REQUIRE( approx_equal_anglesd( col2.get_line_angle(), this_pi / 2.0 ) );
 
-      REQUIRE( approx_equal_anglesf( col3.get_line_angle(), 0.0f ) );
+      REQUIRE( approx_equal_anglesd( col3.get_line_angle(), 0.0 ) );
 
-      REQUIRE( approx_equal_anglesf( col4.get_line_angle(), this_pi ) );
+      REQUIRE( approx_equal_anglesd( col4.get_line_angle(), this_pi ) );
 
-      REQUIRE( approx_equal_anglesf( col5.get_line_angle(), - ( this_pi / 2.0f ) ) );
+      REQUIRE( approx_equal_anglesd( col5.get_line_angle(), - ( this_pi / 2.0 ) ) );
 
-      REQUIRE( approx_equal_anglesf( col6.get_line_angle(), - ( this_pi / 4.0f ) ) );
+      REQUIRE( approx_equal_anglesd( col6.get_line_angle(), - ( this_pi / 4.0 ) ) );
    }
 }
 

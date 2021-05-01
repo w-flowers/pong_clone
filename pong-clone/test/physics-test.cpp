@@ -23,13 +23,13 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
       Line_Eq y_eq_2x1 { -2, 1, {0.0, 1.0} };
 
-      struct positionf pos1 = {0 , 0};
+      struct positiond pos1 = {0 , 0};
 
-      struct positionf pos2 = {1 , 0};
+      struct positiond pos2 = {1 , 0};
 
-      struct positionf pos3 = {0 , 1};
+      struct positiond pos3 = {0 , 1};
 
-      struct positionf pos4 = {2 , 2};
+      struct positiond pos4 = {2 , 2};
 
       CHECK( Physics::sqrd_dist_pt_ln( pos1, hori_ln ) == 9.0);
 
@@ -55,16 +55,16 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
       CHECK( Physics::sqrd_dist_pt_ln( pos4, y_eq_x ) == 0.0);
 
-      CHECK( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos1, y_eq_2x1 ), 0.2) );
+      CHECK( approx_equal_anglesd( Physics::sqrd_dist_pt_ln( pos1, y_eq_2x1 ), 0.2) );
 
-      CHECK( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos2, y_eq_2x1 ), 1.8) );
+      CHECK( approx_equal_anglesd( Physics::sqrd_dist_pt_ln( pos2, y_eq_2x1 ), 1.8) );
 
       CHECK( Physics::sqrd_dist_pt_ln( pos3, y_eq_2x1 ) == 0.0);
 
-      CHECK( approx_equal_anglesf( Physics::sqrd_dist_pt_ln( pos4, y_eq_2x1 ), 1.8) );
+      CHECK( approx_equal_anglesd( Physics::sqrd_dist_pt_ln( pos4, y_eq_2x1 ), 1.8) );
    }
 
-   Ball ball{ 10, 40, 40, 10.0 };
+   Ball ball{ 10, 40.0, 40.0, 10.0 };
 
    struct position pos1 {40, 55};
 

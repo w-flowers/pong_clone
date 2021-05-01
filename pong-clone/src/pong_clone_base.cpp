@@ -27,13 +27,18 @@ float square_float( float a )
    return a * a;
 }
 
+double square_d( double a )
+{
+   return a * a;
+}
+
 int square_int( int a )
 {
    return a * a;
 }
 
-bool approx_equal_anglesf( float a, float b )
+bool approx_equal_anglesd( double a, double b )
 {
-   return fabs( a - b ) < 0.00001;
+   return abs( a - b ) < 0.000001;
 }
 

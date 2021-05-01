@@ -31,11 +31,11 @@ struct BallArgs
 {
    int radius;
 
-   int init_x;
+   double init_x;
 
-   int init_y;
+   double init_y;
 
-   float speed;
+   double speed;
 };
 
 

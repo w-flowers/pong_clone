@@ -44,7 +44,7 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
    for(int i = 0; i < 6; i++)
    {
-      BallArgs temp {200, 1200*( i + 1 ), 3000, 20};
+      BallArgs temp {250, 1200*( i + 1 ), 3000, 5};
 
       ball_init.push_back( temp );
    }
@@ -61,9 +61,9 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
 
       REQUIRE( test_field.get_ball(i).get_position().y == 3000 );
 
-      REQUIRE( test_field.get_ball(i).get_radius() == 200 );
+      REQUIRE( test_field.get_ball(i).get_radius() == 250 );
 
-      REQUIRE( test_field.get_ball(i).get_speed() == 20 );
+      REQUIRE( test_field.get_ball(i).get_speed() == 15 );
    }
 
    test_field.advance_field();
@@ -72,16 +72,16 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
    {
       REQUIRE( test_field.get_ball(i).get_position().x == 1200*( i + 1 ) );
 
-      REQUIRE( test_field.get_ball(i).get_position().y == 3020 );
+      REQUIRE( test_field.get_ball(i).get_position().y == 3015 );
 
-      REQUIRE( test_field.get_ball(i).get_radius() == 200 );
+      REQUIRE( test_field.get_ball(i).get_radius() == 250 );
 
-      REQUIRE( test_field.get_ball(i).get_speed() == 20 );
+      REQUIRE( test_field.get_ball(i).get_speed() == 15 );
    }
 
    SECTION( "Balls do not leave boundaries of field over time" )
    {
-      for( int i = 0; i < 5000; i++ )
+      for( int i = 0; i < 250000; i++ )
       {
          test_field.advance_field();
       }

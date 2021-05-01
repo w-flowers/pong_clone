@@ -19,11 +19,11 @@
 
 struct velocity
 {
-   int dx;
+   double dx;
 
-   int dy;
+   double dy;
 
-   float speed;
+   double speed;
 };
 
 class Ball
@@ -31,39 +31,44 @@ class Ball
 public:
    //Constructor - initialises ball with radius r, position given by inits,
    // and the speed going in the vertical positive direction
-   Ball( int r, int init_x, int init_y, float speed );
+   Ball( int r, double init_x, double init_y, double speed );
    
    // Changes the internal dx and dy components of velocity according to its
    // angle and the angle of the line/object it bounces off
    // NOTE: edge_angle and vel_angle() CANNOT be equal - clipping will occur
    // Controlling function needs to ensure that edge_angle != vel_angle()
-   void bounce( float edge_angle );
+   void bounce( double edge_angle );
 
    // Moves the ball one step, according to what the internal dx and dy are
    void move();
 
+   void move_back();
+
    // Returns current position of the ball
-   struct position get_position() const;
+   struct positiond get_position() const;
 
-   float get_speed() const;
+   void set_position( double x, double y );
 
-   void set_velocity( int dx, int dy );
+   double get_speed() const;
+
+   struct velocity get_velocity() const;
+
+   void set_velocity( double dx, double dy );
 
    // Returns the radius of the ball
    int get_radius() const;
 
    //calculate angle of balls movement from horizontal - range from +pi to -pi
-   float vel_angle();
+   double vel_angle();
 private:
    
    int radius;
    
    struct velocity velocity;
    
-   struct position position;
+   struct positiond position;
    
    class InvalidBall {};
-   
 };
 
 #endif

@@ -18,11 +18,11 @@
 // Gives equation of line in form a(x - p.x) + b(y - p.y) = 0
 struct Line_Eq
 {
-   float a;
+   double a;
 
-   float b;
+   double b;
 
-   struct positionf p;
+   struct positiond p;
 };
 
 
@@ -44,7 +44,7 @@ public:
    void set_p2( int x, int y );
 
    //needed for ball bouncing methods and collision methods
-   float get_line_angle() const;
+   double get_line_angle() const;
 
    ~Line();
 private:
@@ -52,7 +52,7 @@ private:
 
    struct position p2;
 
-   float line_angle;
+   double line_angle;
 };
 
 class Line_Object

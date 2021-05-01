@@ -11,16 +11,16 @@
 
 #include "../inc/physics.hpp"
 
-void Physics::bounce( Ball& ball, float edge_angle )
+void Physics::bounce( Ball& ball, double edge_angle )
 {
-      float newangle = 2 * edge_angle - ball.vel_angle();
+      double newangle = 2 * edge_angle - ball.vel_angle();
       
       ball.set_velocity( 
             //x value
-            static_cast<int>( lroundf( ball.get_speed() * cosf( newangle ) ) ),
+            ball.get_speed() * cosf( newangle ),
 
             //y value
-            static_cast<int>( lroundf( ball.get_speed() * sinf( newangle ) ) )
+            ball.get_speed() * sinf( newangle )
             );
       
       return;
@@ -28,55 +28,57 @@ void Physics::bounce( Ball& ball, float edge_angle )
 
 void Physics::collide_ball_point( Ball& ball, struct position pos )
 {
-   int dx = ball.get_position().x - pos.x;
+   double dx = ball.get_position().x - static_cast<double>( pos.x );
 
-   int dy = ball.get_position().y - pos.y;
+   double dy = ball.get_position().y - static_cast<double>( pos.y );
+
+//   ball.move_back();
 
    ball.bounce( 
-         ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
+         ( atan2( dy, dx )
            + this_pi / 2.0 ) 
          );
 }
 
 bool Physics::is_colliding_bp( Ball& ball, struct position pos )
 {
-   int dx = ball.get_position().x - pos.x;
+   double dx = ball.get_position().x - static_cast<double>( pos.x );
 
-   int dy = ball.get_position().y - pos.y;
+   double dy = ball.get_position().y - static_cast<double>( pos.y );
 
    int br = ball.get_radius();
 
-   return ( square_int( dy ) + square_int( dx ) <= br * br );
+   return ( square_d( dy ) + square_d( dx ) <= 
+         static_cast<double>( br * br ) );
 }
 
 bool Physics::is_colliding_bl( Ball& ball, const Line& line )
 {
-   struct positionf curr_pos { static_cast<float>( ball.get_position().x ), 
-      static_cast<float>( ball.get_position().y ) };
+   struct positiond curr_pos { ball.get_position().x, ball.get_position().y };
 
-   int x1 = line.get_p1().x;
+   double x1 = static_cast<double>( line.get_p1().x );
 
-   int x2 = line.get_p2().x;
+   double x2 = static_cast<double>( line.get_p2().x );
 
-   int y1 = line.get_p1().y;
+   double y1 = static_cast<double>( line.get_p1().y );
 
-   int y2 = line.get_p2().y;
+   double y2 = static_cast<double>( line.get_p2().y );
 
    Line_Eq l_e { (y2 - y1), ( -(x2 - x1) ), {x1, y1} };
 
    //check if within radius of line
    if( sqrd_dist_pt_ln( curr_pos, l_e ) <=
-         square_float( (float) ball.get_radius() ) )
+         square_d( (double) ball.get_radius() ) )
    {
-      float xm = ( x1 + x2 ) / 2.0;
+      double xm = ( x1 + x2 ) / 2.0;
 
-      float ym = ( y1 + y2 ) / 2.0;
+      double ym = ( y1 + y2 ) / 2.0;
 
       //normal equation at midpoint of line
       Line_Eq n_e { ( x2 - x1 ), ( y2 - y1 ), {xm, ym} };
 
       return ( sqrd_dist_pt_ln( curr_pos, n_e ) <=
-            square_float( ym - y1 ) + square_float( xm - x1 ) );
+            square_d( ym - y1 ) + square_d( xm - x1 ) );
    }
 
    else return false;
@@ -91,11 +93,42 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o,
       switch( line_o.get_type() )
       {
          case edge:
+            {
+               double normal_angle = line_o.line.get_line_angle() + this_pi/2;
 
-            ball.bounce( line_o.line.get_line_angle() );
-            
-            break;
+               double x1 = static_cast<double>( line_o.line.get_p1().x );
 
+               double x2 = static_cast<double>( line_o.line.get_p2().x );
+
+               double y1 = static_cast<double>( line_o.line.get_p1().y );
+
+               double y2 = static_cast<double>( line_o.line.get_p2().y );
+
+               Line_Eq l_e { (y2 - y1), ( -(x2 - x1) ), {x1, y1} };
+
+               double dist = sqrt( sqrd_dist_pt_ln( ball.get_position(), l_e ) );
+
+               double dx = dist * cos( normal_angle );
+
+               double dy = dist * sin( normal_angle );
+
+               double new_dx = ball.get_radius() * cos( normal_angle );
+
+               double new_dy = ball.get_radius() * sin( normal_angle );
+
+               double shift_x = new_dx - dx;
+
+               double shift_y = new_dy - dy;
+
+               ball.set_position( ball.get_position().x + shift_x,
+                     ball.get_position().y + shift_y );
+
+               //ball.move_back();
+
+               ball.bounce( line_o.line.get_line_angle() );
+
+               break;
+            }
          case goal:
 
             //Insert goal code here
@@ -127,28 +160,90 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o,
 
 void Physics::collide_balls( Ball& ball1, Ball& ball2 )
 {
-   int dy = ball1.get_position().y - ball2.get_position().y;
+   double dy = ball1.get_position().y - ball2.get_position().y;
 
-   int dx = ball1.get_position().x - ball2.get_position().x;
+   double dx = ball1.get_position().x - ball2.get_position().x;
 
-   if( square_int( dx ) + square_int( dy ) <=
-         square_int( ball1.get_radius() + ball2.get_radius() ) )
+   if( square_d( dx ) + square_d( dy ) <=
+         static_cast<double>( 
+            square_int( ball1.get_radius() + ball2.get_radius() ) )
+     )
    {
+      // Move balls so that they are no longer clipping
+      double line_centres_a = atan2( dy, dx );
+
+      double new_dx = 
+         ( ball1.get_radius() + ball2.get_radius() ) * cos( line_centres_a );
+
+      double new_dy = 
+         ( ball1.get_radius() + ball2.get_radius() ) * sin( line_centres_a );
+
+      double b1x = ball1.get_position().x;
+      double b1y = ball1.get_position().y;
+      double b2x = ball2.get_position().x;
+      double b2y = ball2.get_position().y;
+
+      double v1x = ball1.get_velocity().dx;
+      double v1y = ball1.get_velocity().dy;
+      double v2x = ball2.get_velocity().dx;
+      double v2y = ball2.get_velocity().dy;
+
+      positiond midpt = { ( b1x + b2x / 2 ), ( ( b1y + b2y ) / 2 ) };
+
+      double x_shift = ( new_dx - dx ) / 2;
+
+      double y_shift = ( new_dy - dy ) / 2;
+
+      ball1.set_position(
+           b1x + ( ( ( b1x - midpt.x ) > 0 ) - ( ( b1x - midpt.x ) < 0 ) ) * x_shift * 2,
+           b1y + ( ( ( b1y - midpt.y ) > 0 ) - ( ( b1y - midpt.y ) < 0 ) ) * y_shift * 2);
+
+      ball2.set_position(
+           b2x + ( ( ( b2x - midpt.x ) > 0 ) - ( ( b2x - midpt.x ) < 0 ) ) * x_shift * 2,
+           b2y + ( ( ( b2y - midpt.y ) > 0 ) - ( ( b2y - midpt.y ) < 0 ) ) * y_shift * 2);
+
       //bounce off perpendicular to line joining centres of b1 and b2
-      float normal_angle = 
-         ( atan2f( static_cast<float>( dy ), static_cast<float>( dx ) )
-           + this_pi / 2.0 ); 
+//      double normal_angle = line_centres_a + this_pi / 2.0; 
+
+      //Bounce balls using algorithm for inelastic collision
+      double v1f = 
+         ( ( v1x - v2x ) * ( b1x - b2x ) + ( v1y - v2y ) * ( b1y - b2y ) );
+
+      double v2f =
+         ( ( v2x - v1x ) * ( b2x - b1x ) + ( v2y - v1y ) * ( b2y - b1y ) );
+
+      double norm_x1_x2 = square_d( b1x - b2x ) + square_d( b1y - b2y );
+
+      double norm_x2_x1 = square_d( b2x - b1x ) + square_d( b2y - b1y );
+
+      ball1.set_velocity(
+            v1x - ( v1f / norm_x1_x2 ) * ( b1x - b2x ),
+
+            v1y - ( v1f / norm_x1_x2 ) * ( b1y - b2y )
+            );
+
+      ball2.set_velocity(
+            v2x - ( v2f / norm_x2_x1 ) * ( b2x - b1x ),
+
+            v2y - ( v2f / norm_x2_x1 ) * ( b2y - b1y )
+            );
+
+      /* Old algorithm
+      //ball1.move_back();
 
       ball1.bounce( normal_angle );
 
+      //ball2.move_back();
+
       ball2.bounce( normal_angle );
+      */
    }
 }
 
-float Physics::sqrd_dist_pt_ln( struct positionf pos, Line_Eq line )
+float Physics::sqrd_dist_pt_ln( struct positiond pos, Line_Eq line )
 {
-   float ax_by_c = line.a * ( pos.x - line.p.x ) + 
+   double ax_by_c = line.a * ( pos.x - line.p.x ) + 
       line.b * ( pos.y - line.p.y );
 
-   return square_float( ax_by_c ) / ( line.a*line.a + line.b*line.b );
+   return square_d( ax_by_c ) / ( line.a*line.a + line.b*line.b );
 }

@@ -16,8 +16,8 @@ Line::Line( struct position p1_ , struct position p2_ ):
    p1{p1_}, p2{p2_}
 {
    line_angle = atan2f( 
-         ( (float) ( get_p2().y - get_p1().y ) ), 
-         ( (float) ( get_p2().x - get_p1().x ) ) 
+         ( static_cast<double>( get_p2().y - get_p1().y ) ), 
+         ( static_cast<double>( get_p2().x - get_p1().x ) ) 
          );
 }
 
@@ -45,7 +45,7 @@ void Line::set_p2( int x, int y )
    p2.y = y;
 }
 
-float Line::get_line_angle() const
+double Line::get_line_angle() const
 {
    return line_angle;
 }

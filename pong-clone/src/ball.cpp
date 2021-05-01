@@ -13,8 +13,8 @@
 
 #include "../inc/ball.hpp"
 
-Ball::Ball( int r, int init_x, int init_y, float speed )
-   : radius{r}, velocity{0, static_cast<int>( lroundf( speed ) ), speed},
+Ball::Ball( int r, double init_x, double init_y, double speed )
+   : radius{r}, velocity{0, speed, speed},
    position{init_x, init_y} 
 {
    if( r <= 0 ) throw InvalidBall{};
@@ -22,13 +22,13 @@ Ball::Ball( int r, int init_x, int init_y, float speed )
    return;
 }
 
-void Ball::bounce( float edge_angle )
+void Ball::bounce( double edge_angle )
 {
-      float newangle = 2 * edge_angle - vel_angle();
+      double newangle = 2 * edge_angle - vel_angle();
       
-      velocity.dy = static_cast<int>( lroundf( velocity.speed * sinf( newangle ) ) );
+      velocity.dy = velocity.speed * sinf( newangle );
       
-      velocity.dx = static_cast<int>( lroundf( velocity.speed * cosf( newangle ) ) );
+      velocity.dx = velocity.speed * cosf( newangle );
       
       return;
 }
@@ -40,17 +40,36 @@ void Ball::move()
    position.y += velocity.dy;
 }
 
-struct position Ball::get_position() const
+void Ball::move_back()
+{
+   position.x -= velocity.dx;
+
+   position.y -= velocity.dy;
+}
+
+struct positiond Ball::get_position() const
 {
    return position;
 }
 
-float Ball::get_speed() const
+void Ball::set_position( double x, double y )
+{
+   position.x = x;
+
+   position.y = y;
+}
+
+double Ball::get_speed() const
 {
    return velocity.speed;
 }
 
-void Ball::set_velocity( int dx, int dy )
+struct velocity Ball::get_velocity() const
+{
+   return velocity;
+}
+
+void Ball::set_velocity( double dx, double dy )
 {
    velocity.dx = dx;
 
@@ -64,9 +83,8 @@ int Ball::get_radius() const
    return radius;
 }
 
-float Ball::vel_angle()
+double Ball::vel_angle()
 {
-   return atan2f( ( static_cast<float>( velocity.dy ) ), 
-         ( static_cast<float>( velocity.dx ) ) );
+   return atan2( velocity.dy, velocity.dx );
 }
 

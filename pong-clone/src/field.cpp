@@ -72,14 +72,15 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
 
 void Field_Grid::assign_ball_to_squares( Ball& ball)
 {
-   struct position ball_p = ball.get_position();
+   struct positiond ball_p = ball.get_position();
    
    std::vector<int> cols {};
 
    // Check if line is within radius of vert dividers
    for( int i = 1; i < num_cols; i++ )
    {
-      if( abs( ball_p.x - field_sqrs[i].pos.x ) <= ball.get_radius() )
+      if( abs( ball_p.x - static_cast<double>( field_sqrs[i].pos.x ) ) <= 
+            static_cast<double>( ball.get_radius() ) )
       {
          cols.push_back( i - 1 );
 
@@ -94,7 +95,8 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
    {
       for( int i = 0; i < num_cols; i++ )
       {
-         if( ball_p.x < field_sqrs[i].pos.x + field_sqrs[i].w )
+         if( ball_p.x < 
+               static_cast<double>( field_sqrs[i].pos.x + field_sqrs[i].w ) )
          {
             cols.push_back( i );
 
@@ -108,7 +110,8 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
    // Check if line is within radius of horizontal dividers
    for( int i = 1; i < num_rows; i++ )
    {
-      if( abs( ball_p.y - field_sqrs[num_cols*i].pos.y ) <= ball.get_radius() )
+      if( abs( ball_p.y - static_cast<double>( field_sqrs[num_cols*i].pos.y ) ) 
+            <= static_cast<double>( ball.get_radius() ) )
       {
          rows.push_back( i - 1 );
 
@@ -123,7 +126,10 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
    {
       for( int i = 0; i < num_rows; i++ )
       {
-         if( ball_p.y < field_sqrs[num_cols*i].pos.y + field_sqrs[num_cols*i].h)
+         if( ball_p.y < 
+               static_cast<double>( field_sqrs[num_cols*i].pos.y + 
+                  field_sqrs[num_cols*i].h )
+               )
          {
             rows.push_back( i );
 
@@ -141,10 +147,11 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
 
       int d_col = 0;
 
-      int mid_x = field_sqrs[ cols[0] ].pos.x + field_sqrs[ cols[0] ].w ;
+      double mid_x = static_cast<double>(
+            field_sqrs[ cols[0] ].pos.x + field_sqrs[ cols[0] ].w );
 
-      int mid_y =  field_sqrs[ num_cols * rows[0] ].pos.y 
-         + field_sqrs[ num_cols * rows[0] ].h;
+      double mid_y = static_cast<double>( field_sqrs[ num_cols * rows[0] ].pos.y
+         + field_sqrs[ num_cols * rows[0] ].h );
 
       if( ball_p.x < mid_x )
       {
@@ -163,13 +170,17 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
          d_row = rows[0];
       }
 
-      struct position middle_corner = field_sqrs[ cols[1] + num_cols * rows[1] ].pos;
+      struct positiond middle_corner = { static_cast<double>( 
+            field_sqrs[ cols[1] + num_cols * rows[1] ].pos.x ),
+                       static_cast<double>( 
+                             field_sqrs[ cols[1] + num_cols * rows[1] ].pos.y )
+      };
 
       // Distance from centre is less than or equal to ball radius
       // Means ball is in fourth square
-      if( square_int( ball_p.x - middle_corner.x ) 
-            + square_int( ball_p.y - middle_corner.y )
-            <= square_int( ball.get_radius() ) )
+      if( square_d( ball_p.x - middle_corner.x ) 
+            + square_d( ball_p.y - middle_corner.y )
+            <= square_d( static_cast<double>( ball.get_radius() ) ) )
       {
          for( int i : cols )
          {
@@ -211,27 +222,27 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
 
 void Field_Grid::assign_line_to_squares( Line_Object& line)
 {
-   struct positionf lp1 = {
-      static_cast<float>( line.line.get_p1().x ),
-      static_cast<float>( line.line.get_p1().y )
+   struct positiond lp1 = {
+      static_cast<double>( line.line.get_p1().x ),
+      static_cast<double>( line.line.get_p1().y )
    };
    
-   struct positionf lp2 = {
-      static_cast<float>( line.line.get_p2().x ),
-      static_cast<float>( line.line.get_p2().y )
+   struct positiond lp2 = {
+      static_cast<double>( line.line.get_p2().x ),
+      static_cast<double>( line.line.get_p2().y )
    };
 
    // Ensure that lp1 is to the left of lp2 in x, and closer to top if equal
    if( lp1.x > lp2.x || ( lp1.x == lp2.x && lp1.y > lp2.y ) )
    {
-      struct positionf dummy = lp2;
+      struct positiond dummy = lp2;
 
       lp2 = lp1;
 
       lp1 = dummy;
    }
 
-   std::vector<struct positionf> crossing_pts { lp1 };
+   std::vector<struct positiond> crossing_pts { lp1 };
 
    Line_Eq l_e { ( lp1.y - lp2.y ), ( lp2.x - lp1.x ),
       { ( lp1.x ), (lp1.y ) } };
@@ -241,7 +252,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
    {
       if( lp1.x == lp2.x ) break;
       
-      while( static_cast<float>( field_sqrs[i].pos.x + field_sqrs[i].w ) <= lp1.x )
+      while( static_cast<double>( field_sqrs[i].pos.x + field_sqrs[i].w ) <= lp1.x )
       {
         i++;
 
@@ -250,9 +261,9 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
       if( i >= num_cols ) break;
 
-      float v_intcpt = static_cast<float>( field_sqrs[i].pos.x + field_sqrs[i].w );
+      double v_intcpt = static_cast<double>( field_sqrs[i].pos.x + field_sqrs[i].w );
 
-      if( v_intcpt >= lp2.x || approx_equal_anglesf( v_intcpt, lp2.x )) break;
+      if( v_intcpt >= lp2.x || approx_equal_anglesd( v_intcpt, lp2.x )) break;
 
       else
       {
@@ -266,16 +277,16 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
    //At this point, crossing points is sorted by x, ascending
 
-   float y_min = ( lp1.y < lp2.y ) ? lp1.y: lp2.y;
+   double y_min = ( lp1.y < lp2.y ) ? lp1.y: lp2.y;
 
-   float y_max = ( lp1.y > lp2.y ) ? lp1.y: lp2.y;
+   double y_max = ( lp1.y > lp2.y ) ? lp1.y: lp2.y;
 
    // Find where line crosses into new row  if distinct from existing crossings
    for( int i = 0; i < num_rows; i++ )
    {
       if( lp1.y == lp2.y ) break;
       
-      while( static_cast<float>( field_sqrs[num_cols*i].pos.y 
+      while( static_cast<double>( field_sqrs[num_cols*i].pos.y 
                + field_sqrs[num_cols*i].h ) 
             <= y_min )
       {
@@ -286,7 +297,8 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
       if( i >= num_rows ) break;
 
-      float h_intcpt = static_cast<float>( field_sqrs[num_cols*i].pos.y + field_sqrs[num_cols*i].h );
+      double h_intcpt = static_cast<double>( 
+            field_sqrs[num_cols*i].pos.y + field_sqrs[num_cols*i].h );
 
       if( h_intcpt >= y_max ) 
       {
@@ -295,7 +307,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
       else
       {
-         float new_x = ( (- l_e.b) / (l_e.a) * (h_intcpt - l_e.p.y) + l_e.p.x );
+         double new_x = ( (- l_e.b) / (l_e.a) * (h_intcpt - l_e.p.y) + l_e.p.x );
 
          for( int i = 1; i < crossing_pts.size(); i++ )
          {
@@ -308,7 +320,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
                break;
             }
-            else if( approx_equal_anglesf( new_x, crossing_pts[i].x ) )
+            else if( approx_equal_anglesd( new_x, crossing_pts[i].x ) )
             {
                break;
             }
@@ -320,7 +332,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
    // contained in.
    for( int i = 1; i < crossing_pts.size(); i++ )
    {
-      struct positionf midpoint = 
+      struct positiond midpoint = 
       { ( crossing_pts[i-1].x + crossing_pts[i].x ) / 2.0, 
          ( crossing_pts[i-1].y + crossing_pts[i].y ) / 2.0 };
 
@@ -331,7 +343,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
       for( int i = 0; i < num_rows; i++ )
       {
          if( midpoint.y 
-               <= ( field_sqrs[ num_cols * i ].pos.y 
+               <= static_cast<double>( field_sqrs[ num_cols * i ].pos.y 
                   + field_sqrs[ num_cols * i ].h ) )
          {
             mp_row = i;
@@ -342,7 +354,9 @@ void Field_Grid::assign_line_to_squares( Line_Object& line)
 
       for( int i = 0; i < num_cols; i++ )
       {
-         if( midpoint.x <= ( field_sqrs[ i ].pos.x + field_sqrs[ i ].w ) )
+         if( midpoint.x <= 
+               static_cast<double>( 
+                  field_sqrs[ i ].pos.x + field_sqrs[ i ].w ) )
          {
             mp_col = i;
 

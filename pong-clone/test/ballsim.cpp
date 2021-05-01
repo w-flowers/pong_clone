@@ -38,14 +38,14 @@ int main( int argc, char* argv[] )
 
    ball_init.reserve(6);
 
-   for(int i = 0; i < 8; i++)
+   for(int i = 0; i < 14; i++)
    {
-      BallArgs temp {30, 120*( i + 1 ), 300 + 2*i, 4};
+      BallArgs temp {20, 60*( i + 2 ), 300 + 2*i, 0.4};
 
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 20, 20};
+   Field test_field {list, ball_init, 1000, 800, 25, 25};
    SDL_Event e;
 
    bool quit = false;
@@ -60,6 +60,12 @@ int main( int argc, char* argv[] )
            }
        }
        //Move game objects
+       test_field.advance_field();
+
+       test_field.advance_field();
+       
+       test_field.advance_field();
+
        test_field.advance_field();
        
        //Render

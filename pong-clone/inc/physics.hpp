@@ -31,7 +31,7 @@ namespace Physics
    // angle and the angle of the line/object it bounces off
    // NOTE: edge_angle and vel_angle() CANNOT be equal - clipping will occur
    // Controlling function needs to ensure that edge_angle != vel_angle()
-   void bounce( Ball& ball, float edge_angle );
+   void bounce( Ball& ball, double edge_angle );
 
    // Collide a ball off a point
    void collide_ball_point( Ball& ball, struct position pos );
@@ -51,7 +51,7 @@ namespace Physics
    void collide_balls( Ball& ball1, Ball& ball2 );
 
    // Compute square of distance between point and line
-   float sqrd_dist_pt_ln( struct positionf pos, Line_Eq line );
+   float sqrd_dist_pt_ln( struct positiond pos, Line_Eq line );
 };
 
 #endif
