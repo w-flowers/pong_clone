@@ -40,7 +40,7 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 8; i++)
    {
-      BallArgs temp {20, 120*( i + 1 ), 300 + 2*i, 2};
+      BallArgs temp {30, 120*( i + 1 ), 300 + 2*i, 4};
 
       ball_init.push_back( temp );
    }

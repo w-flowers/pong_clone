@@ -49,7 +49,7 @@ TEST_CASE( "Field Class initialises correctly", "[Field]" )
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 10000, 8000, 10, 10};
+   Field test_field {list, ball_init, 10000, 8000, 20, 20};
 
    REQUIRE( test_field.get_x_dim() == 10000 );
 
