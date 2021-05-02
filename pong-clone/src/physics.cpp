@@ -32,11 +32,24 @@ void Physics::collide_ball_point( Ball& ball, struct position pos )
 
    double dy = ball.get_position().y - static_cast<double>( pos.y );
 
+   double b_to_p_angle = atan2( dy, dx );
+
+   double new_dx = ball.get_radius() * cos( b_to_p_angle );
+
+   double new_dy = ball.get_radius() * sin( b_to_p_angle );
+
 //   ball.move_back();
 
    ball.bounce( 
          ( atan2( dy, dx )
            + this_pi / 2.0 ) 
+         );
+
+   ball.set_position(
+         ( static_cast<double>( pos.x ) + 
+           ( ( dx > 0 ) - ( dx < 0 ) ) * abs( new_dx ) ) ,
+         ( static_cast<double>( pos.y ) + 
+           ( ( dy > 0 ) - ( dy < 0 ) ) * abs( new_dy ) )
          );
 }
 
@@ -190,9 +203,9 @@ void Physics::collide_balls( Ball& ball1, Ball& ball2 )
 
       positiond midpt = { ( b1x + b2x / 2 ), ( ( b1y + b2y ) / 2 ) };
 
-      double x_shift = ( new_dx - dx ) / 2;
+      double x_shift = ( abs( new_dx ) - abs( dx ) ) / 2;
 
-      double y_shift = ( new_dy - dy ) / 2;
+      double y_shift = ( abs( new_dy ) - abs( dy ) ) / 2;
 
       ball1.set_position(
            b1x + ( ( ( b1x - midpt.x ) > 0 ) - ( ( b1x - midpt.x ) < 0 ) ) * x_shift * 2,
