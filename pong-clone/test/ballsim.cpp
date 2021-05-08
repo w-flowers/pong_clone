@@ -40,12 +40,19 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 14; i++)
    {
-      BallArgs temp {20, 60*( i + 2 ), 300 + 2*i, 0.4};
+      BallArgs temp {20 + i, 60*( i + 2 ), 300 + 2*i, 0.6};
 
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 25, 25};
+   for(int i = 0; i < 14; i++)
+   {
+      BallArgs temp {20 - i, 60*( i + 2 ), 400, 0.6};
+
+      ball_init.push_back( temp );
+   }
+
+   Field test_field {list, ball_init, 1000, 800, 8, 5};
    SDL_Event e;
 
    bool quit = false;
@@ -63,11 +70,9 @@ int main( int argc, char* argv[] )
        test_field.advance_field();
 
        test_field.advance_field();
-       
-       test_field.advance_field();
 
        test_field.advance_field();
-       
+
        //Render
        gui.render_all( test_field );
    }

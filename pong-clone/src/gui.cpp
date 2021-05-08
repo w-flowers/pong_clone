@@ -87,7 +87,7 @@ void GUI::render_ball( Ball& ball )
    SDL_SetRenderDrawColor( renderer.get_renderer(), 0, 0, 0, 0 );
 
    // Placeholder for a proper ball drawing method
-   SDL_RenderDrawPoint( renderer.get_renderer(), ball.get_position().x,
+   /*SDL_RenderDrawPoint( renderer.get_renderer(), ball.get_position().x,
          ball.get_position().y );
 
    SDL_RenderDrawPoint( renderer.get_renderer(), 
@@ -97,12 +97,25 @@ void GUI::render_ball( Ball& ball )
    SDL_RenderDrawPoint( renderer.get_renderer(), 
          ball.get_position().x - ball.get_radius(),
          ball.get_position().y );
-
-   SDL_RenderDrawPoint( renderer.get_renderer(), 
+*/
+   SDL_RenderDrawLine( renderer.get_renderer(), 
+         ball.get_position().x + ball.get_radius(), 
+         ball.get_position().y, 
+         ball.get_position().x - ball.get_radius(),
+         ball.get_position().y );
+   
+   /*SDL_RenderDrawPoint( renderer.get_renderer(), 
          ball.get_position().x ,
          ball.get_position().y + ball.get_radius() );
 
    SDL_RenderDrawPoint( renderer.get_renderer(), 
+         ball.get_position().x,
+         ball.get_position().y - ball.get_radius() );
+*/
+   
+   SDL_RenderDrawLine( renderer.get_renderer(), 
+         ball.get_position().x, 
+         ball.get_position().y + ball.get_radius(), 
          ball.get_position().x,
          ball.get_position().y - ball.get_radius() );
 }
