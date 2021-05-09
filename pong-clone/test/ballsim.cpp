@@ -52,6 +52,13 @@ int main( int argc, char* argv[] )
       ball_init.push_back( temp );
    }
 
+   for(int i = 0; i < 14; i++)
+   {
+      BallArgs temp {15 + i, 60*( i + 2 ), 240, 0.6};
+
+      ball_init.push_back( temp );
+   }
+
    Field test_field {list, ball_init, 1000, 800, 8, 5};
    SDL_Event e;
 

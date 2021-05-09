@@ -90,10 +90,17 @@ private:
    void render_line( Line_Object& line_o );
 
    // Method which renders a ball
-   void render_ball( Ball& ball );
+   void render_ball( Ball& ball, int index );
+
+   // Method which takes ball textures and copies them to the balls current
+   // rectangle
+   void copy_ball_textures( Ball& ball, int index );
 
    // Render Background
    void render_background();
+
+   // Vector of Circle textures, accessed by index of ball
+   std::vector< SDL_Texture * > ball_textures {};
 };
 
 #endif
