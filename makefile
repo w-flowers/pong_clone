@@ -54,4 +54,4 @@ obj/ball.o: src/ball.cpp inc/ball.hpp inc/pong_clone_base.hpp
 obj/pong_clone_base.o: src/pong_clone_base.cpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/pong_clone_base.cpp -o obj/pong_clone_base.o 
 clean:
-	rm -f kenken obj/kenken-basic.o obj/kenken-solver.o obj/GUI-kenken.o
+	rm -f -i test/bin/* obj/*.o bin/* test/obj/*
