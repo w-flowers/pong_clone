@@ -40,15 +40,15 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
       ball.bounce( 0 );
 
-      REQUIRE( ball.get_position().x == 40 );
+      REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
-      REQUIRE( ball.get_position().y == 50 );
+      REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 50, 0.00001 ) );
    
       ball.move();
 
-      REQUIRE( ball.get_position().x == 40 );
+      REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
-      REQUIRE( ball.get_position().y == 40 );
+      REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
       ball.move();
 
@@ -56,9 +56,9 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
       ball.move();
 
-      REQUIRE( ball.get_position().x == 40 );
+      REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
-      REQUIRE( ball.get_position().y == 40 );
+      REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
    }
 
    SECTION( "Ball moving vertically bounces correctly off pi/4 angled line" )
@@ -67,9 +67,9 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
       ball.move();
 
-      REQUIRE( ball.get_position().x == 50 );
+      REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 50, 0.00001 ) );
 
-      REQUIRE( ball.get_position().y == 40 );
+      REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
       SECTION( "Ball moving horizontally bounces correctly off pi/4 angled line" )
       {
@@ -77,9 +77,9 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
          ball.move();
 
-         REQUIRE( ball.get_position().x == 50 );
+         REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 50, 0.00001 ) );
 
-         REQUIRE( ball.get_position().y == 50 );
+         REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 50, 0.00001 ) );
       }
 
       SECTION( "Ball moving horizontally bounces correctly off vertical line" )
@@ -88,9 +88,9 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
          ball.move();
 
-         REQUIRE( ball.get_position().x == 40 );
+         REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
-         REQUIRE( ball.get_position().y == 40 );
+         REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
          
          ball.move();
 
@@ -98,9 +98,9 @@ TEST_CASE( "Ball Class initialises correctly", "[ball]" )
 
          ball.move();
 
-         REQUIRE( ball.get_position().x == 40 );
+         REQUIRE_THAT( ball.get_position().x, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
 
-         REQUIRE( ball.get_position().y == 40 );
+         REQUIRE_THAT( ball.get_position().y, Catch::Matchers::WithinAbs( 40, 0.00001 ) );
       }
    }
 }

@@ -12,11 +12,12 @@
 
 #include "line.hpp"
 
-class Paddle{
-   
+class Paddle : public Line_Object
+{
 public:
    
-   Paddle(int half_width, int hori, int vert, int pos_max, int pos_min);
+   Paddle(int half_width, int hori, int vert, int pos_max, int pos_min,
+         Player p);
    
    void move_right();
    
@@ -30,8 +31,7 @@ public:
    
    int get_width();
 
-   Line surface;
-   
+   struct position get_position();
 private:
    
    int half_width; //width of striking surface of the paddle, must be greater than 4, should be even

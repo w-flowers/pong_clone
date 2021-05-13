@@ -10,9 +10,11 @@
 
 #include "../inc/paddle.hpp"
 
-Paddle::Paddle(int width_, int hori, int vert, int pos_max_, int pos_min_):
+Paddle::Paddle(int width_, int hori, int vert, int pos_max_, int pos_min_,
+      Player p):
+   Line_Object( {hori + width_, vert}, {hori - width_, vert}, paddle, p ),
    half_width{width_}, position{hori, vert}, pos_max{pos_max_},
-   pos_min{pos_min_}, surface{ {hori + width_, vert}, {hori - width_, vert} }
+   pos_min{pos_min_}
 {
    //Paddle initialised with rate of change of 1/60 pi per frame   
    angle_d = this_pi / 60.0; 
@@ -48,18 +50,18 @@ void Paddle::move_left()
 
 void Paddle::shrink_angle()
 {
-   double angle = surface.get_line_angle();
+   double angle = line.get_line_angle();
 
    if( angle - angle_d > -this_pi/2 ) angle -= angle_d ;
 
    else angle = -this_pi/2;
 
-   surface.set_p1( position.x + 
+   line.set_p1( position.x + 
         static_cast<int>( round( cos( angle ) * half_width ) ),
         position.y + 
         static_cast<int>( round( sin( angle ) * half_width ) ) );
 
-   surface.set_p2( position.x - 
+   line.set_p2( position.x - 
         static_cast<int>( round( cos( angle ) * half_width ) ),
         position.y - 
         static_cast<int>( round( sin( angle ) * half_width ) ) );
@@ -67,18 +69,18 @@ void Paddle::shrink_angle()
 
 void Paddle::expand_angle()
 {
-   double angle = surface.get_line_angle();
+   double angle = line.get_line_angle();
 
    if( angle + angle_d > this_pi/2 ) angle += angle_d ;
 
    else angle = this_pi/2;
 
-   surface.set_p1( position.x + 
+   line.set_p1( position.x + 
         static_cast<int>( round( cos( angle ) * half_width ) ),
         position.y + 
         static_cast<int>( round( sin( angle ) * half_width ) ) );
 
-   surface.set_p2( position.x - 
+   line.set_p2( position.x - 
         static_cast<int>( round( cos( angle ) * half_width ) ),
         position.y - 
         static_cast<int>( round( sin( angle ) * half_width ) ) );
@@ -97,13 +99,8 @@ int Paddle::get_width()
    return 2*half_width;
 }
 
-int Paddle::get_hori_pos()
+struct position Paddle::get_position()
 {
-   return position.x;
-}
-
-int Paddle::get_vert_pos()
-{
-   return position.y;
+   return position;
 }
 

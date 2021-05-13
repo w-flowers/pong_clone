@@ -47,6 +47,8 @@ obj/field.o: src/field.cpp inc/field.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/field.cpp -o obj/field.o 
 obj/boundary.o: src/boundary.cpp inc/boundary.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/boundary.cpp -o obj/boundary.o 
+obj/paddle.o: src/paddle.cpp inc/paddle.hpp inc/line.hpp inc/pong_clone_base.hpp
+	$(CC) -c $(CFLAGS) src/paddle.cpp -o obj/paddle.o
 obj/line.o: src/line.cpp inc/line.hpp inc/ball.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/line.cpp -o obj/line.o
 obj/ball.o: src/ball.cpp inc/ball.hpp inc/pong_clone_base.hpp

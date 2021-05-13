@@ -87,22 +87,22 @@ int main( int argc, char* argv[] )
 
    while ( !quit )
    {
-       while ( SDL_PollEvent( &e ) )
-       {
-           if ( e.type == SDL_QUIT )
-           {
-               quit = true;
-           }
-       }
-       //Move game objects
-       test_field.advance_field();
+      while ( SDL_PollEvent( &e ) )
+      {
+         if ( e.type == SDL_QUIT )
+         {
+            quit = true;
+         }
+      }
+      //Move game objects
+      test_field.advance_field();
 
-       test_field.advance_field();
+      test_field.advance_field();
 
-       test_field.advance_field();
+      test_field.advance_field();
 
-       //Render
-       gui.render_all( test_field );
+      //Render
+      gui.render_all( test_field );
    }
 
    return 0;

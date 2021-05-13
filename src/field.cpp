@@ -496,6 +496,14 @@ void Field::advance_field()
    {
       b.move();
 
+      if( b.get_position().x < 0 || b.get_position().x > x_dim ||
+            b.get_position().y < 0 || b.get_position().y > y_dim )
+      {
+         b.reset();
+
+         std::cout << "Ball went out of bounds!!!\n";
+      }
+
       field_grid.assign_ball_to_squares( b );
 
       balls_to_collide.at( &b ).clear();

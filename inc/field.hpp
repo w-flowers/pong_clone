@@ -117,6 +117,10 @@ public:
    //public - encapsulation in boundary class
    Boundary boundary;
 
+   std::optional<Paddle> paddle_1 {};
+
+   std::optional<Paddle> paddle_2 {};
+
    Ball& get_ball( int index );
 
    int ball_vec_size();

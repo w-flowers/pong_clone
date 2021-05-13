@@ -27,7 +27,7 @@ struct Line_Eq
 
 
 //Enum used to initialise boundary
-enum Linetype { edge, goal, paddle};
+enum Linetype { edge, goal, paddle };
 
 class Line
 {
