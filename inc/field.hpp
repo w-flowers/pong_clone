@@ -110,8 +110,8 @@ private:
 class Field
 {
 public:
-   Field( std::vector<Line_start> boun_init_list, 
-         std::vector<BallArgs> ball_init_list, int x_d, int y_d, 
+   Field( const std::vector<Line_start>& boun_init_list, 
+         const std::vector<BallArgs>& ball_init_list, int x_d, int y_d, 
          int rows, int columns);
 
    //public - encapsulation in boundary class

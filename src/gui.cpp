@@ -217,6 +217,11 @@ void GUI::render_background()
 
 GUI::~GUI()
 {  
+   for( SDL_Texture * texts : ball_textures )
+   {
+      SDL_DestroyTexture(texts);
+   }
+
    renderer.~Renderer();
    
    window.~Window();

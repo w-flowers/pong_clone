@@ -36,30 +36,51 @@ int main( int argc, char* argv[] )
 
    std::vector<BallArgs> ball_init;
 
-   ball_init.reserve(6);
+   ball_init.reserve(256);
 
-   for(int i = 0; i < 14; i++)
+   for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {20 + i, 60*( i + 2 ), 300 + 2*i, 0.6};
+      BallArgs temp {10 + i % 5, 30*( i + 4 ), 300 + 2*i, 0.6};
 
       ball_init.push_back( temp );
    }
 
-   for(int i = 0; i < 14; i++)
+   for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {20 - i, 60*( i + 2 ), 400, 0.6};
+      BallArgs temp {10 - i % 5, 30*( i + 4 ), 400, 0.6};
 
       ball_init.push_back( temp );
    }
 
-   for(int i = 0; i < 14; i++)
+   for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {15 + i, 60*( i + 2 ), 240, 0.6};
+      BallArgs temp {10 - i % 5, 30*( i + 4 ), 450, 0.6};
 
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 8, 5};
+   for(int i = 0; i < 27; i++)
+   {
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 240, 0.6};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 210, 0.6};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 480, 0.6};
+
+      ball_init.push_back( temp );
+   }
+
+   Field test_field {list, ball_init, 1000, 800, 15, 12};
    SDL_Event e;
 
    bool quit = false;

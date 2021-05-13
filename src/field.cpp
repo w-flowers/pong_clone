@@ -413,8 +413,8 @@ void Field_Grid::return_objects_to_collide(
    return;
 }
 
-Field::Field( std::vector<Line_start> boun_init_list,
-      std::vector<BallArgs> ball_init_list, int x_d, int y_d,
+Field::Field( const std::vector<Line_start>& boun_init_list,
+      const std::vector<BallArgs>& ball_init_list, int x_d, int y_d,
       int rows, int columns):
     boundary {boun_init_list}, x_dim {x_d}, y_dim {y_d}
 {

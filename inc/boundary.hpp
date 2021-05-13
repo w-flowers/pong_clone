@@ -36,7 +36,7 @@ public:
    //Boundary() will join the points into a polygon.
    //It is the caller's responsibility to ensure that the points passed in
    //are reasonable.
-   Boundary( std::vector<Line_start> init_list );
+   Boundary( const std::vector<Line_start>& init_list );
 
    //return edge at vector index
    Line_Object& get_line( int index );
@@ -47,8 +47,6 @@ public:
    class InvalidLinetype{};
 private:
    std::vector<Line_Object> game_bounds;
-
-   //To be created: Vector of Goals - once goal class is created
 
    // DEPRECATED
    //helper method to insert line segments into game bounds vector

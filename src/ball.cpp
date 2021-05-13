@@ -14,8 +14,8 @@
 #include "../inc/ball.hpp"
 
 Ball::Ball( int r, double init_x, double init_y, double speed )
-   : radius{r}, velocity{0, speed, speed},
-   position{init_x, init_y} 
+   : radius{r}, velocity{0, speed, speed}, init_vel{0, speed, speed},
+   position{init_x, init_y}, init_pos{init_x, init_y} 
 {
    if( r <= 0 ) throw InvalidBall{};
 
@@ -75,6 +75,8 @@ void Ball::set_velocity( double dx, double dy )
 
    velocity.dy = dy;
 
+   velocity.speed = hypot(dy, dx);
+
    return;
 }
 
@@ -88,3 +90,9 @@ double Ball::vel_angle()
    return atan2( velocity.dy, velocity.dx );
 }
 
+void Ball::reset()
+{
+   velocity = init_vel;
+
+   position = init_pos;
+}

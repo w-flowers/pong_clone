@@ -1,8 +1,8 @@
 /********************************************************************************
 * Pong Clone - boundary (boundary.cpp) 
 *
-* A class to manage the boundary of the game. Stores a vector of the game and
-* provides initialisation based on a list of points. Will always return a closed
+* A class to manage a boundary in the game. Stores a vector of the game and
+* provides initialisation based on a list of points. May not always return a closed
 * polygon.
 *
 * Author: William Flowers
@@ -10,7 +10,7 @@
 
 #include "../inc/boundary.hpp"
 
-Boundary::Boundary( std::vector<Line_start> init_list )
+Boundary::Boundary( const std::vector<Line_start>& init_list )
 {
    for( auto i = 0; i < init_list.size() - 1; i++ )
    {

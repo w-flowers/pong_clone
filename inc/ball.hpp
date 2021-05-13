@@ -58,16 +58,24 @@ public:
    // Returns the radius of the ball
    int get_radius() const;
 
-   //calculate angle of balls movement from horizontal - range from +pi to -pi
+   // calculate angle of balls movement from horizontal - range from +pi to -pi
    double vel_angle();
+
+   // Reset ball to initial position and velocity
+   void reset();
+
 private:
    
    int radius;
    
    struct velocity velocity;
    
+   const struct velocity init_vel;
+
    struct positiond position;
    
+   const struct positiond init_pos;
+
    class InvalidBall {};
 };
 
