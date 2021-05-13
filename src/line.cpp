@@ -36,6 +36,11 @@ void Line::set_p1( int x, int y )
    p1.x = x;
 
    p1.y = y;
+
+   line_angle = atan2f( 
+         ( static_cast<double>( get_p2().y - get_p1().y ) ), 
+         ( static_cast<double>( get_p2().x - get_p1().x ) ) 
+         );
 }
 
 void Line::set_p2( int x, int y )
@@ -43,6 +48,11 @@ void Line::set_p2( int x, int y )
    p2.x = x;
 
    p2.y = y;
+   
+   line_angle = atan2f( 
+         ( static_cast<double>( get_p2().y - get_p1().y ) ), 
+         ( static_cast<double>( get_p2().x - get_p1().x ) ) 
+         );
 }
 
 double Line::get_line_angle() const

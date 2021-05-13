@@ -10,23 +10,12 @@
 
 #include "../inc/paddle.hpp"
 
-Paddle::Paddle(int width_, int thickness_, int hori, int vert, int pos_max_, int pos_min_)
+Paddle::Paddle(int width_, int hori, int vert, int pos_max_, int pos_min_):
+   half_width{width_}, position{hori, vert}, pos_max{pos_max_},
+   pos_min{pos_min_}, surface{ {hori + width_, vert}, {hori - width_, vert} }
 {
-   width = width_;
-   
-   thickness = thickness_;
-   
-   position.x = hori;
-   
-   position.y = vert;
-   
-   pos_max = pos_max_;
-   
-   pos_min = pos_min_;
-   
-   angle = 0.0; //Paddle initialised as horizontal
-   
-   angle_d = this_pi / 60.0; //Paddle initialised with rate of change of 1/60 pi per frame
+   //Paddle initialised with rate of change of 1/60 pi per frame   
+   angle_d = this_pi / 60.0; 
    
    speed = 4;
    
@@ -35,8 +24,7 @@ Paddle::Paddle(int width_, int thickness_, int hori, int vert, int pos_max_, int
 
 bool Paddle::valid()
 {
-   return ( width >= 4 &&
-      thickness >= 1 &&
+   return ( half_width >= 4 &&
       pos_max > 0 &&
       pos_min >= 0 &&
       pos_max - pos_min > 7 &&
@@ -60,17 +48,42 @@ void Paddle::move_left()
 
 void Paddle::shrink_angle()
 {
+   double angle = surface.get_line_angle();
+
    if( angle - angle_d > -this_pi/2 ) angle -= angle_d ;
 
    else angle = -this_pi/2;
+
+   surface.set_p1( position.x + 
+        static_cast<int>( round( cos( angle ) * half_width ) ),
+        position.y + 
+        static_cast<int>( round( sin( angle ) * half_width ) ) );
+
+   surface.set_p2( position.x - 
+        static_cast<int>( round( cos( angle ) * half_width ) ),
+        position.y - 
+        static_cast<int>( round( sin( angle ) * half_width ) ) );
 }
 
 void Paddle::expand_angle()
 {
-   if( angle + angle_d < this_pi/2 ) angle += angle_d ;
+   double angle = surface.get_line_angle();
 
-   else angle = this_pi/2 ;
+   if( angle + angle_d > this_pi/2 ) angle += angle_d ;
+
+   else angle = this_pi/2;
+
+   surface.set_p1( position.x + 
+        static_cast<int>( round( cos( angle ) * half_width ) ),
+        position.y + 
+        static_cast<int>( round( sin( angle ) * half_width ) ) );
+
+   surface.set_p2( position.x - 
+        static_cast<int>( round( cos( angle ) * half_width ) ),
+        position.y - 
+        static_cast<int>( round( sin( angle ) * half_width ) ) );
 }
+
 
 void Paddle::set_speed( int speed_ )
 { 
@@ -79,19 +92,9 @@ void Paddle::set_speed( int speed_ )
    else speed = speed_ ; 
 }
 
-float Paddle::get_angle()
-{
-   return angle;
-}
-
 int Paddle::get_width()
 {
-   return width;
-}
-
-int Paddle::get_thickness()
-{
-   return thickness;
+   return 2*half_width;
 }
 
 int Paddle::get_hori_pos()
