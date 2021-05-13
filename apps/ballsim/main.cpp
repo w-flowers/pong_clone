@@ -8,9 +8,9 @@
  * classes. Will not include all gameplay features.
  * ***************************************************************************/
 
-#include "../inc/gui.hpp"
+#include "../../inc/gui.hpp"
 
-#include "../inc/field.hpp"
+#include "../../inc/field.hpp"
 
 int main( int argc, char* argv[] )
 {

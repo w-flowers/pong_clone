@@ -15,9 +15,9 @@ obj/kenken-solver.o: src/kenken-solver.c inc/kenken-solver.h inc/kenken-basic.h
 obj/GUI-kenken.o: src/GUI-kenken.c inc/GUI-kenken.h inc/kenken-solver.h inc/kenken-basic.h
 	$(CC) -c $(CFLAGS) src/GUI-kenken.c $(LDLIBS) -o obj/GUI-kenken.o
 
-ballsim: test/bin/ballsim
-test/bin/ballsim: objects
-	$(CC) $(CFLAGS) -o test/bin/ballsim test/ballsim.cpp  obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
+ballsim: bin/ballsim
+bin/ballsim: objects
+	$(CC) $(CFLAGS) -o bin/ballsim apps/ballsim/main.cpp  obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
 
 test: test/bin/main-test
 test/bin/main-test: test/obj/main-test.o test/obj/line-test.o test/obj/boun-test.o test/obj/ball-test.o test/obj/field-test.o test/obj/physics-test.o test/obj/game-test.o objects
