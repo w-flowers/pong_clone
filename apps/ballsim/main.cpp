@@ -101,6 +101,8 @@ int main( int argc, char* argv[] )
 
       test_field.advance_field();
 
+      //SDL_Delay(200);
+
       //Render
       gui.render_all( test_field );
    }

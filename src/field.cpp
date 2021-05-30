@@ -70,8 +70,30 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
    //insert similar things for paddles once implemented
 }
 
-void Field_Grid::assign_ball_to_squares( Ball& ball)
+void Field_Grid::assign_ball_to_squares( Ball& ball )
 {
+   positiond min_x = ball.get_position();
+
+   min_x.x -= static_cast<float>( ball.get_radius() );
+
+   positiond max_x = ball.get_position();
+
+   max_x.x += static_cast<float>( ball.get_radius() );
+
+   positiond min_y = ball.get_position();
+
+   min_y.y -= static_cast<float>( ball.get_radius() );
+
+   positiond max_y = ball.get_position();
+
+   max_y.y += static_cast<float>( ball.get_radius() );
+
+   std::vector<int> ball_squares {};
+
+   ball_squares.reserve(32);
+
+
+   /* OLD ALGORITHM
    struct positiond ball_p = ball.get_position();
    
    std::vector<int> cols {};
@@ -216,6 +238,103 @@ void Field_Grid::assign_ball_to_squares( Ball& ball)
          {
             field_sqrs[i + j*num_cols].balls.push_back( &ball );
          }
+      }
+   }
+   */
+}
+
+bool Field_Grid::point_in_square( struct positionf p, Field_Square& f )
+{
+   return ( static_cast<float>( f.pos.x ) <= p.x &&
+            static_cast<float>( f.pos.y ) <= p.y &&
+            p.x <= static_cast<float>( f.pos.x + f.w ) &&
+            p.y <= static_cast<float>( f.pos.y + f.h ) );
+}
+
+void Field_Grid::find_squares_of_point( struct positionf p,
+      std::vector<int> indexes )
+{
+   //Horizontal search
+
+   std::vector<int> x_inds {};
+
+   std::vector<int> y_inds {};
+
+   int ub = num_cols;
+
+   int lb = 0;
+
+   int mid = ( ub + lb ) / 2 ;
+
+   while( !point_in_square( p, field_sqrs.at( mid ) ) )
+   {
+      if( static_cast<float( field_sqrs.at( mid ).pos.x ) > p.x )
+      {
+         ub = mid;
+      }
+
+      else
+      {
+         lb = mid + 1;
+      }
+
+      mid = ( ub + lb ) / 2;
+   }
+
+   x_inds.push_back( mid );
+
+   if( p.x == static_cast<float>( field_sqrs.at( mid ).pos.x ) )
+   {
+      x_inds.push_back( mid - 1 );
+   }
+
+   else if ( p.x == static_cast<float>( field_sqrs.at( mid ).pos.x + 
+           field_sqrs.at( mid ).w ) )
+   {
+      x_inds.push_back( mid + 1 );
+   }
+
+   // Vertical Search
+
+   int ub = num_rows;
+
+   int lb = 0;
+
+   int mid = ( ub + lb ) / 2 ;
+
+   while( !point_in_square( p, field_sqrs.at( mid * num_cols ) ) )
+   {
+      if( static_cast<float>( field_sqrs.at( mid * num_cols ).pos.y ) > p.y )
+      {
+         ub = mid;
+      }
+
+      else
+      {
+         lb = mid + 1;
+      }
+
+      mid = ( ub + lb ) / 2;
+   }
+
+   y_inds.push_back( mid );
+
+   if( p.y == static_cast<float>( field_sqrs.at( num_cols * mid ).pos.y ) )
+   {
+      y_inds.push_back( mid - 1 );
+   }
+
+   else if ( p.y == static_cast<float>( field_sqrs.at( num_cols * mid ).pos.y +
+           field_sqrs.at( num_cols * mid ).h ) )
+   {
+      y_inds.push_back( mid + 1 );
+   }
+
+   for( int x_ind : x_inds )
+   {
+      for( int y_ind : y_inds )
+      {
+         indexes.push_back( num_cols * y_ind + x_ind );
       }
    }
 }
