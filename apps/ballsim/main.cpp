@@ -40,42 +40,42 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {10 + i % 5, 30*( i + 4 ), 300 + 2*i, 0.6};
+      BallArgs temp {10 + i % 5, 30*( i + 4 ), 300 + 2*i, 0.5 + 0.001 * i};
 
       ball_init.push_back( temp );
    }
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {10 - i % 5, 30*( i + 4 ), 400, 0.6};
+      BallArgs temp {10 - i % 5, 30*( i + 4 ), 400, 0.5 + 0.001 * i};
 
       ball_init.push_back( temp );
    }
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {10 - i % 5, 30*( i + 4 ), 450, 0.6};
+      BallArgs temp {10 - i % 5, 30*( i + 4 ), 450, 0.5 - 0.01 * i};
 
       ball_init.push_back( temp );
    }
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {5 + i % 10, 30*( i + 4 ), 240, 0.6};
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 240, 0.5};
 
       ball_init.push_back( temp );
    }
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {5 + i % 10, 30*( i + 4 ), 210, 0.6};
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 210, 0.5};
 
       ball_init.push_back( temp );
    }
 
    for(int i = 0; i < 27; i++)
    {
-      BallArgs temp {5 + i % 10, 30*( i + 4 ), 480, 0.6};
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 480, 0.5};
 
       ball_init.push_back( temp );
    }

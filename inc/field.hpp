@@ -79,10 +79,14 @@ public:
    // Function gives all squares which a ball is in contact with.
    void assign_ball_to_squares( Ball& ball );
 
-   bool point_in_square( struct positionf p, Field_Square& f );
+   bool point_in_square( struct positiond p, Field_Square& f );
 
-   void find_squares_of_point( struct positionf p, 
-         std::vector<int> indexes );
+   bool point_in_column( struct positiond p, int col );
+
+   bool point_in_row( struct positiond p, int row );
+
+   void find_squares_of_point( struct positiond p, 
+         std::vector<int>& indexes );
 
    // Puts line in all field squares in which the line is in contact with the
    // interior of said square, or the bottom/right boundary, or the field edge.
