@@ -649,7 +649,7 @@ void Field_Grid::return_objects_to_collide(
       )
 {
    // Add objects in each square to ordered map if they don't already exist
-   for( auto sqr : field_sqrs )
+   for( auto& sqr : field_sqrs )
    {
       for( int i = 0; i < sqr.balls.size(); i++ )
       {
