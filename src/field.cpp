@@ -72,7 +72,6 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
 
 void Field_Grid::assign_ball_to_squares( Ball& ball )
 {
-   /* OLD ALGORITHM
    positiond min_x = ball.get_position();
 
    min_x.x -= static_cast<double>( ball.get_radius() );
@@ -130,15 +129,15 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
    for( int i = current_row; i <= end_row; i++ )
    {
       double curr_y_pos = 
-         static_cast<double>( field_sqrs.at( num_cols * current_row ).pos.y );
-
+         static_cast<double>( field_sqrs.at( num_cols * i ).pos.y );
+/*
       // The following index is the index of the rightmost left-side column in
       // ball_squares
       int curr_min_col = 0;
 
       // The same but on the right
       int curr_max_col = num_cols;
-
+*/
       double curr_min_x = ball.get_position().x
          - sqrt( square_d( static_cast<double>( ball.get_radius() ) )
                - square_d( curr_y_pos - ball.get_position().y ) );
@@ -147,12 +146,12 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
          + sqrt( square_d( static_cast<double>( ball.get_radius() ) )
                - square_d( curr_y_pos - ball.get_position().y ) );
 
-      int size_before = ball_squares.size();
+      //int size_before = ball_squares.size();
 
       find_squares_of_point( { curr_min_x, curr_y_pos }, ball_squares );
 
-      int size_after = ball_squares.size();
-
+      //int size_after = ball_squares.size();
+/*
       if( size_after - size_before == 1 )
       {
          curr_min_col = ball_squares.at( size_after - 1 ) % num_cols;
@@ -160,21 +159,21 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
 
       else
       {
-         for( int i = size_after - 1; i >= size_before; i-- )
+         for( int j = size_after - 1; j >= size_before; j-- )
          {
-            int curr_col = ball_squares.at(i) % num_cols;
+            int curr_col = ball_squares.at(j) % num_cols;
 
             curr_min_col = ( curr_min_col < curr_col ) ? curr_col : curr_min_col;
          }
 
       }
-
-      size_before = size_after;
+*/
+      //size_before = size_after;
 
       find_squares_of_point( { curr_max_x, curr_y_pos }, ball_squares );
 
-      size_after = ball_squares.size();
-
+      //size_after = ball_squares.size();
+/*
       if( size_after - size_before == 1 )
       {
          curr_max_col = ball_squares.at( size_after - 1 ) % num_cols;
@@ -182,19 +181,29 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
 
       else
       {
-         for( int i = size_after - 1; i >= size_before; i-- )
+         for( int j = size_after - 1; j >= size_before; j-- )
          {
-            int curr_col = ball_squares.at(i) % num_cols;
+            int curr_col = ball_squares.at(j) % num_cols;
 
             curr_max_col = ( curr_max_col > curr_col ) ? curr_col : curr_max_col;
          }
       }
 
-      for( int i = curr_min_col + 1; i < curr_max_col; i++ )
+      for( int j = curr_min_col + 1; j < curr_max_col; j++ )
       {
-         ball_squares.push_back( current_row * num_cols + i );
+         ball_squares.push_back( i * num_cols + j );
+
+         if( i == current_row )
+         {
+            ball_squares.push_back( ( i - 1 ) * num_cols + j );
+         }
       }
+      */
    }
+
+   find_squares_of_point( max_x, ball_squares );
+
+   find_squares_of_point( min_x, ball_squares );
 
    // Add the balls to the squares with the given indices
 
@@ -211,7 +220,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
       }
    }
 
-   */
+   /* OLD ALGORITHM
    struct positiond ball_p = ball.get_position();
    
    std::vector<int> cols {};
@@ -358,6 +367,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
          }
       }
    }
+   */
 }
 
 bool Field_Grid::point_in_square( struct positiond p, Field_Square& f )
@@ -387,14 +397,27 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 {
    //Horizontal search
 
-   std::vector<int> x_inds {};
+   //std::vector<int> x_inds {};
 
-   std::vector<int> y_inds {};
+   //std::vector<int> y_inds {};
 
-   int ub = num_cols - 1;
+   int x_ind = 0;
 
-   int lb = 0;
+   int y_ind = 0;
 
+   //int ub = num_cols - 1;
+
+   //int lb = 0;
+
+   int mid = 0;
+
+   while( field_sqrs[mid].pos.x < p.x )
+   {
+      mid++;
+   }
+
+   mid--;
+/*
    int mid = ( ub + lb ) / 2 ;
 
    while( !point_in_column( p, mid ) )
@@ -406,7 +429,7 @@ void Field_Grid::find_squares_of_point( struct positiond p,
          break;
       }
 
-      if( static_cast<double>( field_sqrs.at( mid ).pos.x ) > p.x )
+      if( static_cast<double>( field_sqrs[ mid ].pos.x ) > p.x )
       {
          ub = mid;
       }
@@ -418,28 +441,37 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 
       mid = ( ub + lb ) / 2;
    }
-
-   x_inds.push_back( mid );
-
-   if( p.x == static_cast<double>( field_sqrs.at( mid ).pos.x ) )
+*/
+   x_ind = mid ;
+/*
+   if( p.x == static_cast<double>( field_sqrs[ mid ].pos.x ) )
    {
       x_inds.push_back( mid - 1 );
    }
 
-   else if ( p.x == static_cast<double>( field_sqrs.at( mid ).pos.x + 
-           field_sqrs.at( mid ).w ) )
+   else if ( p.x == static_cast<double>( field_sqrs[ mid ].pos.x + 
+           field_sqrs[ mid ].w ) )
    {
       x_inds.push_back( mid + 1 );
    }
-
+*/
    // Vertical Search
 
-   ub = num_rows - 1;
+   //ub = num_rows - 1;
 
-   lb = 0;
+   //lb = 0;
 
-   mid = ( ub + lb ) / 2 ;
+   //mid = ( ub + lb ) / 2 ;
 
+   mid = 0;
+
+   while( field_sqrs[mid*num_cols].pos.y < p.y )
+   {
+      mid++;
+   }
+
+   mid--;
+/*
    while( !point_in_row( p, mid ) )
    {
       if( ub - lb == 1 )
@@ -449,7 +481,7 @@ void Field_Grid::find_squares_of_point( struct positiond p,
          break;
       }
 
-      if( static_cast<double>( field_sqrs.at( mid * num_cols ).pos.y ) > p.y )
+      if( static_cast<double>( field_sqrs[ mid * num_cols ].pos.y ) > p.y )
       {
          ub = mid;
       }
@@ -461,16 +493,16 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 
       mid = ( ub + lb ) / 2;
    }
-
-   y_inds.push_back( mid );
-
-   if( p.y == static_cast<double>( field_sqrs.at( num_cols * mid ).pos.y ) )
+*/
+   y_ind = mid;
+/*
+   if( p.y == static_cast<double>( field_sqrs[ num_cols * mid ].pos.y ) )
    {
       y_inds.push_back( mid - 1 );
    }
 
-   else if ( p.y == static_cast<double>( field_sqrs.at( num_cols * mid ).pos.y +
-           field_sqrs.at( num_cols * mid ).h ) )
+   else if ( p.y == static_cast<double>( field_sqrs[ num_cols * mid ].pos.y +
+           field_sqrs[ num_cols * mid ].h ) )
    {
       y_inds.push_back( mid + 1 );
    }
@@ -482,6 +514,9 @@ void Field_Grid::find_squares_of_point( struct positiond p,
          indexes.push_back( num_cols * y_ind + x_ind );
       }
    }
+   */
+
+   indexes.push_back( num_cols * y_ind + x_ind );
 }
 
 void Field_Grid::assign_line_to_squares( Line_Object& line)
