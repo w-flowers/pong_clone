@@ -795,8 +795,10 @@ void Field::advance_field()
    {
       b.move();
 
-      if( b.get_position().x < 0 || b.get_position().x > x_dim ||
-            b.get_position().y < 0 || b.get_position().y > y_dim )
+      if( b.get_position().x - b.get_radius() < 0 ||
+            b.get_position().x + b.get_radius() > x_dim ||
+            b.get_position().y - b.get_radius() < 0 ||
+            b.get_position().y + b.get_radius() > y_dim )
       {
          b.reset();
 
