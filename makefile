@@ -4,7 +4,7 @@
 CC		= g++
 SDL2_CFLAGS := $(shell sdl2-config --cflags)
 SDL2_LDFLAGS := $(shell sdl2-config --libs)
-CFLAGS	= -Wall -Wextra -O0 -pg -std=c++17 -g $(SDL2_CFLAGS)
+CFLAGS	= -Wall -Wextra -O0 -std=c++17 -g $(SDL2_CFLAGS)
 LDLIBS	= $(SDL2_LDFLAGS)
 
 all: pong_clone

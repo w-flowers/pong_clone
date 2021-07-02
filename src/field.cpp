@@ -58,19 +58,19 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
       current_x += new_w;
    }
 
-   for( int i = 0; i < balls.size(); i++ )
+   for( Ball& ball : balls)
    {
-      assign_ball_to_squares( balls[i], i );
+      assign_ball_to_squares( ball );
    }
 
    for( int i = 0; i < boundary.get_lines_size(); i++ )
    {
-      assign_line_to_squares( boundary.get_line( i ), i );
+      assign_line_to_squares( boundary.get_line( i ) );
    }
    //insert similar things for paddles once implemented
 }
 
-void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
+void Field_Grid::assign_ball_to_squares( Ball& ball )
 {
    /* OLD ALGORITHM
    positiond min_x = ball.get_position();
@@ -202,12 +202,12 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
    {
       if( field_sqrs[i].balls.empty() )
       {
-         field_sqrs[i].balls.push_back( index );
+         field_sqrs[i].balls.push_back( &ball );
       }
 
-      else if( field_sqrs[i].balls.back() != index )
+      else if( field_sqrs[i].balls.back() != &ball )
       {
-         field_sqrs[i].balls.push_back( index );
+         field_sqrs[i].balls.push_back( &ball );
       }
    }
 
@@ -326,7 +326,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
          {
             for( int j : rows )
             {
-               field_sqrs[i + j*num_cols].balls.push_back( index );
+               field_sqrs[i + j*num_cols].balls.push_back( &ball );
             }
          }
       }
@@ -340,7 +340,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
             {
                if( i != d_col || j != d_row )
                {
-                  field_sqrs[i + j*num_cols].balls.push_back( index );
+                  field_sqrs[i + j*num_cols].balls.push_back( &ball );
                }
             }
          }
@@ -354,7 +354,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
       {
          for( int j : rows )
          {
-            field_sqrs[i + j*num_cols].balls.push_back( index );
+            field_sqrs[i + j*num_cols].balls.push_back( &ball );
          }
       }
    }
@@ -484,7 +484,7 @@ void Field_Grid::find_squares_of_point( struct positiond p,
    }
 }
 
-void Field_Grid::assign_line_to_squares( Line_Object& line, int index )
+void Field_Grid::assign_line_to_squares( Line_Object& line)
 {
    struct positiond lp1 = {
       static_cast<double>( line.line.get_p1().x ),
@@ -628,7 +628,7 @@ void Field_Grid::assign_line_to_squares( Line_Object& line, int index )
          }
       }
 
-      field_sqrs[ mp_col + num_cols * mp_row].edges.push_back( index );
+      field_sqrs[ mp_col + num_cols * mp_row].edges.push_back( &line );
    }
 }
 
@@ -643,34 +643,34 @@ void Field_Grid::clear_balls()
 }
 
 void Field_Grid::return_objects_to_collide( 
-      std::vector< std::set< int > >& balls_to_collide,
-      std::vector< std::set< int > >& lines_to_collide,
+      std::unordered_map< Ball*, std::set< Ball* > >& balls_to_collide,
+      std::unordered_map< Ball*, std::set< Line_Object* > >& lines_to_collide,
       std::vector< Ball >& ball_vec //Owner of Balls
       )
 {
    // Add objects in each square to ordered map if they don't already exist
-   for( auto &sqr : field_sqrs )
+   for( auto sqr : field_sqrs )
    {
       for( int i = 0; i < sqr.balls.size(); i++ )
       {
          for( int j = i + 1; j < sqr.balls.size(); j++ )
          {
-            balls_to_collide[ sqr.balls[i] ].insert( sqr.balls[j] );
+            balls_to_collide.at( sqr.balls.at(i) ).insert( sqr.balls.at(j) );
          }
 
          for( int j = 0; j < sqr.edges.size(); j++ )
          {
-            lines_to_collide[ sqr.balls[i] ].insert( sqr.edges[j] );
+            lines_to_collide.at( sqr.balls.at(i) ).insert( sqr.edges.at(j) );
          }
       }
    }
 
    // Delete duplicate pairs from map
-   for( int i = 0; i < ball_vec.size(); i++ )
+   for( Ball& ref_ball : ball_vec )
    {
-      for( int ball_ind : balls_to_collide[i] )
+      for( auto ball_p : balls_to_collide.at( &ref_ball ) )
       {
-         balls_to_collide[ ball_ind ].erase( i );
+         balls_to_collide.at( ball_p ).erase( &ref_ball );
       }
    }
 
@@ -696,23 +696,17 @@ Field::Field( const std::vector<Line_start>& boun_init_list,
 
    balls_to_collide = {};
 
-   balls_to_collide.reserve( ball_vec.size() );
-
    lines_to_collide = {};
-
-   lines_to_collide.reserve( ball_vec.size() );
 
    points_to_collide = {};
 
-   points_to_collide.reserve( ball_vec.size() );
-
-   for( int i = 0; i < ball_vec.size(); i++ )
+   for( Ball& b : ball_vec )
    {
-      balls_to_collide.emplace_back( std::set<int>() );
+      balls_to_collide.insert( { &b, {} } );
 
-      lines_to_collide.emplace_back( std::set<int>() );
+      lines_to_collide.insert( { &b, {} } );
 
-      points_to_collide.emplace_back( std::set<position>() );
+      points_to_collide.insert( { &b, {} } );
    }
 }
 
@@ -742,48 +736,45 @@ void Field::advance_field()
    field_grid.return_objects_to_collide( balls_to_collide, lines_to_collide,
          ball_vec);
 
-   for( int i = 0; i < ball_vec.size(); i++ )
+   for( Ball& b : ball_vec )
    {
-      for( int index : balls_to_collide[i] )
+      for( auto ball_p : balls_to_collide.at( &b ) )
       {
-         Physics::collide_balls( ball_vec[i], ball_vec[index] );
+         Physics::collide_balls( b, *ball_p );
       }
 
-      for( int index : lines_to_collide[i] )
+      for( auto edge_p : lines_to_collide.at( &b ) )
       {
-         Physics::collide_ball_line( ball_vec[i], boundary.get_line( index ),
-               i, points_to_collide );
+         Physics::collide_ball_line( b, *edge_p, points_to_collide );
       }
 
-      for( auto point : points_to_collide[i] )
+      for( auto point : points_to_collide.at( &b ) )
       {
-         Physics::collide_ball_point( ball_vec[i], point );
+         Physics::collide_ball_point( b, point );
       }
    }
 
    field_grid.clear_balls();
 
-   for( int i = 0; i < ball_vec.size(); i++ )
+   for( Ball& b : ball_vec )
    {
-      ball_vec[i].move();
+      b.move();
 
-      if( ball_vec[i].get_position().x < 0 ||
-            ball_vec[i].get_position().x > x_dim ||
-            ball_vec[i].get_position().y < 0 ||
-            ball_vec[i].get_position().y > y_dim )
+      if( b.get_position().x < 0 || b.get_position().x > x_dim ||
+            b.get_position().y < 0 || b.get_position().y > y_dim )
       {
-         ball_vec[i].reset();
+         b.reset();
 
          std::cout << "Ball went out of bounds!!!\n";
       }
 
-      field_grid.assign_ball_to_squares( ball_vec[i], i );
+      field_grid.assign_ball_to_squares( b );
 
-      balls_to_collide[i].clear();
+      balls_to_collide.at( &b ).clear();
 
-      lines_to_collide[i].clear();
+      lines_to_collide.at( &b ).clear();
 
-      points_to_collide[i].clear();
+      points_to_collide.at( &b ).clear();
    }
 }
 
