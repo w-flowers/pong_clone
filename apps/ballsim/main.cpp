@@ -61,6 +61,13 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 27; i++)
    {
+      BallArgs temp {5 + i % 10, 30*( i + 4 ), 270, 0.4};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
       BallArgs temp {5 + i % 10, 30*( i + 4 ), 240, 0.5};
 
       ball_init.push_back( temp );
