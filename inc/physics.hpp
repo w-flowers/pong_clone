@@ -44,7 +44,7 @@ namespace Physics
 
    //Check then execute collision between a ball and a line
    void collide_ball_line( Ball& ball, const Line_Object& line_o, 
-         std::unordered_map< Ball*, std::set< struct position > >& points_to_collide 
+         int index, std::vector< std::set< struct position > >& points_to_collide 
          );
 
    //Check then execute collision between a ball and a ball

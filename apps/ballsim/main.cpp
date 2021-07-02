@@ -80,7 +80,7 @@ int main( int argc, char* argv[] )
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 15, 12};
+   Field test_field {list, ball_init, 1000, 800, 50, 40};
    SDL_Event e;
 
    bool quit = false;

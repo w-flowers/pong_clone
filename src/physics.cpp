@@ -98,7 +98,7 @@ bool Physics::is_colliding_bl( Ball& ball, const Line& line )
 }
 
 void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o,
-     std::unordered_map< Ball*, std::set< struct position > >& points_to_collide 
+     int index, std::vector< std::set< struct position > >& points_to_collide 
      )
 {
    if( is_colliding_bl( ball, line_o.line ) )
@@ -159,14 +159,14 @@ void Physics::collide_ball_line( Ball& ball, const Line_Object& line_o,
 
       if( is_colliding_bp( ball, p1 ) ) 
       {
-         points_to_collide.at( &ball ).insert( { p1 } );
+         points_to_collide[index].insert( { p1 } );
       }
 
       struct position p2 = line_o.line.get_p2();
 
       if( is_colliding_bp( ball, p2 ) )
       {
-         points_to_collide.at( &ball ).insert( { p2 } );
+         points_to_collide[index].insert( { p2 } );
       }
    }
 }
