@@ -72,7 +72,6 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
 
 void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
 {
-   /* OLD ALGORITHM
    positiond min_x = ball.get_position();
 
    min_x.x -= static_cast<double>( ball.get_radius() );
@@ -211,7 +210,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
       }
    }
 
-   */
+   /* OLD ALGORITHM
    struct positiond ball_p = ball.get_position();
    
    std::vector<int> cols {};
@@ -358,6 +357,7 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
          }
       }
    }
+   */
 }
 
 bool Field_Grid::point_in_square( struct positiond p, Field_Square& f )
