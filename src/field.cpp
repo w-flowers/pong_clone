@@ -370,6 +370,67 @@ void Field_Grid::assign_ball_to_squares( Ball& ball )
    */
 }
 
+void Field_Grid::assign_ball_to_squares_lazy( Ball& ball, int index )
+{
+   double r = static_cast<double>( ball.get_radius() );
+
+   positiond p = ball.get_position();
+
+   double min_x = p.x - r;
+
+   double max_x = p.x + r;
+
+   double min_y = p.y - r;
+
+   double max_y = p.y + r;
+
+   int min_row = num_rows - 1;
+
+   int max_row = num_rows - 1;
+
+   int min_col = num_cols - 1;
+
+   int max_col = num_cols - 1;
+
+   while( min_x < static_cast<double>( field_sqrs[min_col].pos.x ) )
+   {
+      min_col--;
+   }
+
+   if( min_x = field_sqrs[min_col].pos.x && min_col > 0 )
+   {
+      min_col--;
+   }
+
+   while( max_x < static_cast<double>( field_sqrs[max_col].pos.x ) )
+   {
+      max_col--;
+   }
+
+   while( min_y < static_cast<double>( field_sqrs[num_cols * min_row].pos.y ) )
+   {
+      min_row--;
+   }
+
+   if( min_y = field_sqrs[min_row * num_cols].pos.y && min_row > 0 )
+   {
+      min_row--;
+   }
+
+   while( max_y < static_cast<double>( field_sqrs[num_cols * max_row].pos.y ) )
+   {
+      max_row--;
+   }
+
+   for( int row = min_row; row <= max_row; row++ )
+   {
+      for( int col = min_col; col <= max_col; col++ )
+      {
+         field_sqrs[row * num_cols + col].balls.push_back(index);
+      }
+   }
+}
+
 bool Field_Grid::point_in_square( struct positiond p, Field_Square& f )
 {
    return ( static_cast<double>( f.pos.x ) <= p.x &&
@@ -401,6 +462,10 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 
    //std::vector<int> y_inds {};
 
+   int x_inds[2] = {-1, -1};
+
+   int y_inds[2] = {-1, -1};
+
    int x_ind = 0;
 
    int y_ind = 0;
@@ -409,14 +474,14 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 
    //int lb = 0;
 
-   int mid = 0;
+   int mid_x = 1;
 
-   while( field_sqrs[mid].pos.x < p.x )
+   while( field_sqrs[mid_x].pos.x < p.x && mid_x < num_cols )
    {
-      mid++;
+      mid_x++;
    }
 
-   mid--;
+   mid_x--;
 /*
    int mid = ( ub + lb ) / 2 ;
 
@@ -442,7 +507,7 @@ void Field_Grid::find_squares_of_point( struct positiond p,
       mid = ( ub + lb ) / 2;
    }
 */
-   x_ind = mid ;
+   x_inds[0] = mid_x ;
 /*
    if( p.x == static_cast<double>( field_sqrs[ mid ].pos.x ) )
    {
@@ -463,14 +528,14 @@ void Field_Grid::find_squares_of_point( struct positiond p,
 
    //mid = ( ub + lb ) / 2 ;
 
-   mid = 0;
+   int mid_y = 1;
 
-   while( field_sqrs[mid*num_cols].pos.y < p.y )
+   while( field_sqrs[mid_y*num_cols].pos.y < p.y && mid_y < num_rows )
    {
-      mid++;
+      mid_y++;
    }
 
-   mid--;
+   mid_y--;
 /*
    while( !point_in_row( p, mid ) )
    {
@@ -494,7 +559,7 @@ void Field_Grid::find_squares_of_point( struct positiond p,
       mid = ( ub + lb ) / 2;
    }
 */
-   y_ind = mid;
+   y_inds[0] = mid_y;
 /*
    if( p.y == static_cast<double>( field_sqrs[ num_cols * mid ].pos.y ) )
    {
@@ -516,7 +581,26 @@ void Field_Grid::find_squares_of_point( struct positiond p,
    }
    */
 
-   indexes.push_back( num_cols * y_ind + x_ind );
+   if ( p.x == static_cast<double>( field_sqrs[ mid_x ].pos.x + 
+            field_sqrs[ mid_x ].w ) )
+   {
+      x_inds[1] = mid_x + 1;
+   }
+
+   if ( p.y == static_cast<double>( field_sqrs[ num_cols * mid_y ].pos.y +
+           field_sqrs[ num_cols * mid_y ].h ) )
+   {
+      y_inds[1] =  mid_y + 1;
+   }
+
+
+   for( int i = 0; i < 4; i++ )
+   {
+      if( x_inds[i%2] >= 0 && y_inds[i/2] >= 0 )
+      {
+         indexes.push_back( num_cols * y_inds[i/2] + x_inds[i%2] );
+      }
+   }
 }
 
 void Field_Grid::assign_line_to_squares( Line_Object& line)
@@ -795,10 +879,10 @@ void Field::advance_field()
    {
       b.move();
 
-      if( b.get_position().x - b.get_radius() < 0 ||
-            b.get_position().x + b.get_radius() > x_dim ||
-            b.get_position().y - b.get_radius() < 0 ||
-            b.get_position().y + b.get_radius() > y_dim )
+      if( ball_vec[i].get_position().x <= 0 ||
+            ball_vec[i].get_position().x >= x_dim ||
+            ball_vec[i].get_position().y <= 0 ||
+            ball_vec[i].get_position().y >= y_dim )
       {
          b.reset();
 
