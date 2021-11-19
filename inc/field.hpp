@@ -79,6 +79,10 @@ public:
    // Function gives all squares which a ball is in contact with.
    void assign_ball_to_squares( Ball& ball, int index );
 
+   // Version of the function above which assigns ball to all squares
+   // for which both the row and column contain a point in the ball.
+   void assign_ball_to_squares_lazy( Ball& ball, int index );
+
    bool point_in_square( struct positiond p, Field_Square& f );
 
    bool point_in_column( struct positiond p, int col );

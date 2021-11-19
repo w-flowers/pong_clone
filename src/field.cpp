@@ -370,6 +370,67 @@ void Field_Grid::assign_ball_to_squares( Ball& ball, int index )
    */
 }
 
+void Field_Grid::assign_ball_to_squares_lazy( Ball& ball, int index )
+{
+   double r = static_cast<double>( ball.get_radius() );
+
+   positiond p = ball.get_position();
+
+   double min_x = p.x - r;
+
+   double max_x = p.x + r;
+
+   double min_y = p.y - r;
+
+   double max_y = p.y + r;
+
+   int min_row = num_rows - 1;
+
+   int max_row = num_rows - 1;
+
+   int min_col = num_cols - 1;
+
+   int max_col = num_cols - 1;
+
+   while( min_x < static_cast<double>( field_sqrs[min_col].pos.x ) )
+   {
+      min_col--;
+   }
+
+   if( min_x = field_sqrs[min_col].pos.x && min_col > 0 )
+   {
+      min_col--;
+   }
+
+   while( max_x < static_cast<double>( field_sqrs[max_col].pos.x ) )
+   {
+      max_col--;
+   }
+
+   while( min_y < static_cast<double>( field_sqrs[num_cols * min_row].pos.y ) )
+   {
+      min_row--;
+   }
+
+   if( min_y = field_sqrs[min_row * num_cols].pos.y && min_row > 0 )
+   {
+      min_row--;
+   }
+
+   while( max_y < static_cast<double>( field_sqrs[num_cols * max_row].pos.y ) )
+   {
+      max_row--;
+   }
+
+   for( int row = min_row; row <= max_row; row++ )
+   {
+      for( int col = min_col; col <= max_col; col++ )
+      {
+         field_sqrs[row * num_cols + col].balls.push_back(index);
+      }
+   }
+}
+
 bool Field_Grid::point_in_square( struct positiond p, Field_Square& f )
 {
    return ( static_cast<double>( f.pos.x ) <= p.x &&
