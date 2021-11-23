@@ -40,4 +40,4 @@ The GUI class in particular is designed to have a public interface such that int
 
 ### Game
 
-The class that implements the game loop. It sets up the game, handles i/o events, calls the field's advance method, and calls the render_all() function from the gui. Essentially, this class acts as a controller that manages the other objects which do the real work.
+The class that implements the game loop. It sets up the game, handles i/o events, calls the field's advance method, and calls the render\_all() function from the gui. Essentially, this class acts as a controller that manages the other objects which do the real work.
