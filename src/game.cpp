@@ -19,6 +19,25 @@ void Game::run()
 
    //game_loop( field );
 
+   std::cout << "Please enter a game mode (local/net):\n";
+
+   std::string input {""};
+
+   std::cin >> input;
+
+   if( input == "local" )
+   {
+      std::cout << "Test successful\n";
+
+      //fork to run server
+
+   }
+
+   else
+   {
+      std::cout << "Functionality not implemented.\n";
+   }
+
    return;
 }
 
@@ -49,7 +68,7 @@ void Game::game_loop( Field& field )
        //Move game objects
        
        //Render
-       gui.render_all( field );
+       //gui.render_all( field );
    }
    
    return;

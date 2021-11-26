@@ -7,13 +7,10 @@ SDL2_LDFLAGS := $(shell sdl2-config --libs)
 CFLAGS	= -Wall -Wextra -O2 -pg -std=c++17 -g $(SDL2_CFLAGS)
 LDLIBS	= $(SDL2_LDFLAGS)
 
-all: pong_clone
-pong_clone: obj/GUI-kenken.o obj/kenken-solver.o obj/kenken-basic.o
-	$(CC) $(CFLAGS) -o kenken obj/kenken-basic.o obj/kenken-solver.o obj/GUI-kenken.o $(LDLIBS)
-obj/kenken-solver.o: src/kenken-solver.c inc/kenken-solver.h inc/kenken-basic.h
-	$(CC) -c $(CFLAGS) src/kenken-solver.c -o obj/kenken-solver.o
-obj/GUI-kenken.o: src/GUI-kenken.c inc/GUI-kenken.h inc/kenken-solver.h inc/kenken-basic.h
-	$(CC) -c $(CFLAGS) src/GUI-kenken.c $(LDLIBS) -o obj/GUI-kenken.o
+all: pong_clone ballsim test
+pong_clone: bin/pong_clone
+bin/pong_clone: objects
+	$(CC) $(CFLAGS) -o bin/pong_clone apps/pong_clone/main.cpp  obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
 
 ballsim: bin/ballsim
 bin/ballsim: objects

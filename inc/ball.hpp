@@ -26,6 +26,16 @@ struct velocity
    double speed;
 };
 
+//Ball data for drawing
+struct ball_pos_data
+{
+   int rounded_x;
+
+   int rounded_y;
+
+   int radius;
+};
+
 class Ball
 {
 public:

@@ -426,7 +426,7 @@ void Field_Grid::assign_ball_to_squares_lazy( Ball& ball, int index )
    {
       for( int col = min_col; col <= max_col; col++ )
       {
-         field_sqrs[row * num_cols + col].balls.push_back(index);
+         field_sqrs[row * num_cols + col].balls.push_back( &ball );
       }
    }
 }
@@ -879,10 +879,10 @@ void Field::advance_field()
    {
       b.move();
 
-      if( ball_vec[i].get_position().x <= 0 ||
-            ball_vec[i].get_position().x >= x_dim ||
-            ball_vec[i].get_position().y <= 0 ||
-            ball_vec[i].get_position().y >= y_dim )
+      if( b.get_position().x <= 0 ||
+            b.get_position().x >= x_dim ||
+            b.get_position().y <= 0 ||
+            b.get_position().y >= y_dim )
       {
          b.reset();
 
@@ -896,6 +896,30 @@ void Field::advance_field()
       lines_to_collide.at( &b ).clear();
 
       points_to_collide.at( &b ).clear();
+   }
+}
+
+void Field::write_field_positions( struct field_position_data& fpd )
+{
+   fpd.ball_positions.clear();
+
+   fpd.line_positions.clear();
+
+   for( Ball& b : ball_vec )
+   {
+      fpd.ball_positions.push_back(
+            { round( b.get_position().x ),
+            round( b.get_position().y ),
+            b.get_radius() } );
+   }
+
+
+   for( int i = 0; i < boundary.get_lines_size(); i++ )
+   {
+      fpd.line_positions.push_back(
+            { boundary.get_line( i ).line.get_p1(),
+            boundary.get_line( i ).line.get_p2(),
+            boundary.get_line( i ).get_type() } );
    }
 }
 

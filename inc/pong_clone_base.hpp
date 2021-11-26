@@ -26,6 +26,8 @@
 
 #include <unordered_set>
 
+#include <string>
+
 const float this_pi = 3.141593; //local definition of pi, may change in future
 
 const int fps = 30;
@@ -48,32 +50,6 @@ struct positiond
 {
    double x;
    double y;
-};
-
-//Ball data for drawing
-struct ball_pos_data
-{
-   position_d centre;
-
-   double radius;
-}
-
-//Line data for drawing
-struct line_pos_data
-{
-   position p1;
-
-   position p2;
-
-   Linetype t;
-}
-
-// Structure for transferring data from game server to GUI client
-struct field_position_data
-{
-   std::vector< ball_pos_data > ball_positions {};
-
-   std::vector< line_pos_data > line_positions {};
 };
 
 //TO DO: Structure for transferring commands from GUI to game server

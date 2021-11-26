@@ -54,26 +54,26 @@ GUI::GUI(int width, int height):
 { 
 }
 
-void GUI::render_all( Field& field )
+void GUI::render_all( field_position_data& field )
 {
    if( ball_textures.size() == 0 )
    {
-      ball_textures.reserve( field.ball_vec_size() );
+      ball_textures.reserve( field.ball_positions.size() );
 
-      for( int i = 0; i < field.ball_vec_size(); i++ )
+      for( int i = 0; i < field.ball_positions.size(); i++ )
       {
          // Render balls to SDL texture here
          ball_textures.push_back(
                SDL_CreateTexture( renderer.get_renderer(),
                   SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET,
-                  2 * field.get_ball( i ).get_radius() + 1, 
-                  2 * field.get_ball( i ).get_radius() + 1
+                  2 * field.ball_positions[ i ].radius + 1, 
+                  2 * field.ball_positions[ i ].radius + 1
                   )
                );
 
          SDL_SetTextureBlendMode( ball_textures.at(i), SDL_BLENDMODE_BLEND );
 
-         render_ball( field.get_ball( i ), i );
+         render_ball( field.ball_positions[i], i );
       }
    }
 
@@ -81,29 +81,29 @@ void GUI::render_all( Field& field )
 
    render_background();
 
-   for( int i = 0; i < field.ball_vec_size(); i++ )
+   for( int i = 0; i < field.ball_positions.size(); i++ )
    {
-      copy_ball_textures( field.get_ball(i), i );
+      copy_ball_textures( field.ball_positions[i], i );
    }
 
-   for( int i = 0; i < field.boundary.get_lines_size(); i++ )
+   for( int i = 0; i < field.line_positions.size(); i++ )
    {
-      render_line( field.boundary.get_line( i ) );
+      render_line( field.line_positions[i] );
    }
    
    SDL_RenderPresent( renderer.get_renderer() );
 }
 
-void GUI::render_line( Line_Object& line_o )
+void GUI::render_line( line_pos_data& line_o )
 {
    SDL_SetRenderDrawColor( renderer.get_renderer(), 0, 0, 0, 0 );
 
-   SDL_RenderDrawLine( renderer.get_renderer(), line_o.line.get_p1().x, 
-         line_o.line.get_p1().y, line_o.line.get_p2().x,
-         line_o.line.get_p2().y );
+   SDL_RenderDrawLine( renderer.get_renderer(), line_o.p1.x, 
+         line_o.p1.y, line_o.p2.x,
+         line_o.p2.y );
 }
 
-void GUI::render_ball( Ball& ball, int index )
+void GUI::render_ball( ball_pos_data& ball, int index )
 {
    SDL_SetRenderDrawColor( renderer.get_renderer(), 255, 255, 255, 0 );
 
@@ -126,10 +126,10 @@ void GUI::render_ball( Ball& ball, int index )
          ball.get_position().y );
 */
    SDL_RenderDrawLine( renderer.get_renderer(), 
-         2 * ball.get_radius(), 
-         ball.get_radius(), 
+         2 * ball.radius, 
+         ball.radius, 
          0,
-         ball.get_radius() );
+         ball.radius );
    
    /*SDL_RenderDrawPoint( renderer.get_renderer(), 
          ball.get_position().x ,
@@ -141,14 +141,14 @@ void GUI::render_ball( Ball& ball, int index )
 */
    
    SDL_RenderDrawLine( renderer.get_renderer(), 
-         ball.get_radius(), 
-         2* ball.get_radius(), 
-         ball.get_radius(),
+         ball.radius, 
+         2* ball.radius, 
+         ball.radius,
          0 );
 
    int n = 0;
 
-   int r = ball.get_radius();
+   int r = ball.radius;
 
    int x = r;
 
@@ -161,47 +161,47 @@ void GUI::render_ball( Ball& ball, int index )
       x -= x_inc;
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() + x,
-            ball.get_radius() + n);
+            ball.radius + x,
+            ball.radius + n);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() + x,
-            ball.get_radius() - n);
+            ball.radius + x,
+            ball.radius - n);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() - x,
-            ball.get_radius() + n);
+            ball.radius - x,
+            ball.radius + n);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() - x,
-            ball.get_radius() - n);
+            ball.radius - x,
+            ball.radius - n);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() + n,
-            ball.get_radius() + x);
+            ball.radius + n,
+            ball.radius + x);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() + n,
-            ball.get_radius() - x);
+            ball.radius + n,
+            ball.radius - x);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() - n,
-            ball.get_radius() + x);
+            ball.radius - n,
+            ball.radius + x);
 
       SDL_RenderDrawPoint( renderer.get_renderer(), 
-            ball.get_radius() - n,
-            ball.get_radius() - x);
+            ball.radius - n,
+            ball.radius - x);
    }
 
    SDL_SetRenderTarget( renderer.get_renderer(), NULL );
 }
 
-void GUI::copy_ball_textures( Ball& ball, int index )
+void GUI::copy_ball_textures( ball_pos_data& ball, int index )
 {
-   SDL_Rect temp { round( ball.get_position().x ) - ball.get_radius(),
-      round( ball.get_position().y ) - ball.get_radius(),
-      2 * ball.get_radius() + 1,
-      2 * ball.get_radius() + 1
+   SDL_Rect temp { ball.rounded_x - ball.radius,
+      ball.rounded_y - ball.radius,
+      2 * ball.radius + 1,
+      2 * ball.radius + 1
    };
 
    SDL_RenderCopy( renderer.get_renderer(), ball_textures.at( index ),

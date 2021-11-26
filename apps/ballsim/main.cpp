@@ -88,6 +88,9 @@ int main( int argc, char* argv[] )
    }
 
    Field test_field {list, ball_init, 1000, 800, 150, 100};
+
+   struct field_position_data field_position_data {};
+
    SDL_Event e;
 
    bool quit = false;
@@ -110,8 +113,10 @@ int main( int argc, char* argv[] )
 
       //SDL_Delay(200);
 
+      test_field.write_field_positions( field_position_data );
+
       //Render
-      gui.render_all( test_field );
+      gui.render_all( field_position_data );
    }
 
    return 0;

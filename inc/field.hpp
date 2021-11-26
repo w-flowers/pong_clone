@@ -119,6 +119,13 @@ private:
    std::vector<Field_Square> field_sqrs {};
 };
 
+// Structure for transferring data from game server to GUI client
+struct field_position_data
+{
+   std::vector< ball_pos_data > ball_positions {};
+
+   std::vector< line_pos_data > line_positions {};
+};
 
 class Field
 {
@@ -147,6 +154,8 @@ public:
    
    //moves elements in field by one step
    void advance_field();
+
+   void write_field_positions( struct field_position_data& fpd );
 
    class InvalidDimensions{};
 private:

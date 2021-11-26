@@ -75,7 +75,7 @@ public:
    class FailedInit{};
    
    //Method which renders all game objects
-   void render_all( Field& field );
+   void render_all( field_position_data& field );
 
    //Non-copyable
    GUI( const GUI & ) =delete;
@@ -87,14 +87,14 @@ private:
    Renderer renderer;
 
    // Method which renders edges, goals and paddles
-   void render_line( Line_Object& line_o );
+   void render_line( line_pos_data& line_o );
 
    // Method which renders a ball
-   void render_ball( Ball& ball, int index );
+   void render_ball( ball_pos_data& ball, int index );
 
    // Method which takes ball textures and copies them to the balls current
    // rectangle
-   void copy_ball_textures( Ball& ball, int index );
+   void copy_ball_textures( ball_pos_data& ball, int index );
 
    // Render Background
    void render_background();
