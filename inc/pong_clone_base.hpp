@@ -52,8 +52,6 @@ struct positiond
    double y;
 };
 
-//TO DO: Structure for transferring commands from GUI to game server
-
 enum Player {pl_1, pl_2, none};
 
 // Convenience function, don't want overhead of using exp
