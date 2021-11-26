@@ -87,7 +87,7 @@ int main( int argc, char* argv[] )
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 1000, 800, 150, 100};
+   Field test_field {list, ball_init, 1000, 800, 25, 20};
 
    struct field_position_data field_position_data {};
 
