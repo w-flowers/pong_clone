@@ -1,11 +1,11 @@
 
-/********************************************************************************
-* Pong Clone - PROGRAM_NAME (FILENAME.cpp) 
+/*******************************************************************************
+* Pong Clone - Client (client.cpp) 
 *
-* DESCRIPTION
+* Code that does the client-side networking for a game of pong.
 *
 * Author: William Flowers
-********************************************************************************/
+*******************************************************************************/
 
-#include "../inc/FILENAME.hpp"
+#include "../inc/client.hpp"
 

@@ -18,6 +18,9 @@
 class Server
 {
 public:
+   Server();
+
+   ~Server();
 
    // Starts the server
    run_server();
@@ -27,6 +30,10 @@ private:
    game_loop();
 
    Field field{};
+
+   void send_field_info();
+
+   int get_client_move( Player p, );
 }
 
 #endif
