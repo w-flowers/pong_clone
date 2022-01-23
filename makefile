@@ -33,7 +33,7 @@ test/obj/ball-test.o: test/ball-test.cpp inc/ball.hpp
 	$(CC) $(CFLAGS) -o test/obj/ball-test.o -c test/ball-test.cpp
 test/obj/game-test.o: test/game-test.cpp inc/game.hpp
 	$(CC) $(CFLAGS) -o test/obj/game-test.o -c test/game-test.cpp
-objects: obj/line.o obj/ball.o obj/game.o obj/gui.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o
+objects: obj/line.o obj/ball.o obj/config.o obj/game.o obj/gui.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o
 obj/game.o: src/game.cpp inc/game.hpp inc/gui.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/game.cpp -o obj/game.o 
 obj/gui.o: src/gui.cpp inc/gui.hpp inc/pong_clone_base.hpp
@@ -50,6 +50,8 @@ obj/line.o: src/line.cpp inc/line.hpp inc/ball.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/line.cpp -o obj/line.o
 obj/ball.o: src/ball.cpp inc/ball.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/ball.cpp -o obj/ball.o
+obj/config.o: src/config.cpp inc/config.hpp inc/pong_clone_base.hpp
+	$(CC) -c $(CFLAGS) src/config.cpp -o obj/config.o
 obj/pong_clone_base.o: src/pong_clone_base.cpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/pong_clone_base.cpp -o obj/pong_clone_base.o 
 clean:

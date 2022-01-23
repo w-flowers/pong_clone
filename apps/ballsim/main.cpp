@@ -36,7 +36,7 @@ int main( int argc, char* argv[] )
 
    std::vector<BallArgs> ball_init;
 
-   ball_init.reserve(256);
+   ball_init.reserve(512);
 
    for(int i = 0; i < 27; i++)
    {
@@ -48,6 +48,13 @@ int main( int argc, char* argv[] )
    for(int i = 0; i < 27; i++)
    {
       BallArgs temp {10 - i % 5, 30*( i + 4 ), 400, 0.5 + 0.001 * i};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
+      BallArgs temp {5 + i % 3, 29*( i + 4 ), 425, 0.4};
 
       ball_init.push_back( temp );
    }
@@ -68,6 +75,13 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 27; i++)
    {
+      BallArgs temp {4 + i % 3, 30*( i + 4 ), 255, 0.8};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
       BallArgs temp {5 + i % 10, 30*( i + 4 ), 240, 0.5};
 
       ball_init.push_back( temp );
@@ -75,7 +89,21 @@ int main( int argc, char* argv[] )
 
    for(int i = 0; i < 27; i++)
    {
+      BallArgs temp {4 + i % 3, 30*( i + 4 ), 225, 0.8};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
       BallArgs temp {5 + i % 10, 30*( i + 4 ), 210, 0.5};
+
+      ball_init.push_back( temp );
+   }
+
+   for(int i = 0; i < 27; i++)
+   {
+      BallArgs temp {5 + i % 3, 29*( i + 4 ), 465, 0.4};
 
       ball_init.push_back( temp );
    }

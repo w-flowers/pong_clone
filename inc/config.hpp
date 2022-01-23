@@ -15,6 +15,16 @@
 
 #include <iostream>
 
+#include <sstream>
+
+#include <filesystem>
+
+#include <fstream>
+
+#include "pong_clone_base.hpp"
+
+#include "line.hpp"
+
 enum Gametype { sim, multiplayer };
 
 struct Ball_Args
@@ -61,7 +71,7 @@ class InvalidConfig {};
 
 void run_configuration( Configuration& config, std::string filepath );
 
-void read_config_file( Configuration& config, std::ifstream input );
+void read_config_file( Configuration& config, std::ifstream& input );
 
 void process_config_line( Configuration& config,
                           std::vector< std::string >& tokens );
@@ -71,6 +81,12 @@ void parse_gametype_line( Configuration& config,
 
 void parse_dimensions_line( Configuration& config,
                          std::vector< std::string >& tokens );
+
+void parse_line_line( Configuration& config,
+                          std::vector< std::string >& tokens );
+
+void parse_ball_line( Configuration& config,
+                          std::vector< std::string >& tokens );
 
 #endif
 
