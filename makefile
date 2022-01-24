@@ -10,7 +10,7 @@ LDLIBS	= $(SDL2_LDFLAGS)
 all: pong_clone ballsim test
 pong_clone: bin/pong_clone
 bin/pong_clone: objects
-	$(CC) $(CFLAGS) -o bin/pong_clone apps/pong_clone/main.cpp  obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
+	$(CC) $(CFLAGS) -o bin/pong_clone apps/pong_clone/main.cpp  obj/gui.o obj/config.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
 
 ballsim: bin/ballsim
 bin/ballsim: objects
@@ -34,13 +34,13 @@ test/obj/ball-test.o: test/ball-test.cpp inc/ball.hpp
 test/obj/game-test.o: test/game-test.cpp inc/game.hpp
 	$(CC) $(CFLAGS) -o test/obj/game-test.o -c test/game-test.cpp
 objects: obj/line.o obj/ball.o obj/config.o obj/game.o obj/gui.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o
-obj/game.o: src/game.cpp inc/game.hpp inc/gui.hpp inc/pong_clone_base.hpp
+obj/game.o: src/game.cpp inc/game.hpp inc/gui.hpp inc/pong_clone_base.hpp inc/config.hpp
 	$(CC) -c $(CFLAGS) src/game.cpp -o obj/game.o 
 obj/gui.o: src/gui.cpp inc/gui.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/gui.cpp -o obj/gui.o 
 obj/physics.o: src/physics.cpp inc/physics.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/physics.cpp -o obj/physics.o 
-obj/field.o: src/field.cpp inc/field.hpp inc/pong_clone_base.hpp
+obj/field.o: src/field.cpp inc/field.hpp inc/pong_clone_base.hpp inc/ball.hpp inc/line.hpp inc/paddle.hpp inc/boundary.hpp inc/physics.hpp inc/config.hpp
 	$(CC) -c $(CFLAGS) src/field.cpp -o obj/field.o 
 obj/boundary.o: src/boundary.cpp inc/boundary.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/boundary.cpp -o obj/boundary.o 

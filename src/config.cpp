@@ -11,7 +11,7 @@
 
 #include "../inc/config.hpp"
 
-void run_configuration( Configuration& config, std::string filepath )
+void run_configuration( Configuration& config, std::string& filepath )
 {
    // Open file given by filepath
 
@@ -24,7 +24,7 @@ void run_configuration( Configuration& config, std::string filepath )
    read_config_file( config, input );
 }
 
-void read_config_file( Configuration& config, std::ifstream input )
+void read_config_file( Configuration& config, std::ifstream& input )
 {
    std::string line_buffer;
 
@@ -41,7 +41,12 @@ void read_config_file( Configuration& config, std::ifstream input )
          tokens.push_back( input_token );
       }
 
-      process_config_line( config, tokens );
+      if( tokens.size() > 0 )
+      {
+         process_config_line( config, tokens );
+      }
+
+      tokens.clear();
    }
 }
 
@@ -70,6 +75,8 @@ void process_config_line( Configuration& config,
 
    else
    {
+      std::cerr << "Invalid initial token.\n";
+
       throw InvalidConfig{};
    }
 }
@@ -79,6 +86,10 @@ void parse_gametype_line( Configuration& config,
 {
    if( tokens.size() != 2 || ++( config.gametype_set_count ) > 1 )
    {
+      std::cerr << "Invalid gametype line.\ngametype_set_count: " <<
+         config.gametype_set_count << "\ntoken count: " <<
+         tokens.size() << "\n";
+
       throw InvalidConfig{};
    }
 
@@ -94,6 +105,8 @@ void parse_gametype_line( Configuration& config,
 
    else
    {
+      std::cerr << "Invalid gametype.\n";
+
       throw InvalidConfig{};
    }
 }
@@ -103,6 +116,10 @@ void parse_dimensions_line( Configuration& config,
 {
    if( tokens.size() != 3 || ++( config.dimensions_set_count ) > 1 )
    {
+      std::cerr << "Invalid dimensions line.\ndimensions_set_count: " <<
+         config.dimensions_set_count << "\ntoken count: " <<
+         tokens.size() << "\n";
+
       throw InvalidConfig{};
    }
 
@@ -112,6 +129,8 @@ void parse_dimensions_line( Configuration& config,
 
    if( config.window_width <= 0 || config.window_height <= 0 )
    {
+      std::cerr << "Invalid dimensions.\n";
+
       throw InvalidConfig{};
    }
 }
@@ -124,6 +143,11 @@ void parse_line_line( Configuration& config,
     || ( config.gametype == sim && tokens.size() != 6 )
     || ( config.gametype == multiplayer && tokens.size() != 7 ) )
    {
+      std::cerr << "Invalid line line.\ngametype_set_count: " <<
+         config.gametype_set_count << "\ndimensions_set_count: " <<
+         config.dimensions_set_count << "\ntoken count: " <<
+         tokens.size() << "\n";
+
       throw InvalidConfig{};
    }
 
@@ -148,6 +172,8 @@ void parse_line_line( Configuration& config,
    
    else
    {
+      std::cerr << "Invalid linetype.\n";
+
       throw InvalidConfig{};
    }
 
@@ -181,6 +207,8 @@ void parse_line_line( Configuration& config,
 
       else
       {
+         std::cerr << "Invalid player value.\n";
+
          throw InvalidConfig{};
       }
    }
@@ -191,6 +219,8 @@ void parse_line_line( Configuration& config,
     || new_line.pos_1.y <= 0 || new_line.pos_1.y >= config.window_height
     || new_line.pos_2.y <= 0 || new_line.pos_2.y >= config.window_height )
    {
+      std::cerr << "Line out of bounds.\n";
+
       throw InvalidConfig{};
    }
 }
@@ -200,6 +230,10 @@ void parse_ball_line( Configuration& config,
 {
    if( tokens.size() != 5 || config.dimensions_set_count != 1 )
    {
+      std::cerr << "Invalid ball line.\ndimensions_set_count: " <<
+         config.dimensions_set_count << "\ntoken count: " <<
+         tokens.size() << "\n";
+
       throw InvalidConfig{};
    }
 
@@ -223,6 +257,8 @@ void parse_ball_line( Configuration& config,
     || new_ball.init_y + static_cast<double>( new_ball.r )
          >= static_cast<double>( config.window_height ) )
    {
+      std::cerr << "Ball out of bounds.\n";
+
       throw InvalidConfig{};
    }
 }

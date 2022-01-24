@@ -11,9 +11,13 @@
 #include "../inc/game.hpp"
 
 
-void Game::run()
+void Game::run( std::string filename )
 {
    //insert body here
+   //
+   struct Configuration config {};
+
+   run_configuration( config, filename );
 
    // Initialise field
 

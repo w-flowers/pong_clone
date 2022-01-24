@@ -16,6 +16,8 @@
 
 #include "field.hpp"
 
+#include "config.hpp"
+
 const int GUI_SIZE_X {500};
 
 const int GUI_SIZE_Y {500};
@@ -23,7 +25,7 @@ const int GUI_SIZE_Y {500};
 namespace Game
 {
    //A containing method for all the game code, to be run after setup
-   void run();
+   void run( std::string filename );
 
    //The method which runs the game loop - called from within run
    void game_loop( Field& field );

@@ -8,7 +8,27 @@
 
 int main( int argc, char *argv[] )
 {
-   Game::run();
+   if( argc == 1 )
+   {
+      std::cout << "Please select a config file to load.\n";
+
+      return 1;
+   }
+
+   else if( argc == 2 )
+   {
+      std::string filename {argv[1]};
+
+      Game::run( filename );
+   }
+
+   else
+   {
+      std::cout <<
+         "Too many arguments supplied - please enter a single filename\n";
+
+      return 1;
+   }
 
    return 0;
 }

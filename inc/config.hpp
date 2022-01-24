@@ -69,7 +69,7 @@ struct Configuration
 // Exception for if read_config_file is fed bad input
 class InvalidConfig {};
 
-void run_configuration( Configuration& config, std::string filepath );
+void run_configuration( Configuration& config, std::string& filepath );
 
 void read_config_file( Configuration& config, std::ifstream& input );
 

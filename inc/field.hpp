@@ -27,17 +27,7 @@
 
 #include "physics.hpp"
 
-struct BallArgs
-{
-   int radius;
-
-   double init_x;
-
-   double init_y;
-
-   double speed;
-};
-
+#include "config.hpp"
 
 struct Field_Square
 {
@@ -131,7 +121,7 @@ class Field
 {
 public:
    Field( const std::vector<Line_start>& boun_init_list, 
-         const std::vector<BallArgs>& ball_init_list, int x_d, int y_d, 
+         const std::vector<Ball_Args>& ball_init_list, int x_d, int y_d, 
          int rows, int columns);
 
    //public - encapsulation in boundary class

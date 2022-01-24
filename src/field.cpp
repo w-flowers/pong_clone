@@ -797,7 +797,7 @@ void Field_Grid::return_objects_to_collide(
 }
 
 Field::Field( const std::vector<Line_start>& boun_init_list,
-      const std::vector<BallArgs>& ball_init_list, int x_d, int y_d,
+      const std::vector<Ball_Args>& ball_init_list, int x_d, int y_d,
       int rows, int columns):
     boundary {boun_init_list}, x_dim {x_d}, y_dim {y_d}
 {
@@ -808,7 +808,7 @@ Field::Field( const std::vector<Line_start>& boun_init_list,
 
    for( auto arg : ball_init_list )
    {
-      ball_vec.emplace_back( Ball( arg.radius, arg.init_x, arg.init_y, arg.speed) );
+      ball_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
    }
 
    field_grid = { ball_vec, boundary, x_dim, y_dim, rows, columns };
