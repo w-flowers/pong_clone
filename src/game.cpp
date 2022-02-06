@@ -33,7 +33,17 @@ void Game::run( std::string filename )
    {
       std::cout << "Test successful\n";
 
+      int sd[2] = {0};
+
+      if( socketpair(AF_UNIX, SOCK_STREAM, 0, sd) == -1)
+      {
+         std::cerr << "Call to socketpair failed.\n";
+
+         return;
+      }
+
       //fork to run server
+
 
    }
 

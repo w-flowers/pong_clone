@@ -15,25 +15,55 @@
 
 #define PONG_SERVER
 
+#include <optional>
+
+#include "pong_clone_base.hpp"
+
+#include "field.hpp"
+
+#include <sys/types.h> 
+
+#include <sys/socket.h> 
+
+#include <netinet/in.h> 
+
+#include <netdb.h> 
+
+#include <arpa/inet.h>
+
+#include <cstring>
+
 class Server
 {
 public:
-   Server();
+   // Accepts two connection types - local or net. In case of local, a socket
+   // descriptor is passed in by the calling function (it will be created by a
+   // call to socketpair prior to forking the process).
+   //
+   // In the case of a net connection type, the int for the socket descriptor
+   // is unused, and the function should be passed a dummy value.
+   Server( std::string& connection_type,
+           std::optional<int> socket_descriptor,
+           struct Configuration& config );
 
    ~Server();
 
    // Starts the server
-   run_server();
+   void run_server();
 
 private:
 
-   game_loop();
+   int sd {0};
 
-   Field field{};
+   Field field;
+
+   void game_loop();
 
    void send_field_info();
 
-   int get_client_move( Player p, );
+   int get_client_move( Player p );
+
+   class ServerInitError {};
 }
 
 #endif

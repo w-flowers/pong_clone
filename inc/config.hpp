@@ -6,6 +6,9 @@
 * balls, edges, who they belong to and the size of the field. It also determines
 * whether the code is a simulation or a game.
 *
+* The struct configuration is defined in pong_clone_base to allow it to be used
+* by the field class for initialisation.
+*
 * Author: William Flowers
 *******************************************************************************/
 
@@ -24,47 +27,6 @@
 #include "pong_clone_base.hpp"
 
 #include "line.hpp"
-
-enum Gametype { sim, multiplayer };
-
-struct Ball_Args
-{
-   int r {};
-
-   double init_x {};
-
-   double init_y {};
-
-   double speed {};
-};
-
-struct Line_Object_Args
-{
-   struct position pos_1 {};
-
-   struct position pos_2 {};
-
-   Linetype t {edge};
-
-   Player p {none};
-};
-
-struct Configuration
-{
-   Gametype gametype {sim};
-
-   int window_width {1000};
-
-   int window_height {800};
-
-   std::vector< Ball_Args > balls {};
-
-   std::vector< Line_Object_Args > lines {};
-
-   int gametype_set_count {0};
-
-   int dimensions_set_count {0};
-};
 
 // Exception for if read_config_file is fed bad input
 class InvalidConfig {};
