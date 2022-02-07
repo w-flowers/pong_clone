@@ -54,6 +54,11 @@ struct positiond
 
 enum Gametype { sim, multiplayer };
 
+//Enum used to initialise boundary
+enum Linetype { edge, goal, paddle };
+
+enum Player {pl_1, pl_2, none};
+
 struct Ball_Args
 {
    int r {};
@@ -92,8 +97,6 @@ struct Configuration
 
    int dimensions_set_count {0};
 };
-
-enum Player {pl_1, pl_2, none};
 
 // Convenience function, don't want overhead of using exp
 float square_float( float a );

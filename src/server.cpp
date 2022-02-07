@@ -13,7 +13,7 @@
 
 #include "../inc/server.hpp"
 
-const std::string port = "3491";
+const char* port = "3491";
 
 Server::Server( std::string& connection_type,
            std::optional<int> socket_descriptor,
@@ -53,7 +53,7 @@ Server::Server( std::string& connection_type,
       hints.ai_addr = NULL;
       hints.ai_next = NULL;
 
-      if( getaddrinfo( NULL, port.data(), &hints, server_info ) )
+      if( getaddrinfo( NULL, port, &hints, &server_info ) )
       {
          std::cerr << "Call to getaddrinfo failed.\n";
 

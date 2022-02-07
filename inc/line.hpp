@@ -26,9 +26,6 @@ struct Line_Eq
 };
 
 
-//Enum used to initialise boundary
-enum Linetype { edge, goal, paddle };
-
 //Line data for drawing
 struct line_pos_data
 {

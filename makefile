@@ -50,6 +50,8 @@ obj/line.o: src/line.cpp inc/line.hpp inc/ball.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/line.cpp -o obj/line.o
 obj/ball.o: src/ball.cpp inc/ball.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/ball.cpp -o obj/ball.o
+obj/server.o: src/server.cpp inc/server.hpp inc/field.hpp inc/pong_clone_base.hpp
+	$(CC) -c $(CFLAGS) src/server.cpp -o obj/server.o
 obj/config.o: src/config.cpp inc/config.hpp inc/pong_clone_base.hpp
 	$(CC) -c $(CFLAGS) src/config.cpp -o obj/config.o
 obj/pong_clone_base.o: src/pong_clone_base.cpp inc/pong_clone_base.hpp

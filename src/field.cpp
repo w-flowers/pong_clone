@@ -796,6 +796,8 @@ void Field_Grid::return_objects_to_collide(
    return;
 }
 
+/**************************************************************
+ *
 Field::Field( const std::vector<Line_start>& boun_init_list,
       const std::vector<Ball_Args>& ball_init_list, int x_d, int y_d,
       int rows, int columns):
@@ -809,6 +811,45 @@ Field::Field( const std::vector<Line_start>& boun_init_list,
    for( auto arg : ball_init_list )
    {
       ball_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
+   }
+
+   field_grid = { ball_vec, boundary, x_dim, y_dim, rows, columns };
+
+   balls_to_collide = {};
+
+   lines_to_collide = {};
+
+   points_to_collide = {};
+
+   for( Ball& b : ball_vec )
+   {
+      balls_to_collide.insert( { &b, {} } );
+
+      lines_to_collide.insert( { &b, {} } );
+
+      points_to_collide.insert( { &b, {} } );
+   }
+}
+*
+************************************************************/
+
+Field::Field( const struct Configuration& config,
+      int rows, int columns):
+    x_dim {config.window_width}, y_dim {config.window_height}
+{
+   if( x_dim <= 0 || y_dim <= 0 )
+   {
+      throw InvalidDimensions{};
+   }
+
+   for( auto arg : ball_init_list )
+   {
+      ball_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
+   }
+
+   for( auto arg : ball_init_list )
+   {
+      boundary_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
    }
 
    field_grid = { ball_vec, boundary, x_dim, y_dim, rows, columns };

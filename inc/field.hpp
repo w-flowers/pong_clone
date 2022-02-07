@@ -60,6 +60,10 @@ public:
    Field_Grid(  std::vector<Ball>& balls, Boundary& boundary, 
       int field_x_dim, int field_y_dim, int rows, int columns );
 
+   //Need to add paddles to this structure
+   Field_Grid(  std::vector<Ball>& balls, std::vector<Line_Object>& boundary, 
+      int field_x_dim, int field_y_dim, int rows, int columns );
+
    //Empty Constructor
    Field_Grid() {};
 
@@ -120,12 +124,14 @@ struct field_position_data
 class Field
 {
 public:
-   Field( const std::vector<Line_start>& boun_init_list, 
-         const std::vector<Ball_Args>& ball_init_list, int x_d, int y_d, 
-         int rows, int columns);
+   //Field( const std::vector<Line_start>& boun_init_list, 
+   //      const std::vector<Ball_Args>& ball_init_list, int x_d, int y_d, 
+   //      int rows, int columns);
+
+   Field( const struct Configuration& config, int rows, int columns);
 
    //public - encapsulation in boundary class
-   Boundary boundary;
+   //Boundary boundary;
 
    std::optional<Paddle> paddle_1 {};
 
@@ -152,6 +158,8 @@ private:
    // Implementation note: resizing or pushing back to this vector will
    // invalidate all the pointers to ball in all other structures - just don't!
    std::vector<Ball> ball_vec;
+
+   std::vector<Line_Object> boundary_vec;
 
    std::unordered_map< Ball*, std::set< Ball* > > balls_to_collide;
 

@@ -21,6 +21,8 @@
 
 #include "field.hpp"
 
+#include <unistd.h>
+
 #include <sys/types.h> 
 
 #include <sys/socket.h> 
@@ -55,7 +57,7 @@ private:
 
    int sd {0};
 
-   Field field;
+   //Field field;
 
    void game_loop();
 
@@ -64,7 +66,7 @@ private:
    int get_client_move( Player p );
 
    class ServerInitError {};
-}
+};
 
 #endif
 
