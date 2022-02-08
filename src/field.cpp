@@ -70,6 +70,69 @@ Field_Grid::Field_Grid( std::vector<Ball>& balls, Boundary& boundary,
    //insert similar things for paddles once implemented
 }
 
+Field_Grid::Field_Grid( std::vector<Ball>& balls,
+      std::vector<Line_Object>& boundary, int field_x_dim, int field_y_dim,
+      int rows, int columns )
+   : num_rows {rows}, num_cols {columns}, field_sqrs {} 
+{
+   field_sqrs.reserve( num_rows * num_cols );
+
+   //INSERT code to initialise field squares
+   int remaining_height = field_y_dim;
+
+   int remaining_width = field_x_dim;
+
+   int current_x = 0;
+
+   int current_y = 0;
+
+   int new_h = 0;
+
+   int new_w = 0;
+
+   for( int i = 0; i < num_rows * num_cols ; i++ )
+   {
+      if( !( i % num_cols ) )
+      {
+         current_x = 0;
+
+         current_y += new_h;
+
+         new_h = remaining_height / (num_rows - i / num_rows );
+
+         remaining_height -= new_h;
+
+         remaining_width = field_x_dim;
+      }
+
+      new_w = remaining_width / ( num_cols - i % num_cols );
+
+      remaining_width -= new_w;
+
+      field_sqrs.emplace_back( Field_Square() );
+
+      field_sqrs.back().pos = {current_x, current_y};
+
+      field_sqrs.back().w = new_w;
+
+      field_sqrs.back().h = new_h;
+
+      current_x += new_w;
+   }
+
+   for( Ball& ball : balls )
+   {
+      assign_ball_to_squares( ball );
+   }
+
+   for( Line_Object& line : boundary )
+   {
+      assign_line_to_squares( line );
+   }
+   //insert similar things for paddles once implemented
+}
+
+
 void Field_Grid::assign_ball_to_squares( Ball& ball )
 {
    positiond min_x = ball.get_position();
@@ -842,17 +905,41 @@ Field::Field( const struct Configuration& config,
       throw InvalidDimensions{};
    }
 
-   for( auto arg : ball_init_list )
+   for( auto arg : config.balls )
    {
       ball_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
    }
 
-   for( auto arg : ball_init_list )
+   for( auto arg : config.lines )
    {
-      boundary_vec.emplace_back( Ball( arg.r, arg.init_x, arg.init_y, arg.speed) );
+      if( arg.t == edge )
+      {
+         boundary_vec.emplace_back( Line_Object( arg.pos_1, arg.pos_2,
+                                                 arg.t, arg.p ) );
+      }
+
+      else if( arg.t == goal )
+      {
+         // Do nothing - goal yet to be implemented
+      }
+
+      else if( arg.t == paddle )
+      {/*
+         if( arg.p == pl_1 && !paddle_1.has_value() )
+         {
+            *paddle_1 = Paddle( arg );
+         }
+
+         else if( arg.p == pl_1 && paddle_1.has_value() ) 
+         {
+            throw InvalidPaddle {};
+         }
+         
+        */
+       } 
    }
 
-   field_grid = { ball_vec, boundary, x_dim, y_dim, rows, columns };
+   field_grid = { ball_vec, boundary_vec, x_dim, y_dim, rows, columns };
 
    balls_to_collide = {};
 
@@ -955,12 +1042,12 @@ void Field::write_field_positions( struct field_position_data& fpd )
    }
 
 
-   for( int i = 0; i < boundary.get_lines_size(); i++ )
+   for( Line_Object& l : boundary_vec )
    {
       fpd.line_positions.push_back(
-            { boundary.get_line( i ).line.get_p1(),
-            boundary.get_line( i ).line.get_p2(),
-            boundary.get_line( i ).get_type() } );
+            { l.line.get_p1(),
+            l.line.get_p2(),
+            l.get_type() } );
    }
 }
 
