@@ -15,9 +15,14 @@
 
 const char* port = "3491";
 
+const int collision_grid_rows = 25;
+
+const int collision_grid_columns = 20;
+
 Server::Server( std::string& connection_type,
            std::optional<int> socket_descriptor,
-           struct Configuration& config )
+           struct Configuration& config ):
+   field { config, collision_grid_rows, collision_grid_columns }
 {
    // Section 1 - initialise sd - either using provided descriptor
    // or via calls to unix api

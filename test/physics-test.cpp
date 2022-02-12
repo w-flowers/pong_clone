@@ -66,39 +66,57 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
    Ball ball{ 10, 40.0, 40.0, 10.0 };
 
-   struct position pos1 {40, 55};
+   struct position pos1 {40, 60};
 
-   struct position pos2 {40, 25};
+   struct position pos2 {40, 21};
 
    SECTION( "Ball bounces correctly off horizontal line while moving vertically." )
    {
       ball.move();
 
-      Physics::collide_ball_point( ball, pos1 );
+      if( Physics::is_colliding_bp( ball, pos1 ) )
+      {
+         Physics::collide_ball_point( ball, pos1 );
+      }
 
-      Physics::collide_ball_point( ball, pos2 ); //should do nothing
+      if( Physics::is_colliding_bp( ball, pos2 ) )
+      {
+         Physics::collide_ball_point( ball, pos2 ); //should do nothing
+      }
 
-      CHECK( ball.get_position().x == 40 );
+      REQUIRE_THAT( ball.get_position().x,
+                    Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
 
-      CHECK( ball.get_position().y == 50 );
-   
-      ball.move();
-
-      CHECK( ball.get_position().x == 40 );
-
-      CHECK( ball.get_position().y == 40 );
-
-      ball.move();
-
-      Physics::collide_ball_point( ball, pos1 );//should do nothing
-
-      Physics::collide_ball_point( ball, pos2 );
+      REQUIRE_THAT( ball.get_position().y,
+                    Catch::Matchers::WithinRel( 50.0, 0.0001 ) );
 
       ball.move();
 
-      CHECK( ball.get_position().x == 40 );
+      REQUIRE_THAT( ball.get_position().x,
+                    Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
 
-      CHECK( ball.get_position().y == 40 );
+      REQUIRE_THAT( ball.get_position().y,
+                    Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
+
+      ball.move();
+
+      if( Physics::is_colliding_bp( ball, pos1 ) )
+      {
+         Physics::collide_ball_point( ball, pos1 );//should do nothing
+      }
+
+      if( Physics::is_colliding_bp( ball, pos2 ) )
+      {
+         Physics::collide_ball_point( ball, pos2 ); 
+      }
+
+      ball.move();
+
+      REQUIRE_THAT( ball.get_position().x,
+                    Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
+
+      REQUIRE_THAT( ball.get_position().y,
+                    Catch::Matchers::WithinRel( 40.0, 0.1 ) );
    }
 
    SECTION( "Ball moving vertically bounces correctly off pi/4 angled line" )
@@ -107,22 +125,38 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
       ball.move();
 
-      CHECK( ball.get_position().x == 50 );
+      CAPTURE( ball.get_position().x );
 
-      CHECK( ball.get_position().y == 40 );
+      CAPTURE( ball.get_position().y );
+
+      CAPTURE( ball.get_velocity().dx );
+
+      CAPTURE( ball.get_velocity().dy );
+
+      REQUIRE_THAT( ball.get_position().x,
+                    Catch::Matchers::WithinRel( 50.0, 0.0001 ) );
+
+      REQUIRE_THAT( ball.get_position().y,
+                    Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
 
       SECTION( "Ball moving horizontally bounces correctly off pi/4 angled line" )
       {
          ball.bounce( this_pi / 4.0 );
 
-         Physics::collide_ball_point( ball, pos2 ); //should do nothing
+         if( Physics::is_colliding_bp( ball, pos2 ) )
+         {
+            Physics::collide_ball_point( ball, pos2 ); //should do nothing
+         }
 
          ball.move();
 
-         CHECK( ball.get_position().x == 50 );
+         REQUIRE_THAT( ball.get_position().x,
+               Catch::Matchers::WithinRel( 50.0, 0.0001 ) );
 
-         CHECK( ball.get_position().y == 50 );
-      }
+         REQUIRE_THAT( ball.get_position().y,
+               Catch::Matchers::WithinRel( 50.0, 0.0001 ) );
+
+     }
 
       SECTION( "Ball moving horizontally bounces correctly off vertical line" )
       {
@@ -130,19 +164,23 @@ TEST_CASE( "Physics functions compile and work", "[physics]" )
 
          ball.move();
 
-         CHECK( ball.get_position().x == 40 );
+         REQUIRE_THAT( ball.get_position().x,
+               Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
 
-         CHECK( ball.get_position().y == 40 );
-         
+         REQUIRE_THAT( ball.get_position().y,
+               Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
+
          ball.move();
 
          ball.bounce( this_pi / 2.0 );
 
          ball.move();
 
-         CHECK( ball.get_position().x == 40 );
+         REQUIRE_THAT( ball.get_position().x,
+               Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
 
-         CHECK( ball.get_position().y == 40 );
+         REQUIRE_THAT( ball.get_position().y,
+               Catch::Matchers::WithinRel( 40.0, 0.0001 ) );
       }
    }
 }

@@ -20,36 +20,59 @@ Field_Square *Field_Grid::get_field_square(int index)
 TEST_CASE( "Field Class initialises correctly", "[Field]" )
 {
 
-   std::vector<Line_start> list {};
+   std::vector<Line_Object_Args> list {};
 
    list.reserve(20);
 
-   for(int i = 1; i < 11; i++)
+   for(int i = 1; i < 10; i = i + 1)
    {
-      Line_start temp {{900*i, 1000*( i%2 ) + 50 }, edge, none};
+      Line_Object_Args temp {{900*i, 1000*( i%2 ) + 50 },
+                             {900*(i+1), 1000*( (i+1)%2 ) + 50 },
+                             edge,
+                             none};
 
       list.push_back(temp);
    }
 
-   for(int i = 10; i > 0; i--)
+   Line_Object_Args side_1 {{900*(10), 1000*( ( 10 )%2 ) + 50 },
+                            {900*10, 6000 - 1000 * ( 10 % 2 ) },
+                            edge,
+                            none};
+
+   list.push_back( side_1 );
+
+   for(int i = 10; i > 1; i = i - 1 )
    {
-      Line_start temp {{900*i, 6000 - 1000 * ( i%2 ) }, edge, none};
+      Line_Object_Args temp {{900*i, 6000 - 1000 * ( i%2 ) },
+                             {900*(i-1), 6000 - 1000 * ( (i-1)%2 ) },
+                             edge,
+                             none};
 
       list.push_back(temp);
    }
 
-   std::vector<BallArgs> ball_init;
+
+   Line_Object_Args side_2 {{900*(1), 6000 - 1000*( ( 1 )%2 ) },
+                            {900*1, 1000 * ( 1 % 2 ) + 50 },
+                            edge,
+                            none};
+
+   list.push_back( side_2 );
+
+   std::vector<Ball_Args> ball_init;
 
    ball_init.reserve(6);
 
    for(int i = 0; i < 6; i++)
    {
-      BallArgs temp {25, 1200*( i + 1 ), 3000, 1.5};
+      Ball_Args temp {25, 1200*( i + 1 ), 3000, 1.5};
 
       ball_init.push_back( temp );
    }
 
-   Field test_field {list, ball_init, 10000, 8000, 10, 10};
+   struct Configuration config {sim, 10000, 8000, ball_init, list, 1, 1};
+
+   Field test_field {config, 10, 10};
 
    REQUIRE( test_field.get_x_dim() == 10000 );
 

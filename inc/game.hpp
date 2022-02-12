@@ -18,6 +18,8 @@
 
 #include "config.hpp"
 
+#include "server.hpp"
+
 const int GUI_SIZE_X {500};
 
 const int GUI_SIZE_Y {500};

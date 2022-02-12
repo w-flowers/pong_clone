@@ -9,3 +9,7 @@ bin/*
 dev_res
 
 gmon.out
+
+*.swp
+
+test/obj/*

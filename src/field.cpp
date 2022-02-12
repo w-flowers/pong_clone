@@ -460,7 +460,7 @@ void Field_Grid::assign_ball_to_squares_lazy( Ball& ball, int index )
       min_col--;
    }
 
-   if( min_x = field_sqrs[min_col].pos.x && min_col > 0 )
+   if( min_x == field_sqrs[min_col].pos.x && min_col > 0 )
    {
       min_col--;
    }
@@ -475,7 +475,7 @@ void Field_Grid::assign_ball_to_squares_lazy( Ball& ball, int index )
       min_row--;
    }
 
-   if( min_y = field_sqrs[min_row * num_cols].pos.y && min_row > 0 )
+   if( min_y == field_sqrs[min_row * num_cols].pos.y && min_row > 0 )
    {
       min_row--;
    }

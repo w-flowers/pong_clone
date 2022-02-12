@@ -57,7 +57,7 @@ private:
 
    int sd {0};
 
-   //Field field;
+   Field field;
 
    void game_loop();
 

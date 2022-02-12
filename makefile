@@ -17,8 +17,8 @@ bin/ballsim: objects
 	$(CC) $(CFLAGS) -o bin/ballsim apps/ballsim/main.cpp  obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS)
 
 test: test/bin/main-test
-test/bin/main-test: test/obj/main-test.o test/obj/line-test.o test/obj/boun-test.o test/obj/ball-test.o test/obj/field-test.o test/obj/physics-test.o test/obj/game-test.o objects
-	$(CC) $(CFLAGS) -o test/bin/main-test test/obj/ball-test.o test/obj/line-test.o test/obj/boun-test.o test/obj/main-test.o test/obj/field-test.o test/obj/physics-test.o test/obj/game-test.o obj/gui.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o $(LDLIBS) 
+test/bin/main-test: test/obj/main-test.o test/obj/line-test.o test/obj/boun-test.o test/obj/ball-test.o test/obj/field-test.o test/obj/physics-test.o objects
+	$(CC) $(CFLAGS) -o test/bin/main-test test/obj/ball-test.o test/obj/line-test.o test/obj/boun-test.o test/obj/main-test.o test/obj/field-test.o test/obj/physics-test.o obj/game.o obj/line.o obj/ball.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o obj/config.o  $(LDLIBS) 
 test/obj/main-test.o: test/main-test.cpp
 	$(CC) $(CFLAGS) -o test/obj/main-test.o -c test/main-test.cpp 
 test/obj/physics-test.o: test/physics-test.cpp inc/physics.hpp
@@ -31,8 +31,6 @@ test/obj/line-test.o: test/line-test.cpp inc/line.hpp
 	$(CC) $(CFLAGS) -o test/obj/line-test.o -c test/line-test.cpp 
 test/obj/ball-test.o: test/ball-test.cpp inc/ball.hpp
 	$(CC) $(CFLAGS) -o test/obj/ball-test.o -c test/ball-test.cpp
-test/obj/game-test.o: test/game-test.cpp inc/game.hpp
-	$(CC) $(CFLAGS) -o test/obj/game-test.o -c test/game-test.cpp
 objects: obj/line.o obj/ball.o obj/config.o obj/game.o obj/gui.o obj/pong_clone_base.o obj/boundary.o obj/field.o obj/physics.o
 obj/game.o: src/game.cpp inc/game.hpp inc/gui.hpp inc/pong_clone_base.hpp inc/config.hpp
 	$(CC) -c $(CFLAGS) src/game.cpp -o obj/game.o 
