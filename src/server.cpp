@@ -30,6 +30,10 @@ Server::Server( std::string& connection_type,
    {
       if( socket_descriptor.has_value() )
       {
+         is_local = true;
+
+         gametype = config.gametype;
+
          sd = *socket_descriptor;
       }
 
@@ -45,6 +49,10 @@ Server::Server( std::string& connection_type,
    {
       // Create socket to listen on
       // Store socket in sd
+
+      is_local = false;
+
+      gametype = config.gametype;
 
       struct addrinfo hints, *server_info, *a;
 
@@ -94,21 +102,36 @@ Server::Server( std::string& connection_type,
    {
       throw ServerInitError {};
    }
-
-   // Initialise field from config format
 }
 
 void Server::run_server()
 {
+   if( is_local )
    // Set up sockets and await connections from clients
    
    // Create field
    
+   // Send initial field parameters to clients
+
    // Enter Game Loop
    
    game_loop();
 
    // Cleanup resources
+}
+
+void Server::sim_loop()
+{
+   while( 1 )
+   {
+      field.advance_field();
+
+      send_field_info();
+
+      // Check for quit signal from client
+   }
+
+   // Acknowledge quit signal and exit
 }
 
 void Server::game_loop()
@@ -120,4 +143,28 @@ void Server::game_loop()
    // Advance field
 }
 
+void Server::send_field_info()
+{
+   field.write_field_positions( fpd );
+
+   // send data
+
+   // Send size of list of balls
+
+   for( ball_pos_data bpd : fpd.ball_positions )
+   {
+      // Send data for each ball
+   }
+
+   // Send size of list of lines
+
+   for( line_pos_data lpd : fpd.line_positions )
+   {
+      // Send data for each line
+   }
+
+   fpd.ball_positions.clear();
+
+   fpd.line_positions.clear();
+}
 

@@ -57,13 +57,21 @@ private:
 
    int sd {0};
 
+   Gametype gametype {sim}
+
    Field field;
+
+   field_position_data fpd {};
+
+   void sim_loop();
 
    void game_loop();
 
    void send_field_info();
 
    int get_client_move( Player p );
+
+   bool is_local {true};
 
    class ServerInitError {};
 };
