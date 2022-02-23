@@ -96,6 +96,8 @@ Server::Server( std::string& connection_type,
 
          throw ServerInitError {};
       }
+
+      freeaddrinfo( server_info );
    }
 
    else
@@ -106,16 +108,51 @@ Server::Server( std::string& connection_type,
 
 void Server::run_server()
 {
+   struct sockaddr_storage client_addr;
+
+   socklen_t sock_size;
+
    if( is_local )
+   {
+      if( gametype == sim )
+      {
+         sim_loop();
+      }
+
+      else if( gametype == multiplayer )
+      {
+         game_loop();
+      }
+
+      close( sd );
+
+      return 0;
+   }
+
    // Set up sockets and await connections from clients
    
-   // Create field
-   
+   if( listen( sd, 1 ) == -1 )
+   {
+      std::cerr << "Call to listen failed.\n";
+   }
+
+   new_fd = accept( sd,
+                    static_cast<struct sockaddr *>( &client_addr ),
+                    &sock_size );
+
    // Send initial field parameters to clients
 
    // Enter Game Loop
-   
-   game_loop();
+
+   if( gametype == sim )
+   {
+      sim_loop();
+   }
+
+   else if( gametype == multiplayer )
+   {
+      game_loop()
+   }
 
    // Cleanup resources
 }
@@ -147,24 +184,124 @@ void Server::send_field_info()
 {
    field.write_field_positions( fpd );
 
+   int active_sock {0};
+
+   if( is_local )
+   {
+      active_sock = sd;
+   }
+
+   else
+   {
+      active_sock = new_fd;
+   }
+
    // send data
 
    // Send size of list of balls
+   send_data( active_sock,
+              fpd.ball_positions.size(),
+              sizeof( fpd.ball_positions.size() ) );
 
    for( ball_pos_data bpd : fpd.ball_positions )
    {
-      // Send data for each ball
+      send_ball_data( active_sock, bpd );
    }
 
    // Send size of list of lines
+   send_data( active_sock,
+              fpd.line_positions.size(),
+              sizeof( fpd.line_positions.size() ) );
 
    for( line_pos_data lpd : fpd.line_positions )
    {
-      // Send data for each line
+      send_line_data( active_sock, lpd );
    }
+}
 
-   fpd.ball_positions.clear();
+void Server::send_ball_data( int active_sock, ball_pos_data &bpd const )
+{
+   int data_size {0};
 
-   fpd.line_positions.clear();
+   char *data_to_send = &bpd.rounded_x;
+
+   data_size = sizeof( bpd.rounded_x );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   data_to_send = &bpd.rounded_y;
+
+   data_size = sizeof( bpd.rounded_y );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   data_to_send = &bpd.radius;
+
+   data_size = sizeof( bpd.radius );
+
+   send_data( active_sock, data_to_send, data_size );
+}
+
+void Server::send_line_data( int active_sock, line_pos_data &lpd const )
+{
+   int data_size {0};
+
+   char *data_to_send = &lpd.p1.x;
+
+   data_size = sizeof( lpd.p1.x );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   data_to_send = &lpd.p1.y;
+
+   data_size = sizeof( lpd.p1.y );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   data_to_send = &lpd.p2.x;
+
+   data_size = sizeof( lpd.p2.x );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   data_to_send = &lpd.p2.y;
+
+   data_size = sizeof( lpd.p2.y );
+
+   send_data( active_sock, data_to_send, data_size );
+
+   switch( lpd.t )
+   {
+      case edge:
+         send_data( active_sock, 'e', 1 );
+         break;
+
+      case goal:
+         send_data( active_sock, 'g', 1 );
+         break;
+
+      case paddle:
+         send_data( active_sock, 'p', 1 );
+         break;
+   }
+}
+
+void Server::send_data( int active_sock, char *data_to_send, int data_size )
+{
+   int rv {0};
+
+   while( data_size && rv != -1 )
+   {
+      rv = send( active_sock, data_to_send, data_size, 0 );
+
+      data_size -= rv;
+
+      while( rv > 1 )
+      {
+         data_to_send++;
+
+         rv--;
+      }
+   }
 }
 

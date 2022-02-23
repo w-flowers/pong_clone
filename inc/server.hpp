@@ -57,6 +57,8 @@ private:
 
    int sd {0};
 
+   int new_fd {0};
+
    Gametype gametype {sim}
 
    Field field;
@@ -74,6 +76,12 @@ private:
    bool is_local {true};
 
    class ServerInitError {};
+
+   void send_ball_data( int active_sock, ball_pos_data &bpd const );
+
+   void send_line_data( int active_sock, line_pos_data &lpd const );
+
+   void send_data( int active_sock, char *data_to_send, int data_size );
 };
 
 #endif
